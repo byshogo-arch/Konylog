@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="docTitle">KONYLOG BASE — 現場管理と個人開発、ツールの記録</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            base: {
+              sand: '#F4F0E8', sandDark: '#E8E2D5', charcoal: '#1E2229',
+              white: '#FFFFFF', turquoise: '#00B4D8', mustard: '#F39C12',
+            }
+          },
+          fontFamily: {
+            bebas: ['"Bebas Neue"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Noto Sans JP"', 'sans-serif']
+          },
+          boxShadow: {
+            'solid': '4px 4px 0px #1E2229',
+            'solid-lg': '6px 6px 0px #1E2229',
+            'solid-sm': '2px 2px 0px #1E2229',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .bg-pegboard {
+      background-color: #F4F0E8;
+      background-image: radial-gradient(#D5CEBE 2px, transparent 2px);
+      background-size: 24px 24px;
+    }
+    .stamp {
+      display: inline-block;
+      border: 2px dashed #1E2229;
+      transform: rotate(-2deg);
+    }
+  </style>
+</head>
+<body class="bg-pegboard text-base-charcoal font-sans antialiased selection:bg-base-turquoise selection:text-white min-h-screen flex flex-col">
+
+  <!-- ======================================================== -->
+  <!-- ★★★ 【文字編集エリア】うさん臭さを消した現場仕様 ★★★ -->
+  <!-- ======================================================== -->
+  <script>
+    const SITE_DATA = {
+      // 1. サイトヘッダー＆ヒーロー
+      siteName: "KONYLOG",
+      siteSuffix: "BASE",
+      subTitle: "Site Management & Indie Development",
+      stampText: "BUILD ON SITE.",
+      tagLabel: "建築の現場管理 × 手作りのツール開発",
+      heroTitle1: "現場管理、",
+      heroTitle2: "ときどき個人開発。",
+      heroDescription: "安全靴を履いて現場を歩き、写真と書類に追われる日々の中で「ここ、もっと楽にできないか？」を自分で解決するためにコードを書く。現場のリアルと、試して本当に役立ったツールの置き場。",
+
+      // 2. マニフェスト（地に足のついた誠実なスタンス）
+      manifestoTitle: "FROM THE FIELD,<br>FOR THE WORK.",
+      manifestoText1: "キラキラしたIT用語や大げさなノウハウではなく、実際の建築現場で土埃にまみれながら感じた『不便さ』を出発点にしています。",
+      manifestoText2: "既存のソフトで足りないものは自分で小さくツールをつくり、使えるAI技術は現場仕事の手間を減らすために貪欲に取り入れる。地に足のついた実務と、ちょっとした工夫の記録です。",
+
+      // 3. 記事一覧（現場目線の等身大のタイトル）
+      articles: [
+        {
+          id: "card-field",
+          category: "field",
+          badge: "現場管理 #01",
+          badgeColor: "bg-base-charcoal text-white",
+          logNo: "LOG-01",
+          tag: "FIELD WORK",
+          date: "2026.09.15",
+          title: "安全靴を脱いだあと、現場監督が夜な夜なコードを書く理由",
+          summary: "現場写真の整理、黒板、工程のすり合わせ。泥臭い現場の仕事を少しでも気持ちよく進めるための個人的なスタンスと日常。",
+          content: "現場管理の仕事はとにかくマルチタスクで泥臭い。図面を見て、職人さんと話し、安全を確認し、山のような写真を撮る。疲れ果てて帰ってきたあと、なぜかパソコンを開いてツールを作ってしまうのは、自分の手で『現場の面倒くささ』を一つずつ解消していくのが楽しいからかもしれない。"
+        },
+        {
+          id: "card-tools",
+          category: "tools",
+          badge: "便利ツール #02",
+          badgeColor: "bg-base-turquoise text-white",
+          logNo: "LOG-02",
+          tag: "TOOLKIT",
+          date: "2026.09.10",
+          title: "現場仕事の書類や雑務で、実際に試して本当に役立っているAIツール",
+          summary: "流行りのAIを片っ端から試した結果、現場管理の実務で「これは残った」と言える実用的な使い方とツールだけをまとめました。",
+          content: "世間では『AIで仕事が激変する』と騒がれているけれど、現場で本当に使えるものは一握り。報告書のドラフト作成、大量のテキスト整理、調べ物の時短など、うさん臭い煽り抜きで『日々の手間を30分減らしてくれたツール』だけを正直に紹介する。"
+        },
+        {
+          id: "card-dev",
+          category: "dev",
+          badge: "自作ツール #03",
+          badgeColor: "bg-base-mustard text-base-charcoal",
+          logNo: "LOG-03",
+          tag: "IN-HOUSE TOOL",
+          date: "2026.09.05",
+          title: "「現場のここが不便」を自分で解決する。小さな自作ツールの開発記録",
+          summary: "大掛かりなシステムはいらない。自分や周りの仲間が現場でちょっと便利になるような、軽量で使い勝手のいいWebツールを作ってみる。",
+          content: "市販の施工管理アプリは多機能すぎて使いづらいことがある。『この作業だけワンクリックで終わらせたい』という現場の小さなワガママを形にする個人開発の記録。小さく作って現場で試すのが一番面白い。"
+        }
+      ]
+    };
+  </script>
+  <!-- ======================================================== -->
+
+  <!-- TOP BAR -->
+  <div class="bg-base-charcoal text-base-sand text-xs font-mono py-2 px-4 flex justify-between items-center border-b-2 border-base-charcoal">
+    <div class="flex items-center space-x-3">
+      <span class="w-2 h-2 bg-base-turquoise rounded-full animate-ping"></span>
+      <span class="tracking-widest">KONYLOG BASE // FIELD MANAGEMENT & PRACTICAL TOOLS</span>
+    </div>
+    <div class="hidden sm:flex space-x-6 text-[11px] text-gray-400">
+      <span>FIELD: 巡回完了</span>
+      <span>TOOL: 稼働中</span>
+      <span>STATUS: ご安全に！</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-8 py-8 w-full flex-1 flex flex-col">
+
+    <!-- 1. HEADER -->
+    <header class="bg-base-white border-2 border-base-charcoal p-5 sm:p-6 shadow-solid flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 bg-base-turquoise border-2 border-base-charcoal flex items-center justify-center shadow-solid-sm -rotate-3">
+          <span class="font-bebas text-3xl text-white">K</span>
+        </div>
+        <div>
+          <a href="#" class="font-bebas text-4xl sm:text-5xl tracking-wider text-base-charcoal hover:text-base-turquoise transition-colors leading-none block">
+            <span id="uiSiteName"></span> <span class="text-base-turquoise" id="uiSiteSuffix"></span>
+          </a>
+          <span class="font-mono text-[10px] tracking-widest text-gray-500 font-bold uppercase" id="uiSubTitle"></span>
+        </div>
+      </div>
+
+      <!-- 分かりやすいカテゴリーボタン -->
+      <nav class="flex flex-wrap items-center gap-2 sm:gap-3 font-mono text-xs font-bold">
+        <button onclick="filterCategory('all')" class="category-btn px-3 py-1.5 bg-base-charcoal text-white border-2 border-base-charcoal shadow-solid-sm transition-all">
+          すべて (ALL)
+        </button>
+        <button onclick="filterCategory('field')" class="category-btn px-3 py-1.5 bg-base-sandDark hover:bg-base-charcoal hover:text-white border-2 border-base-charcoal shadow-solid-sm transition-all -rotate-1">
+          #01 現場管理
+        </button>
+        <button onclick="filterCategory('tools')" class="category-btn px-3 py-1.5 bg-base-sandDark hover:bg-base-turquoise hover:text-white border-2 border-base-charcoal shadow-solid-sm transition-all rotate-1">
+          #02 ツール一覧
+        </button>
+        <button onclick="filterCategory('dev')" class="category-btn px-3 py-1.5 bg-base-sandDark hover:bg-base-mustard hover:text-base-charcoal border-2 border-base-charcoal shadow-solid-sm transition-all -rotate-2">
+          #03 自作ツール
+        </button>
+      </nav>
+    </header>
+
+    <!-- 2. HERO -->
+    <section class="mb-14 relative">
+      <div class="bg-base-white border-2 border-base-charcoal p-8 sm:p-14 shadow-solid-lg relative overflow-hidden">
+        <div class="absolute top-4 right-4 sm:top-6 sm:right-8 stamp px-3 py-1 bg-yellow-100 font-mono text-xs font-bold text-base-charcoal" id="uiStamp"></div>
+
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 bg-base-turquoise/20 border border-base-turquoise text-base-turquoiseDark font-mono text-xs font-bold mb-6">
+            <span>●</span>
+            <span id="uiTagLabel"></span>
+          </div>
+
+          <h1 class="font-sans font-black text-4xl sm:text-6xl lg:text-7xl text-base-charcoal tracking-tight leading-tight">
+            <span id="uiHero1"></span><br>
+            <span class="text-base-turquoise underline decoration-base-charcoal decoration-4" id="uiHero2"></span>
+          </h1>
+
+          <p class="mt-6 text-base sm:text-lg text-gray-600 font-medium leading-relaxed" id="uiHeroDesc"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. FEATURED ARTICLES -->
+    <section id="latest" class="mb-14">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center space-x-3">
+          <span class="px-2.5 py-1 bg-base-charcoal text-white font-mono text-xs font-bold">LOGS</span>
+          <h2 class="font-bebas text-3xl sm:text-4xl text-base-charcoal tracking-wider">
+            RECENT POSTS & TOOLS
+          </h2>
+        </div>
+        <span class="font-mono text-xs text-gray-500">※カードをクリックして記事を読む</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="cardContainer"></div>
+    </section>
+
+    <!-- 4. PHILOSOPHY / MANIFESTO -->
+    <section class="bg-base-charcoal text-base-sand p-8 sm:p-12 border-2 border-base-charcoal shadow-solid-lg relative mb-14">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+        <div class="md:col-span-1">
+          <span class="font-mono text-xs text-base-turquoise font-bold tracking-widest uppercase block mb-2">
+            [ ABOUT THIS SITE ]
+          </span>
+          <h2 class="font-bebas text-4xl sm:text-5xl text-white tracking-wide leading-none" id="uiManifestoTitle"></h2>
+        </div>
+        <div class="md:col-span-2 text-sm sm:text-base text-gray-300 font-sans leading-relaxed space-y-4">
+          <p id="uiManifesto1"></p>
+          <p id="uiManifesto2"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FOOTER -->
+    <footer class="mt-auto bg-base-white border-2 border-base-charcoal p-6 shadow-solid flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs font-bold">
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 bg-base-turquoise inline-block"></span>
+        <span>KONYLOG.COM // 現場とツールの備忘録</span>
+      </div>
+      <div class="flex items-center space-x-6">
+        <span class="text-gray-400">ご安全に！</span>
+        <a href="#" class="hover:text-base-turquoise transition-colors">TWITTER (X)</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- POPUP MODAL -->
+  <div id="articleModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-base-white border-4 border-base-charcoal max-w-2xl w-full p-6 sm:p-8 shadow-solid-lg relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 bg-base-charcoal text-white font-mono font-bold flex items-center justify-center hover:bg-base-turquoise transition-colors">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    document.getElementById('docTitle').innerText = SITE_DATA.siteName + " " + SITE_DATA.siteSuffix;
+    document.getElementById('uiSiteName').innerText = SITE_DATA.siteName;
+    document.getElementById('uiSiteSuffix').innerText = SITE_DATA.siteSuffix;
+    document.getElementById('uiSubTitle').innerText = SITE_DATA.subTitle;
+    document.getElementById('uiStamp').innerText = SITE_DATA.stampText;
+    document.getElementById('uiTagLabel').innerText = SITE_DATA.tagLabel;
+    document.getElementById('uiHero1').innerText = SITE_DATA.heroTitle1;
+    document.getElementById('uiHero2').innerText = SITE_DATA.heroTitle2;
+    document.getElementById('uiHeroDesc').innerText = SITE_DATA.heroDescription;
+    document.getElementById('uiManifestoTitle').innerHTML = SITE_DATA.manifestoTitle;
+    document.getElementById('uiManifesto1').innerText = SITE_DATA.manifestoText1;
+    document.getElementById('uiManifesto2').innerText = SITE_DATA.manifestoText2;
+
+    const cardContainer = document.getElementById('cardContainer');
+    SITE_DATA.articles.forEach(item => {
+      const card = document.createElement('article');
+      card.setAttribute('data-category', item.category);
+      card.className = "article-card cursor-pointer bg-base-white border-2 border-base-charcoal p-6 shadow-solid hover:-translate-y-1 hover:shadow-solid-lg transition-all duration-200 flex flex-col justify-between group";
+      card.onclick = () => openModal(item.id);
+      card.innerHTML = `
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="px-2.5 py-1 ${item.badgeColor} font-mono text-xs font-bold border border-base-charcoal shadow-solid-sm">
+              ${item.badge}
+            </span>
+            <span class="font-mono text-xs text-gray-400">${item.logNo}</span>
+          </div>
+          <h3 class="font-sans font-bold text-xl text-base-charcoal group-hover:text-base-turquoise transition-colors leading-snug">
+            ${item.title}
+          </h3>
+          <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+            ${item.summary}
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t-2 border-base-sandDark flex justify-between items-center font-mono text-xs font-bold">
+          <span class="text-gray-400">TAG: ${item.tag}</span>
+          <span class="text-base-turquoise">読む (OPEN) →</span>
+        </div>
+      `;
+      cardContainer.appendChild(card);
+    });
+
+    function openModal(id) {
+      const item = SITE_DATA.articles.find(a => a.id === id);
+      if (!item) return;
+      document.getElementById('modalContent').innerHTML = `
+        <div class="font-mono text-xs text-base-turquoise font-bold mb-2">[ ${item.badge} // ${item.date} ]</div>
+        <h2 class="font-sans font-black text-2xl sm:text-3xl text-base-charcoal mb-6 leading-tight">${item.title}</h2>
+        <div class="text-gray-700 leading-relaxed text-sm sm:text-base border-t-2 border-base-sandDark pt-6">
+          <p>${item.content}</p>
+        </div>
+        <div class="mt-8 pt-4 border-t-2 border-base-sandDark flex justify-end">
+          <button onclick="closeModal()" class="px-6 py-2 bg-base-charcoal text-white font-mono text-xs font-bold hover:bg-base-turquoise">閉じる</button>
+        </div>
+      `;
+      document.getElementById('articleModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('articleModal').classList.add('hidden');
+    }
+
+    function filterCategory(cat) {
+      const cards = document.querySelectorAll('.article-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
