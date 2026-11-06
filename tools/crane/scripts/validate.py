@@ -127,6 +127,21 @@ def check(path):
                     pr, pv = R, v
         else:
             E.append(f'{tag}: type must be radius|angle')
+    for i, c in enumerate(d.get('onTire', [])):
+        tag = f'onTire[{i}]({c.get("mode")},{c.get("zone")})'
+        if c.get('mode') not in ('static', 'creep') or c.get('zone') not in ('front', 'all'): E.append(f'{tag}: bad mode/zone')
+        radii, loads, cols = c.get('radii', []), c.get('loads', []), c.get('cols', [])
+        if not radii or not cols: E.append(f'{tag}: empty'); continue
+        if len(loads) != len(radii) or any(len(r) != len(cols) for r in loads): E.append(f'{tag}: dims'); continue
+        if any(radii[k+1] <= radii[k] for k in range(len(radii)-1)): E.append(f'{tag}: radii not increasing')
+        for j in range(len(cols)):
+            prev = None
+            for r in range(len(radii)):
+                v = loads[r][j]
+                if v is None: continue
+                if not is_num(v) or v <= 0: E.append(f'{tag}: bad value {v}'); continue
+                if prev is not None and v > prev + 1e-9: W.append(f'{tag}: load increases at R={radii[r]} L={cols[j].get("L")}')
+                prev = v
     v = d['vehicle']
     for k in ['length', 'width', 'height', 'gvw']:
         if not is_num(v.get(k)): E.append(f'vehicle.{k} missing')

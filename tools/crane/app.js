@@ -257,7 +257,8 @@
       if (!chart) { res.reason = 'アウトリガ不使用の表がありません'; return res; }
       res.chart = chart; res.chartKind = 'tire';
       res.zone = { kind: chart.zone === 'front' ? 'tire-front' : 'tire-all', label: { text: `アウトリガ不使用・${mode === 'static' ? '静止' : '走行(1.6km/h以下)'}・${chart.zone === 'front' ? `前方(±${frontHalf}°)` : '360°'}`, cls: chart.zone === 'front' ? 'zone-front' : 'zone-side' } };
-      const cols = chart.cols.map((c, idx) => ({ idx, L: c.L, c })).sort((x, y) => x.L - y.L);
+      if (!chart.radii || !chart.radii.length) { res.reason = 'アウトリガ不使用の表データがありません'; return res; }
+      const cols = chart.cols.map((c, idx) => ({ idx, L: c.L, c })).filter((x) => modeOk(x.c, p.mode)).sort((x, y) => x.L - y.L);
       const lk = lookupGrid(chart.radii, cols, (r, c) => chart.loads[r][c], p.R, p.L);
       return finishBoom(m, p, res, lk, chart, 'main', hookMass);
     }
@@ -471,10 +472,9 @@
     $('modelBadge').textContent = `${MAKERS[m.maker]} ${m.model}${m.nickname ? '（' + m.nickname + '）' : ''}`;
     // outriggers
     const items = m.outriggers.states.map((x) => ({ value: x.id, label: `${x.label}`, sub: x.nonUniform ? `前${fmtL(x.front)}m／後${fmtL(x.rear)}m` : `${fmtL(x.width)}m${x.note && x.note.length < 14 ? ' ' + x.note : ''}` }));
-    if ((m.onTire || []).length) {
-      if (m.onTire.some((t) => t.mode === 'static')) items.push({ value: 'tire-static', label: '不使用・静止', sub: 'タイヤ' });
-      if (m.onTire.some((t) => t.mode === 'creep')) items.push({ value: 'tire-creep', label: '不使用・走行', sub: '1.6km/h以下' });
-    }
+    const tireOk = (m.onTire || []).filter((t) => t.radii && t.radii.length);
+    if (tireOk.some((t) => t.mode === 'static')) items.push({ value: 'tire-static', label: '不使用・静止', sub: 'タイヤ' });
+    if (tireOk.some((t) => t.mode === 'creep')) items.push({ value: 'tire-creep', label: '不使用・走行', sub: '1.6km/h以下' });
     toggleGroup($('ostChips'), items, st.ost, (v) => { st.ost = v; if (isTire(v)) { st.work = 'boom'; const Ls = tireLengths(m); if (!Ls.some((L) => Math.abs(L - st.L) < EPS)) st.L = Ls[0]; } update(); });
     const so = isTire(st.ost) ? null : stateOf(m, st.ost);
     let hint = '';
@@ -539,7 +539,7 @@
       q.append(h('button', { type: 'button', onclick: () => { st.slew = a; update(); } }, lbl));
     }
   }
-  const tireLengths = (m) => [...new Set((m.onTire || []).flatMap((c) => c.cols.map((k) => k.L)))].sort((a, b) => a - b);
+  const tireLengths = (m) => [...new Set((m.onTire || []).filter((c) => c.radii && c.radii.length).flatMap((c) => c.cols.filter((k) => modeOk(k, st.mode)).map((k) => k.L)))].sort((a, b) => a - b);
   function setIfNotFocused(id, v) { const e = $(id); if (document.activeElement !== e) e.value = v; }
 
   // ---------- rendering: side view ----------
@@ -948,6 +948,10 @@
       if (mx) { const j = mx.cols.findIndex((c) => Math.abs(c.L - st.L) < EPS && modeOk(c, st.mode)); if (j >= 0) ref = { name: `${m.outriggers.states[0].label}（前後方・参考）${fmtL(st.L)}m`, j, radii: mx.radii, loads: mx.loads }; }
     }
     const allV = series.flatMap((x) => x.loads.map((r) => r[x.j])).filter((v) => v != null);
+    if (!allV.length || !chart.radii || !chart.radii.length) {
+      svg.append(s('text', { x: W / 2, y: H / 2, 'text-anchor': 'middle', fill: '#6B7078' }, 'この条件の性能曲線はありません'));
+      return;
+    }
     const xmax = Math.max(...chart.radii, st.R) * 1.04;
     let ymax = Math.max(...allV, res.total || 0) * 1.08;
     const ystep = niceStep(ymax / 6);
