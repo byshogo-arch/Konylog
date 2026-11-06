@@ -375,3 +375,6 @@ table.cmp .cmp-model { font-weight: 700; white-space: nowrap; }
 .ad-text .ad-cta:hover, .ad-text .ad-cta:focus-visible { background: #0A6665; }
 .ad-text .ad-note { margin: 8px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
 .ad-text img[width="1"] { display: block; }
+/* ?adpreview=1 のときのバナーの代わり */
+.ad-dummy { display: inline-flex; align-items: center; justify-content: center; max-width: 100%; box-sizing: border-box; border: 1px dashed var(--muted);
+  background: repeating-linear-gradient(45deg, var(--sand), var(--sand) 8px, var(--sand-d) 8px, var(--sand-d) 16px); font: 700 12px var(--mono); color: var(--muted); }

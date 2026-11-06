@@ -1694,18 +1694,40 @@
   // ---------- ads (ads.js) ----------
   /** Put the ad codes from ads.js into their slots. Codes are the site owner's own A8.net HTML;
    *  script tags inside a code are re-created so they run. Empty slots stay hidden. */
+  // 広告は allowHosts のドメイン（とサブドメイン）でだけ出す（建材相場ボードと同じ決まり）。
+  // Vercel のプレビューや手元では出さない。?adpreview=1 なら位置と見た目だけ確認できる（リンク・計測画像は外す）
   function mountAds() {
     const cfg = window.CRANE_ADS || {};
+    const host = location.hostname;
+    const hostOk = (cfg.allowHosts || []).some((d) => host === d || host.endsWith('.' + d));
+    const preview = !hostOk && new URLSearchParams(location.search).get('adpreview') === '1';
+    if (!hostOk && !preview) return;
     for (const [key, html] of Object.entries(cfg)) {
       const slot = document.getElementById('ad-' + key);
       if (!slot || typeof html !== 'string' || !html.trim()) continue;
       const body = slot.querySelector('.ad-body');
-      body.innerHTML = html;
-      for (const old of body.querySelectorAll('script')) {
-        const sc = document.createElement('script');
-        for (const a of old.attributes) sc.setAttribute(a.name, a.value);
-        sc.text = old.text;
-        old.replaceWith(sc);
+      const tpl = document.createElement('template'); // 中身はまだ読み込まれない（画像も取りに行かない）
+      tpl.innerHTML = html;
+      const frag = tpl.content;
+      if (preview) {
+        frag.querySelectorAll('script').forEach((sc) => sc.remove());
+        frag.querySelectorAll('img').forEach((im) => {
+          const w = +im.getAttribute('width') || 0, hh = +im.getAttribute('height') || 0;
+          if (w <= 1 && hh <= 1) { im.remove(); return; } // 計測用の1×1画像
+          const d = document.createElement('span'); d.className = 'ad-dummy'; d.textContent = `広告バナー ${w}×${hh}`;
+          d.style.width = w + 'px'; d.style.height = hh + 'px'; im.replaceWith(d);
+        });
+        frag.querySelectorAll('a').forEach((a) => { a.removeAttribute('href'); a.setAttribute('aria-disabled', 'true'); });
+        slot.querySelector('.ad-label').textContent = '広告（位置の確認用・リンクは無効）';
+      }
+      body.replaceChildren(frag);
+      if (!preview) {
+        for (const old of body.querySelectorAll('script')) {
+          const sc = document.createElement('script');
+          for (const a of old.attributes) sc.setAttribute(a.name, a.value);
+          sc.text = old.text;
+          old.replaceWith(sc);
+        }
       }
       slot.hidden = false;
     }
