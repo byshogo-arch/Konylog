@@ -280,7 +280,7 @@
     // --- on-tire ---
     if (isTire(p.ost)) {
       const mode = p.ost === 'tire-static' ? 'static' : 'creep';
-      const frontHalf = m.onTireFrontHalf ?? (m.maker === 'kato' ? 1 : 2);
+      const frontHalf = m.onTireFrontHalf ?? 1;
       const a = norm360(p.slew), dF = Math.min(a, 360 - a);
       const zone = dF <= frontHalf + EPS ? 'front' : 'all';
       const tl = (m.onTire || []).filter((t) => partsOk(t, p.parts));
@@ -529,7 +529,7 @@
     });
     const so = isTire(st.ost) ? null : stateOf(m, st.ost);
     let hint = '';
-    if (isTire(st.ost)) hint = m.onTireNote || 'アウトリガを使わずタイヤで支える状態。前方（ブームが車両の真正面付近）とそれ以外で性能が違います。';
+    if (isTire(st.ost)) hint = (m.onTireNote ? m.onTireNote + ' ' : 'アウトリガを使わずタイヤで支える状態。') + '前方性能はブームがキャリヤ正面のごく狭い範囲（資料の「約2°」を左右計とみなし、本ツールは安全側に±1°で判定）のときだけ。';
     else if (so && so.zones && so.zones.length) {
       hint = so.zones.map((z) => `${z.zone === 'front' ? '前方' : '後方'}±${z.half}°は${z.use.zone === 'front' ? '前方性能表' : stateOf(m, z.use.state).label + stateOf(m, z.use.state).width + 'mの性能'}`).join('、') + '、それ以外（側方）はこの張出幅の性能。';
     } else hint = '全周（どの向きでも）同じ性能です。' + (m.boomCharts.some((c) => c.zone === 'front') ? '' : '');
@@ -766,7 +766,7 @@
     };
     const zones = [];
     if (tire) {
-      const fh = m.onTireFrontHalf ?? (m.maker === 'kato' ? 1 : 2);
+      const fh = m.onTireFrontHalf ?? 1;
       svg.append(s('rect', { x: 0, y: 0, width: Wd, height: Hd, fill: '#FDEBD0', 'fill-opacity': 0.6 }));
       svg.append(sector(-fh, fh, '#7B5CD6', 0.35));
       zones.push({ a: 0, label: `前方±${fh}°`, kind: 'front' }, { a: 120, label: '360°', kind: 'side' });
