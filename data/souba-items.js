@@ -150,59 +150,151 @@ window.KONYLOG_SOUBA = {
     },
     {
       id: 'sus_scrap', cat: 'steel', kind: 'sell',
-      name: 'ステンレスくず', spec: 'SUS304', keywords: ['ステンレス', 'SUS', 'スクラップ'],
+      name: 'ステンレスくず', spec: 'SUS304（18-8）付物なし', keywords: ['ステンレス', 'SUS', 'スクラップ', '18-8'],
+      price: { low: 185, high: 220, unit: '円/kg', basis: '業者の持込買取価格（公開価格表）', asOf: '2026-11-06', tax: '税込' },
+      history: [
+        { label: '400系', text: 'SUS430など（磁石につくもの）は30〜46円/kgと大幅に安い' }
+      ],
       trend: { code: 'PRCG20_2600350017', proxy: true, label: 'ニッケル地金（輸入物価）' },
-      memo: 'ステンレスくずの値段は、含まれるニッケルの相場（と円相場）でほぼ決まります。'
+      memo: 'ステンレスくずの値段は、含まれるニッケルの相場（と円相場）でほぼ決まります。ニッケルを含まない400系は鉄くずに近い値段です。',
+      sources: [
+        { label: '大畑商事 買取価格一覧表（大阪・千葉・群馬）', url: 'https://www.ohata.org/kakaku_hyou.html' },
+        { label: 'ヒラノヤ（大阪・堺）ステンレススクラップ', url: 'https://hiranoyasan.com/all-items/' },
+        { label: 'スクラップ価格.com（神戸）', url: 'https://super-recycle.com/price_list/' }
+      ]
     },
 
     /* ===== 銅・アルミ・電線 ===== */
     {
       id: 'copper', cat: 'nonferrous', kind: 'buy',
       name: '電気銅（銅建値）', spec: '国内の銅地金の基準価格', keywords: ['銅', '建値', 'LME'],
+      price: { low: 2280000, high: 2280000, unit: '円/t', basis: 'JX金属の国内建値（11月6日改定。kgあたり2,280円）', asOf: '2026-11-06', approx: false },
+      history: [
+        { label: '2020年', text: '平均 約70万円/t（JX金属の月平均から計算）' },
+        { label: '2022年4月', text: '月平均 約134万円/t（当時の高値）' },
+        { label: '2025年', text: '平均 約154万円/t（同じく計算値）' },
+        { label: '2026年10月', text: '月平均 約238万円/t。10月13日に過去最高の244万円' }
+      ],
       trend: { code: 'PRCG20_2201050001', label: '銅' },
-      memo: '2020年春の底から上がり続け、2026年は過去最高を更新しています（2020年平均の約3.4倍）。電線・配管・設備機器の価格にそのまま響く、いま一番注意したい品目です。'
+      memo: '2020年春の底から上がり続け、2026年10月13日に建値244万円/tの過去最高（2020年平均の約3.5倍）。11月6日は228万円まで下がっています。\n電線・配管・設備機器の価格にそのまま響く、いま一番注意したい品目です。',
+      sources: [
+        { label: 'JX金属「銅建値」（改定履歴・月間平均推移）', url: 'https://www.jx-nmm.com/cuprice/' }
+      ]
     },
     {
       id: 'densen', cat: 'nonferrous', kind: 'buy',
-      name: '電線・ケーブル', spec: 'CV・VVF・IVなど', keywords: ['電線', 'ケーブル', 'VVF', 'CV'],
+      name: '電線・ケーブル', spec: 'VVF 1.6mm×2C 100m巻', keywords: ['電線', 'ケーブル', 'VVF', 'CV', 'IV', 'Fケーブル'],
+      price: { low: 15980, high: 21980, unit: '円/巻', basis: '通販価格（モノタロウ、メーカー5社のVVF1.6×2C 100m巻）', asOf: '2026-11-06', tax: '税抜' },
+      history: [
+        { label: '3芯', text: 'VVF1.6×3C 100m巻は 32,980〜39,980円（同じく通販・税抜）' },
+        { label: '2026年', text: '電線各社が加工費などを値上げ（矢崎 平均8%・5月〜、フジクラ・ダイヤ 4〜7%・6月〜、SFCC 平均4〜8%・7月〜）' }
+      ],
       trend: { code: 'PRCG20_2201050008', label: 'プラスチック被覆銅線' },
-      memo: '電線は銅の値段に連動して値決めされるので、銅の高騰がそのまま効いています。指数は2026年9月に過去最高（2020年の3倍超）。電気設備の見積りは有効期限を短めにしておくと安心です。'
+      memo: '電線は銅の値段に連動して値決めされるので、銅の高騰がそのまま効いています。指数は2026年9月に過去最高（2020年の3倍超）。\nさらに2026年は電線各社が加工費などの値上げも実施。電気設備の見積りは有効期限を短めにしておくと安心です。',
+      sources: [
+        { label: 'モノタロウ VVFケーブル（弥栄電線・協和電線工業・住電HST・矢崎・愛知電線の各ページ）', url: 'https://www.monotaro.com/g/04641370/' },
+        { label: '矢崎エナジーシステム「電線・ケーブルの価格改定のお願い」2026年4月14日（PDF）', url: 'https://www.yazaki-group.com/file/%E9%9B%BB%E7%B7%9A%E3%83%BB%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB%E3%81%AE%E4%BE%A1%E6%A0%BC%E6%94%B9%E5%AE%9A%E3%81%AE%E3%81%8A%E9%A1%98%E3%81%84_20260414.pdf' }
+      ]
     },
     {
       id: 'alsash', cat: 'nonferrous', kind: 'buy',
-      name: 'アルミサッシ', spec: '住宅・ビル用', keywords: ['サッシ', 'アルミ', '窓'],
+      name: 'アルミサッシ', spec: '住宅用サッシ・ドア', keywords: ['サッシ', 'アルミ', '窓', 'YKK', 'LIXIL'],
+      priceNote: '商品・サイズで大きく違うので価格は非掲載。2026年10月受注分から主要3社が10〜20%値上げ',
+      history: [
+        { label: 'YKK AP', text: '住宅用 10〜15%（2026年10月・11月の2段階）' },
+        { label: 'LIXIL', text: '平均13%（2026年10月〜）' },
+        { label: '三協アルミ', text: 'アルミサッシ 20%（2026年10月〜、建材問屋の案内による）' }
+      ],
       trend: { code: 'PRCG20_2201150003', label: 'アルミニウムサッシ' },
-      memo: 'アルミ地金や副資材・物流費の上昇を受けて、サッシメーカーが2022年以降たびたび値上げ。2020年比+4割で過去最高圏です。'
+      memo: 'アルミ地金や副資材・物流費の上昇を受けて、サッシメーカーは2022年以降たびたび値上げ。2026年秋も主要3社がほぼ同時に10〜20%の値上げをしました。指数は過去最高圏です。',
+      sources: [
+        { label: 'LIXIL「建材・設備機器のメーカー希望小売価格の一部改定について」2026年5月18日', url: 'https://newsroom.lixil.com/ja/2026051801' },
+        { label: 'リフォーム産業新聞「YKK AP、住宅用商品などを10月から順次値上げ」2026年6月30日', url: 'https://www.reform-online.jp/news/manufacturer/68984.php' },
+        { label: 'SYAA（建材問屋）「三協アルミも2026年秋の価格改定を発表」', url: 'http://esuwai.net/news/1120/' }
+      ]
     },
     {
       id: 'cu_pika', cat: 'nonferrous', kind: 'sell',
-      name: '銅スクラップ（ピカ線）', spec: '1号銅線（被覆をむいた光った銅線）', keywords: ['銅', 'ピカ線', '1号銅線', 'スクラップ'],
+      name: '銅スクラップ（ピカ線）', spec: '1号銅線（被覆をむいた光った銅線）', keywords: ['銅', 'ピカ線', '1号銅線', '特号', 'スクラップ'],
+      price: { low: 2200, high: 2350, unit: '円/kg', basis: '業者の持込買取価格（大阪・名古屋・神戸・埼玉などの公開価格表）', asOf: '2026-11-06', tax: '税込（一部表記なし）' },
+      history: [
+        { label: '目安', text: '銅建値（kgあたり2,280円）の94〜103%くらいで買い取られています' }
+      ],
       trend: { code: 'PRCG20_2202350003', label: '銅・アルミニウム屑' },
-      memo: '銅スクラップの値段は銅相場とほぼ連動します。指数（銅・アルミ屑）は2026年6月に過去最高をつけたあと、夏にかけて1割ほど下げました。\nピカ線は銅スクラップの中で一番高く売れます。'
+      memo: '銅スクラップの値段は銅建値（銅相場）とほぼ連動します。指数（銅・アルミ屑）は2026年6月に過去最高をつけたあと、夏にかけて1割ほど下げました。\nピカ線は銅スクラップの中で一番高く売れます。11月6日に建値が1kgあたり60円下がったので、買取価格も下がる可能性があります。',
+      sources: [
+        { label: '大畑商事 買取価格一覧表（大阪・千葉・群馬）', url: 'https://www.ohata.org/kakaku_hyou.html' },
+        { label: 'ヒラノヤ（大阪・堺）買取価格表', url: 'https://hiranoyasan.com/all-items/' },
+        { label: 'スクラップ価格.com（神戸）', url: 'https://super-recycle.com/price_list/' },
+        { label: '森本商店（名古屋）本日の買取価格', url: 'https://morimoto-nagoya.com/item-86/' },
+        { label: '土金（大阪）スクラップ買取価格', url: 'https://www.dokindokin.com/scrap_type/copper/' }
+      ]
     },
     {
       id: 'cu_komi', cat: 'nonferrous', kind: 'sell',
-      name: '銅スクラップ（込銅・並銅）', spec: '付着物のある銅くず・銅管など', keywords: ['銅', '込銅', '並銅', '上銅', '銅管'],
+      name: '銅スクラップ（込銅・並銅）', spec: '付着物のある銅くず・細い銅線・銅管など', keywords: ['銅', '込銅', '並銅', '上銅', '銅管', '2号銅'],
+      price: { low: 2100, high: 2250, unit: '円/kg', basis: '業者の持込買取価格（公開価格表）', asOf: '2026-11-06', tax: '税込' },
+      history: [
+        { label: '上銅', text: '2,240〜2,350円/kg' },
+        { label: '下銅', text: '1,920〜2,000円/kg' }
+      ],
       trend: { code: 'PRCG20_2202350003', label: '銅・アルミニウム屑' },
-      memo: '油・塗装・ハンダなどが付いた銅くずや銅管。ピカ線より安くなりますが、値動きは銅相場と同じです。'
+      memo: '油・塗装・ハンダなどが付いた銅くずや銅管。ピカ線より安くなりますが、値動きは銅相場と同じです。付着物を外してきれいにするほど高く売れます。',
+      sources: [
+        { label: '大畑商事 買取価格一覧表（大阪・千葉・群馬）', url: 'https://www.ohata.org/kakaku_hyou.html' },
+        { label: 'ヒラノヤ（大阪・堺）買取価格表', url: 'https://hiranoyasan.com/all-items/' },
+        { label: 'スクラップ価格.com（神戸）', url: 'https://super-recycle.com/price_list/' },
+        { label: '森本商店（名古屋）本日の買取価格', url: 'https://morimoto-nagoya.com/item-86/' },
+        { label: '土金（大阪）スクラップ買取価格', url: 'https://www.dokindokin.com/scrap_type/copper/' }
+      ]
     },
     {
       id: 'brass', cat: 'nonferrous', kind: 'sell',
-      name: '真鍮スクラップ', spec: '黄銅（水栓金具・バルブなど）', keywords: ['真鍮', '黄銅', 'スクラップ'],
+      name: '真鍮スクラップ', spec: '黄銅（水栓金具・バルブなど）', keywords: ['真鍮', '黄銅', 'スクラップ', '蛇口'],
+      price: { low: 1380, high: 1550, unit: '円/kg', basis: '業者の持込買取価格（公開価格表、付物なし〜込真鍮）', asOf: '2026-11-06', tax: '税込（一部表記なし）' },
+      history: [
+        { label: '付物が多いもの', text: '真鍮（下）は780円/kg前後まで下がる例も' }
+      ],
       trend: { code: 'PRCG20_2202350003', label: '銅・アルミニウム屑' },
-      memo: '真鍮は銅と亜鉛の合金。銅相場に引っぱられて高値圏です。'
+      memo: '真鍮は銅と亜鉛の合金。銅相場に引っぱられて高値圏です。ゴムパッキンや鉄ネジなどの付物は外すほど高くなります。',
+      sources: [
+        { label: '大畑商事 買取価格一覧表（大阪・千葉・群馬）', url: 'https://www.ohata.org/kakaku_hyou.html' },
+        { label: 'スクラップ価格.com（神戸）', url: 'https://super-recycle.com/price_list/' },
+        { label: '土金（大阪）真鍮スクラップ買取価格', url: 'https://www.dokindokin.com/scrap_type/brass/' }
+      ]
     },
     {
       id: 'zatsusen', cat: 'nonferrous', kind: 'sell',
-      name: '被覆電線スクラップ', spec: '雑線・VVF・CVなど', keywords: ['雑線', '電線', 'VA線', 'スクラップ'],
+      name: '被覆電線スクラップ', spec: 'VVF（VA線・Fケーブル）', keywords: ['雑線', '電線', 'VA線', 'VVF', 'CV', 'IV', 'スクラップ'],
+      price: { low: 900, high: 1020, unit: '円/kg', basis: '業者の持込買取価格（銅率40%前後のVVF）', asOf: '2026-11-06', tax: '税込' },
+      history: [
+        { label: '銅率80%', text: 'IV・CVの太い単線など 1,720〜1,830円/kg' },
+        { label: '銅率60〜65%', text: 'CV・3本線など 1,220〜1,280円/kg' },
+        { label: '家電線・雑線', text: '630〜780円/kg' }
+      ],
       trend: { code: 'PRCG20_2202350003', label: '銅・アルミニウム屑' },
-      memo: '被覆付きの電線は、中の銅の割合（銅率）で値段が決まります。一般に太い線ほど銅率が高く、高く売れます。'
+      memo: '被覆付きの電線は、中の銅の割合（銅率）で値段が決まります。太い線ほど銅率が高く、高く売れます。端子やコネクタなどの付物は外しておくと減額されません。',
+      sources: [
+        { label: '大畑商事 買取価格一覧表（大阪・千葉・群馬）', url: 'https://www.ohata.org/kakaku_hyou.html' },
+        { label: 'ヒラノヤ（大阪・堺）電線スクラップ', url: 'https://hiranoyasan.com/all-items/' },
+        { label: '土金（大阪）電線スクラップ', url: 'https://www.dokindokin.com/scrap_type/electrical-wire/' },
+        { label: '宝源（埼玉・越谷）持ち込み買取価格', url: 'https://hougen.co.jp/' }
+      ]
     },
     {
       id: 'al_scrap', cat: 'nonferrous', kind: 'sell',
-      name: 'アルミスクラップ', spec: 'サッシくずなど', keywords: ['アルミ', 'サッシ', 'スクラップ'],
+      name: 'アルミスクラップ', spec: 'サッシくず', keywords: ['アルミ', 'サッシ', 'スクラップ'],
+      price: { low: 325, high: 470, unit: '円/kg', basis: '業者の持込買取価格（ビスなし360〜470円・ビス付き325〜405円）', asOf: '2026-11-06', tax: '税込（一部表記なし）' },
+      history: [
+        { label: '参考', text: 'アルミ地金（国内）603円/kg（11月2日）。2026年5月の月平均711円/kgがピーク' }
+      ],
       trend: { code: 'PRCG20_2201050003', proxy: true, label: 'アルミニウム合金・同二次合金地金' },
-      memo: 'アルミサッシなどのくずは、再生アルミ（二次合金地金）の原料になります。指数は2026年7月に過去最高をつけました。'
+      memo: 'アルミサッシなどのくずは、再生アルミ（二次合金地金）の原料になります。値段は銅ではなくアルミ地金の相場で動きます。ビスやゴム・樹脂の付物を外すほど高く売れます。',
+      sources: [
+        { label: '大畑商事 買取価格一覧表（大阪・千葉・群馬）', url: 'https://www.ohata.org/kakaku_hyou.html' },
+        { label: 'ヒラノヤ（大阪・堺）アルミサッシスクラップ', url: 'https://hiranoyasan.com/all-items/aluminum_scrap/aluminum-sash-a/' },
+        { label: '白銅「地金価格情報」（アルミ地金の日経デイリー値）', url: 'https://www.hakudo.co.jp/product/metal/' }
+      ]
     },
 
     /* ===== 木材・合板 ===== */
