@@ -189,6 +189,24 @@
   }
   const modeOk = (col, mode) => !col.mode || !mode || String(col.mode).split(/[,\/・]/).map((x) => x.trim()).includes(mode);
 
+  /** A printed mark on a cell (＊/★/※/#…) that changes reeving / hook for that value. Three data shapes:
+   *  chart.marks[row][col] + col.alt[symbol]; col.partsStar {parts, radii}; col.marked {symbol, radii, parts, note}. */
+  function cellSpecial(chart, r, j) {
+    const col = chart.cols[j], R = chart.radii ? chart.radii[r] : null;
+    const sym = chart.marks && chart.marks[r] ? chart.marks[r][j] : null;
+    if (sym) {
+      const alt = (col.alt && col.alt[sym]) || {};
+      return { symbol: sym, parts: alt.parts, hook: alt.hook, note: alt.note || '' };
+    }
+    if (col.partsStar && R != null && (col.partsStar.radii || []).some((x) => Math.abs(x - R) < EPS)) {
+      return { symbol: '＊', parts: col.partsStar.parts, hook: col.partsStar.hook, note: col.partsStar.note || `＊印は${col.partsStar.parts}本掛` };
+    }
+    if (col.marked && R != null && (col.marked.radii || []).some((x) => Math.abs(x - R) < EPS)) {
+      return { symbol: col.marked.symbol || '※', parts: col.marked.parts, hook: col.marked.hook, note: col.marked.note || '' };
+    }
+    return null;
+  }
+
   /** Conservative table lookup. cols: [{idx, L}] ascending by L. Returns {value, rows, cols, reason, note}. */
   function lookupGrid(radii, cols, val, R, L) {
     if (!cols.length) return { value: null, reason: 'このブーム長さの表がありません' };
@@ -352,8 +370,17 @@
     }
     for (const c of used) if (c.note) res.msgs.push({ t: 'info', s: `${fmtL(c.L)}mブームの注記：${c.note}` });
     let hk = forceHook || used[used.length - 1].hook || 'main';
+    // marked cells (different reeving / heavier hook for that value): use the heaviest hook among the cells used
+    const hooksM = m.hooks || {};
+    for (const r of lk.rows) for (const j of lk.cols) {
+      const sp = cellSpecial(chart, r, j);
+      if (!sp) continue;
+      res.msgs.push({ t: 'warn', s: `採用した値には「${sp.symbol}」印：${[sp.note, sp.parts ? sp.parts + '本掛' : '', sp.hook && hooksM[sp.hook] ? hooksM[sp.hook].label + 'を使用' : ''].filter(Boolean).join('・')}` });
+      if (sp.parts) res.partsOverride = sp.parts;
+      if (sp.hook && hooksM[sp.hook] && (!hooksM[hk] || hooksM[sp.hook].mass > hooksM[hk].mass)) hk = sp.hook;
+    }
     let cap = lk.value;
-    res.parts = used.map((c) => c.parts).filter(Boolean);
+    res.parts = res.partsOverride ? [res.partsOverride] : used.map((c) => c.parts).filter(Boolean);
     if (p.work === 'single' && !isTire(p.ost)) {
       const stp = m.singleTop;
       if (!stp) { res.reason = 'この機種のシングルトップ（ルースタ）性能データがありません'; return res; }
@@ -1136,7 +1163,8 @@
         chart.cols.forEach((c, j) => {
           const v = chart.loads[i][j];
           const hit = lk && lk.rows && lk.rows.includes(i) && lk.cols.includes(j);
-          tr.append(h('td', { class: v == null ? 'blank' : hit ? 'hit' : lk && lk.cols.includes(j) ? 'colcur' : null }, v == null ? '' : fmtT(v)));
+          const spc = v == null ? null : cellSpecial(chart, i, j);
+          tr.append(h('td', { class: v == null ? 'blank' : hit ? 'hit' : lk && lk.cols.includes(j) ? 'colcur' : null, title: spc ? `${spc.symbol} ${spc.note || ''}${spc.parts ? ' ' + spc.parts + '本掛' : ''}` : null }, v == null ? '' : fmtT(v) + (spc ? spc.symbol : '')));
         });
         tb.append(tr);
       });
