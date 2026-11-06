@@ -355,3 +355,10 @@ table.cmp .cmp-model { font-weight: 700; white-space: nowrap; }
   body.print-report #reportRoot { position: static; left: 0; }
   body.print-report .rpage { page-break-after: always; break-after: page; }
 }
+
+/* ad slots (ads.js) */
+.ad-slot { border: 2px dashed var(--peg); background: rgba(255,255,255,.7); padding: 8px 10px 12px; text-align: center; }
+.ad-label { font: 700 10px var(--mono); color: var(--muted); text-align: left; margin-bottom: 6px; letter-spacing: .1em; }
+.ad-body { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.ad-body img { max-width: 100%; height: auto; }
+.ad-body a { display: inline-block; max-width: 100%; }

@@ -1,6 +1,6 @@
 // Offline support for the crane tool: network first (always fresh when online), cache fallback when offline.
-const CACHE = 'konylog-crane-v2';
-const CORE = ['./', './index.html', './style.css', './app.js', './data/index.js', './vendor/html2canvas.min.js', './vendor/jspdf.umd.min.js'];
+const CACHE = 'konylog-crane-v3';
+const CORE = ['./', './index.html', './style.css', './app.js', './ads.js', './data/index.js', './vendor/html2canvas.min.js', './vendor/jspdf.umd.min.js'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));

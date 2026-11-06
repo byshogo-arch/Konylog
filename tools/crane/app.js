@@ -1689,11 +1689,32 @@
     });
   }
 
+  // ---------- ads (ads.js) ----------
+  /** Put the ad codes from ads.js into their slots. Codes are the site owner's own A8.net HTML;
+   *  script tags inside a code are re-created so they run. Empty slots stay hidden. */
+  function mountAds() {
+    const cfg = window.CRANE_ADS || {};
+    for (const [key, html] of Object.entries(cfg)) {
+      const slot = document.getElementById('ad-' + key);
+      if (!slot || typeof html !== 'string' || !html.trim()) continue;
+      const body = slot.querySelector('.ad-body');
+      body.innerHTML = html;
+      for (const old of body.querySelectorAll('script')) {
+        const sc = document.createElement('script');
+        for (const a of old.attributes) sc.setAttribute(a.name, a.value);
+        sc.text = old.text;
+        old.replaceWith(sc);
+      }
+      slot.hidden = false;
+    }
+  }
+
   // ---------- boot ----------
   // offline cache (network first). Only on https so local file:// use is unaffected.
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
   readHash();
   bindInputs();
+  try { mountAds(); } catch (e) { /* an ad must never break the calculator */ }
   // a pasted/shared link (hash) changes the whole state; our own updates use replaceState and do not fire this
   window.addEventListener('hashchange', () => {
     readHash();
