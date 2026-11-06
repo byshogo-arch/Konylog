@@ -351,7 +351,7 @@
         if (!p || (p.low == null && p.high == null)) return '';
         const lo = p.low != null ? p.low : p.high, hi = p.high != null ? p.high : p.low;
         const useMan = lo >= 10000 && hi >= 10000;
-        const f = (n) => (useMan ? man(n) : Math.round(n).toLocaleString('ja-JP'));
+        const f = (n) => (useMan ? man(n) : n.toLocaleString('ja-JP', { maximumFractionDigits: 1 }));
         const unit = useMan ? String(p.unit).replace(/^円/, '万円') : p.unit;
         return (lo === hi ? f(lo) : f(lo) + '〜' + f(hi)) + unit;
       }

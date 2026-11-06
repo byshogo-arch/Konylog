@@ -318,7 +318,7 @@
         const d = man >= 100 ? 0 : man >= 10 ? 1 : 2;
         return trimZeros(man.toFixed(d));
       }
-      return Math.round(n).toLocaleString('ja-JP');
+      return Number.isInteger(n) ? n.toLocaleString('ja-JP') : n.toLocaleString('ja-JP', { maximumFractionDigits: 1 });
     }
     // price: { low, high, unit:'円/m³' }
     function priceParts(p) {
