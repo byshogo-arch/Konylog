@@ -172,8 +172,9 @@
   }
   function zoneLabel(m, z) {
     const so = stateOf(m, z.use.state);
-    const w = so ? `${so.label}${fmtL(so.width)}m` : '';
-    if (z.kind === 'front') return { text: `前方性能（${w}の前方表）`, cls: 'zone-front' };
+    const w = so ? (so.nonUniform ? so.label : `${so.label}${fmtL(so.width)}m`) : '';
+    const fl = (m.frontSpecial && m.frontSpecial.label) || '前方性能';
+    if (z.kind === 'front') return { text: `${fl}（${w}の前方表）`, cls: 'zone-front' };
     if (z.kind === 'front-max') return { text: `前方域 → ${w}の性能`, cls: 'zone-max' };
     if (z.kind === 'rear-max') return { text: `後方域 → ${w}の性能`, cls: 'zone-max' };
     if (z.kind === 'all') return { text: `${w}・全周`, cls: 'zone-max' };
@@ -469,7 +470,7 @@
     const m = st.m;
     $('modelBadge').textContent = `${MAKERS[m.maker]} ${m.model}${m.nickname ? '（' + m.nickname + '）' : ''}`;
     // outriggers
-    const items = m.outriggers.states.map((x) => ({ value: x.id, label: `${x.label}`, sub: `${fmtL(x.width)}m${x.note ? ' ' + x.note : ''}` }));
+    const items = m.outriggers.states.map((x) => ({ value: x.id, label: `${x.label}`, sub: x.nonUniform ? `前${fmtL(x.front)}m／後${fmtL(x.rear)}m` : `${fmtL(x.width)}m${x.note && x.note.length < 14 ? ' ' + x.note : ''}` }));
     if ((m.onTire || []).length) {
       if (m.onTire.some((t) => t.mode === 'static')) items.push({ value: 'tire-static', label: '不使用・静止', sub: 'タイヤ' });
       if (m.onTire.some((t) => t.mode === 'creep')) items.push({ value: 'tire-creep', label: '不使用・走行', sub: '1.6km/h以下' });
@@ -482,6 +483,7 @@
       hint = so.zones.map((z) => `${z.zone === 'front' ? '前方' : '後方'}±${z.half}°は${z.use.zone === 'front' ? '前方性能表' : stateOf(m, z.use.state).label + stateOf(m, z.use.state).width + 'mの性能'}`).join('、') + '、それ以外（側方）はこの張出幅の性能。';
     } else hint = '全周（どの向きでも）同じ性能です。' + (m.boomCharts.some((c) => c.zone === 'front') ? '' : '');
     if (so && so.zones && so.zones.some((z) => z.use.zone === 'front') && so.id === m.outriggers.states[0].id) hint = so.zones.filter((z) => z.zone === 'front').map((z) => `前方±${z.half}°は前方性能表（全周より高い）`).join('') + '、それ以外は全周の性能。';
+    if (so && so.note) hint += ` ※${so.note}`;
     $('ostHint').textContent = hint;
     // work
     const works = [{ value: 'boom', label: 'ブーム（主巻）' }];
@@ -723,8 +725,9 @@
     // carrier
     const car = s('g', {});
     if (!tire) {
+      const wF = so.front || so.width, wR = so.rear || so.width; // non-uniform set-ups (front/rear widths differ)
       for (const [fwd, side] of [[len * 0.36, 1], [len * 0.36, -1], [-len * 0.36, 1], [-len * 0.36, -1]]) {
-        const [x0, y0] = P(fwd, 0), [x1, y1] = P(fwd, side * so.width / 2);
+        const [x0, y0] = P(fwd, 0), [x1, y1] = P(fwd, side * (fwd > 0 ? wF : wR) / 2);
         car.append(s('line', { x1: x0, y1: y0, x2: x1, y2: y1, stroke: '#1E2229', 'stroke-width': Math.max(3, 0.35 * sc) }));
         car.append(s('rect', { x: x1 - 0.45 * sc, y: y1 - 0.45 * sc, width: 0.9 * sc, height: 0.9 * sc, fill: '#1E2229' }));
       }
@@ -746,7 +749,7 @@
     for (const zz of zones) {
       const rr = evaluate(m, { ...params(), slew: zz.a });
       const txt = rr.ok ? `${fmtT(rr.cap)}t` : '×';
-      const name = zz.kind === 'front' ? (tire ? '前方' : '前方性能') : zz.kind === 'max' ? (zz.a === 0 ? '前方' : '後方') : zz.kind === 'all' ? '全周' : '側方';
+      const name = zz.kind === 'front' ? (tire ? '前方' : ((m.frontSpecial && m.frontSpecial.label) || '前方性能')) : zz.kind === 'max' ? (zz.a === 0 ? '前方' : '後方') : zz.kind === 'all' ? '全周' : '側方';
       const R0 = E * sc * 0.78;
       const ang = zz.kind === 'side' || zz.kind === 'all' ? zz.a : zz.a;
       const tx = c + R0 * Math.sin(rad(ang)), ty = c - R0 * Math.cos(rad(ang));

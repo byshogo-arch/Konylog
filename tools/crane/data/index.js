@@ -217,6 +217,60 @@ window.CRANE_INDEX = [
   "verified": "checked"
  },
  {
+  "id": "kato-mr-250rf",
+  "maker": "kato",
+  "model": "MR-250Rf",
+  "nickname": "CITYRANGE SUPERBOOM（PREMIUM Roughter）",
+  "generation": "型式 KRM-25H-F",
+  "classTon": 25,
+  "status": "current",
+  "variant": "6段ブーム・2段SLジブ（油圧伸縮・油圧無段階傾斜）・H型アウトリガ",
+  "maxLoad": {
+   "t": 25,
+   "r": 2.8,
+   "L": 6.7,
+   "note": "6.7mブーム 7本掛（主要諸元 最大定格総荷重）"
+  },
+  "boom": {
+   "min": 6.7,
+   "max": 29
+  },
+  "boomLengths": [
+   6.7,
+   11.25,
+   15.74,
+   20.2,
+   24.6,
+   29
+  ],
+  "hasJib": true,
+  "hasFront": false,
+  "hasOnTire": true,
+  "outriggers": [
+   6,
+   5.2,
+   4.4,
+   3.4,
+   2.085
+  ],
+  "vehicle": {
+   "length": 9195,
+   "width": 2395,
+   "height": 3495,
+   "wheelbase": 3540,
+   "gvw": 24455,
+   "axles": [
+    12250,
+    12205
+   ],
+   "turningRadius": 5,
+   "turningRadius2ws": 8.3,
+   "maxSpeed": 49,
+   "note": "主要諸元の値。本機は、新規開発車両証明制度による適合証明書「基本通行条件重量:B」の交付を受けていますが、実際の通行条件は、運行経路ごとの道路管理者の算定結果によって付与されます。道路の走行には、道路法による通行の許可と道路運送車両法による保安基準の緩和が必要。"
+  },
+  "verified": "checked"
+ },
+ {
   "id": "kato-sl-250rv",
   "maker": "kato",
   "model": "SL-250RV",
@@ -422,7 +476,7 @@ window.CRANE_INDEX = [
    "maxSpeed": 49,
    "note": "走行時寸法・重量（主要諸元）。新規開発車両証明制度による適合証明書「基本通行条件 重量：A」交付（実際の通行条件は経路ごとの道路管理者の算定による）。"
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "tadano-gr-250n-5",
@@ -473,6 +527,60 @@ window.CRANE_INDEX = [
    "turningRadius2ws": 8.5,
    "maxSpeed": 49,
    "note": ""
+  },
+  "verified": "pending"
+ },
+ {
+  "id": "kato-mr-350rf2",
+  "maker": "kato",
+  "model": "MR-350RfⅡ",
+  "nickname": "",
+  "generation": "KRM-35H-F",
+  "classTon": 35,
+  "status": "current",
+  "variant": "6段ブーム（MODE A 通常伸縮／MODE B 特殊伸縮）・3段SLジブ・H型アウトリガ（性能表 #1001〜 C05742。#0051〜 C05741 と定格総荷重表は同一）",
+  "maxLoad": {
+   "t": 35,
+   "r": 2.6,
+   "L": 7.5,
+   "note": "7.5mブーム 10本掛（主要諸元、ルースタシーブ使用）"
+  },
+  "boom": {
+   "min": 7.5,
+   "max": 32.5
+  },
+  "boomLengths": [
+   7.5,
+   12.5,
+   17.5,
+   22.5,
+   27.5,
+   32.5
+  ],
+  "hasJib": true,
+  "hasFront": false,
+  "hasOnTire": true,
+  "outriggers": [
+   6.8,
+   6.3,
+   5.2,
+   4.2,
+   2.31
+  ],
+  "vehicle": {
+   "length": 9800,
+   "width": 2620,
+   "height": 3595,
+   "wheelbase": 3650,
+   "gvw": 27925,
+   "axles": [
+    13970,
+    13955
+   ],
+   "turningRadius": 4.9,
+   "turningRadius2ws": 8.1,
+   "maxSpeed": 49,
+   "note": "新規開発車両証明制度「基本通行条件 重量：D」。高速自動車国道は走行不可。4輪ステアリング最小回転半径4.9mは構内移動時（最小通路軌跡図）。"
   },
   "verified": "pending"
  },
@@ -642,6 +750,64 @@ window.CRANE_INDEX = [
    "note": "3軸(6×4)。軸重は前前軸/前後軸/後軸。最小回転半径 6.5m（6輪ステアリング）／10.8m（前4輪ステアリング）。新規開発車両証明制度による適合証明書「基本通行条件 重量：D」交付（実際の通行条件は経路ごとの道路管理者の算定による）。"
   },
   "verified": "checked"
+ },
+ {
+  "id": "kato-sl-600rf3",
+  "maker": "kato",
+  "model": "SL-600RfⅢ",
+  "nickname": "",
+  "generation": "KR-60H-F2",
+  "classTon": 60,
+  "status": "current",
+  "variant": "5段ブーム(10.1〜40.0m, MODE A/B)・SLジブ(8.92m/12.7m/16.5m 油圧無段階オフセット5〜60°)・H型アウトリガ",
+  "maxLoad": {
+   "t": 60,
+   "r": 1.8,
+   "L": 10.1,
+   "note": "10.1mブーム 13本掛（60tフック・ルースタシーブ併用）"
+  },
+  "boom": {
+   "min": 10.1,
+   "max": 40
+  },
+  "boomLengths": [
+   10.1,
+   17.6,
+   25,
+   25.1,
+   32.5,
+   36.5,
+   40
+  ],
+  "hasJib": true,
+  "hasFront": true,
+  "hasOnTire": true,
+  "outriggers": [
+   7.6,
+   7.2,
+   6.5,
+   5.4,
+   4.3,
+   2.43
+  ],
+  "vehicle": {
+   "length": 12475,
+   "width": 2750,
+   "height": 3730,
+   "wheelbase": 5750,
+   "gvw": 35895,
+   "axles": [
+    13995,
+    8100,
+    13800
+   ],
+   "turningRadius": 6.7,
+   "turningRadius2ws": 10.8,
+   "maxSpeed": 49,
+   "note": "主要諸元の寸法・重量（走行時）。軸距4,250+1,500mm、軸重は前軸/後前軸/後後軸。輪距 前2,300/後2,300mm。最小回転半径 6輪操向6.7m・2輪操向10.8m。車名及び型式 カトウ YDS-KRC027。新規開発車両証明制度の適合証明書「基本通行条件 重量：D」交付。公道走行には道路法の通行許可と保安基準緩和が必要、高速自動車国道は走行不可。走行時はフックを所定の位置に格納。",
+   "configs": []
+  },
+  "verified": "pending"
  },
  {
   "id": "tadano-gr-600n",
