@@ -1,0 +1,46 @@
+name: 建材相場 指数の自動更新
+
+on:
+  schedule:
+    # 毎週月曜 10:17（日本時間）に、日銀の新しい月のデータが出ていないか確認する。
+    # 企業物価指数は毎月中旬、企業向けサービス価格指数（処分費）は下旬に出るので、月2回ほど更新される
+    - cron: '17 1 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: souba-trends
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 日銀APIから指数を取り直す
+        run: node tools/update-souba-trends.mjs
+
+      - name: 新しいデータがあればコミットして main に反映（Vercel が自動で公開）
+        env:
+          # Vercel が本番デプロイを作るよう、リポジトリ所有者の名前でコミットする（メールは GitHub の noreply アドレス）
+          GIT_AUTHOR_NAME: byshogo-arch
+          GIT_AUTHOR_EMAIL: 326077251+byshogo-arch@users.noreply.github.com
+          GIT_COMMITTER_NAME: byshogo-arch
+          GIT_COMMITTER_EMAIL: 326077251+byshogo-arch@users.noreply.github.com
+        run: |
+          if git diff --quiet -- data/souba-trends.js; then
+            echo "新しいデータはありません"
+            exit 0
+          fi
+          LATEST=$(node -e "const vm=require('vm'),fs=require('fs');const c={window:{}};vm.runInNewContext(fs.readFileSync('data/souba-trends.js','utf8'),c);console.log(c.window.KONYLOG_SOUBA_TRENDS.latestMonth)")
+          git add data/souba-trends.js
+          git commit -m "建材相場: 日銀の指数を ${LATEST} 分まで更新"
+          git push
