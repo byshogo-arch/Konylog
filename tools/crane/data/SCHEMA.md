@@ -98,6 +98,8 @@ Reference example: `src/tadano-gr-250n-5.json`.
     "configs": []                        // optional extra travel configurations [{label, length,width,height,gvw,axles}]
   },
   "notes": ["chart notes worth showing to the user (hook mass rule, single top rule, wind, etc.)"],
+  // notes / outriggers.note / onTireNote / jib.note are shown as they are: plain Japanese, no field names (cols, zone, rMax …).
+  "dataNotes": ["how the data is stored, for maintainers (field names are fine here); shown only in the collapsed technical block"],
   "verification": {"status": "checked", "method": "how numbers were checked", "issues": ["anything uncertain"]}
 }
 ```

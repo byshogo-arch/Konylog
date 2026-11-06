@@ -51,7 +51,7 @@ b { font-weight: 700; }
 .sec-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
 .sec-head h2 { margin: 0; font-size: 20px; font-weight: 900; }
 .sec-no { font: 700 12px var(--mono); background: var(--ink); color: var(--white); padding: 2px 7px; }
-.sec-note { font-size: 12px; color: var(--muted); }
+.sec-note { font-size: 12px; color: var(--muted); min-width: 0; max-width: 100%; } /* 性能表の選択欄が長い機種（SL-850RfⅢ）でもスマホで横にはみ出さない */
 .row-label { font: 700 12px var(--mono); margin: 10px 0 6px; color: var(--ink-2); }
 .hint { font-size: 12px; color: var(--ink-2); margin: 8px 0 0; }
 
@@ -222,6 +222,10 @@ table.road .okv { color: var(--ok); font-weight: 700; }
 /* sources */
 .src-list { font-size: 13px; margin: 0; padding-left: 18px; }
 .src-list li { margin: 4px 0; word-break: break-all; }
+#srcBox { overflow-wrap: anywhere; } /* 長い数値の並びや英数字でもスマホで横にはみ出さない */
+details.tech { margin-top: 8px; font-size: 12px; }
+details.tech summary { cursor: pointer; font-weight: 700; color: var(--ink-2); }
+details.tech .notes { margin-top: 6px; }
 .notes { font-size: 12.5px; color: var(--ink-2); padding-left: 18px; }
 .verif { font: 500 11px var(--mono); color: var(--muted); }
 
@@ -362,3 +366,12 @@ table.cmp .cmp-model { font-weight: 700; white-space: nowrap; }
 .ad-body { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .ad-body img { max-width: 100%; height: auto; }
 .ad-body a { display: inline-block; max-width: 100%; }
+/* テキスト広告（ビルドジョブなど）：ツールのボタン（黒）と見分けがつくよう青緑にする */
+.ad-text { flex: 1 1 100%; max-width: 560px; text-align: left; }
+.ad-text .ad-lead { margin: 0 0 8px; font-size: 13px; font-weight: 700; line-height: 1.5; color: var(--ink-2); }
+.ad-text .ad-cta { display: block; text-align: center; background: #0E7C7B; color: var(--white); font-weight: 900; line-height: 1.5;
+  padding: 12px 14px; border: 2px solid var(--ink); box-shadow: var(--shadow-sm); text-decoration: none;
+  word-break: keep-all; overflow-wrap: anywhere; } /* <wbr> の位置で改行（単語の途中で折り返さない） */
+.ad-text .ad-cta:hover, .ad-text .ad-cta:focus-visible { background: #0A6665; }
+.ad-text .ad-note { margin: 8px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.ad-text img[width="1"] { display: block; }

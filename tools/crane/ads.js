@@ -4,9 +4,19 @@
 // ・バナーは横幅に合わせて自動で縮みます（スマホでも崩れません）。
 // ・各広告には「広告」の表示が自動で付きます（ステルスマーケティング規制への対応）。
 // ・PDFの計算書には広告は入りません。
+// ・A8.net では、A8 に登録していないサイトに広告を貼れません。このツールを置くサイトを A8 の「副サイト」に登録し、
+//   「広告リンク作成」の「掲載サイト」でそのサイトを選んで作ったコードに差し替えてください（a8mat=… の部分が変わります）。
 window.CRANE_ADS = {
   // 「この条件で吊れる機種（全機種比較）」の下
-  middle: ``,
+  // ビルドジョブ（建設業界特化の転職エージェント／A8 提携中 s00000024757004）。
+  // Konylog の WordPress パターン 1641「A8｜施工管理の転職 ビルドジョブ」と同じリンク・計測用画像・文言。
+  middle: `
+<div class="ad-text">
+  <p class="ad-lead">施工管理の転職（建設業界専門のエージェント）</p>
+  <a class="ad-cta" href="https://px.a8.net/svt/ejp?a8mat=4BEFL8+2TT6RM+5B0Y+NTJWY" rel="nofollow sponsored">ビルドジョブ｜<wbr>建設業界特化の<wbr>転職エージェントの<wbr>無料キャリア面談</a>
+  <p class="ad-note">無料のキャリア面談の案内ページに移ります。</p>
+  <img border="0" width="1" height="1" src="https://www11.a8.net/0.gif?a8mat=4BEFL8+2TT6RM+5B0Y+NTJWY" alt="">
+</div>`,
   // ページの一番下（フッターの上）
   bottom: ``,
 };
