@@ -76,77 +76,149 @@ window.KONYLOG_SOUBA = {
     },
     {
       id: 'd_con', cat: 'concrete', kind: 'dispose',
-      name: 'コンクリートがら', spec: '無筋・有筋', keywords: ['コンガラ', 'がれき類', '処分費'],
+      name: 'コンクリートがら', spec: '無筋・有筋（中間処理施設への持込）', keywords: ['コンガラ', 'がれき類', '処分費', 'コン塊'],
+      price: { low: 1200, high: 5250, unit: '円/t', basis: '5府県（青森・秋田・広島・兵庫・大阪）が公表する施設ごとの受入単価。運搬費は別', asOf: '2026-11-01' },
+      history: [
+        { label: '無筋', text: '府県ごとの中央値 1,500〜3,000円/t（広島県 1,700円/t）' },
+        { label: '有筋', text: '府県ごとの中央値 2,000〜4,000円/t' },
+        { label: '横浜市', text: '市発注工事の指定単価 無筋 9,400円/m³・有筋 12,500円/m³' },
+        { label: '値上がり', text: '兵庫県では2025年4月→2026年11月に87施設中38施設が値上げ（値下げは0）' }
+      ],
       trend: { code: 'PRCS20_5202050003', label: '産業廃棄物処理（処分費全体）' },
-      memo: '再生砕石の原料になるので、処分費は建設廃棄物の中では安い部類です。\nグラフは処分費全体（産業廃棄物処理）の指数で、2005年からずっと上がり続け、2023年以降は上げ幅が大きくなっています。'
+      memo: '再生砕石の原料になるので、処分費は建設廃棄物の中では安い部類です。ただし地域差が大きく、大塊・二次製品・夜間休日は割増になるのが一般的です。\nグラフは処分費全体（産業廃棄物処理）の指数で、2005年からずっと上がり続け、2023年以降は上げ幅が大きくなっています。',
+      sources: [ { label: '兵庫県「建設副産物の処理ならびに受入価格」2026年11月1日適用（PDF）', url: 'https://web.pref.hyogo.lg.jp/ks04/documents/fukusanbutsu081101.pdf' }, { label: '広島県「再資源化施設一覧表（コンクリート塊・アスファルトコンクリート塊）」2026年7月一部改定（PDF）', url: 'https://chotatsu.pref.hiroshima.lg.jp/estimate/k20/k20hukusann/coas202607hiru.pdf' }, { label: '青森県「建設廃棄物再資源化施設受入料金」2026年10月1日以降適用（PDF）', url: 'https://www.pref.aomori.lg.jp/soshiki/kendo/seibikikaku/files/04_R081001syobun.pdf' }, { label: '大阪府「建設廃棄物等受入価格 調査報告書」2026年2月1日適用（PDF）', url: 'https://www.pref.osaka.lg.jp/documents/106060/r7simohankikensetuhakibutu.pdf' }, { label: '横浜市「土木工事資材等単価表」2026年11月版（PDF）', url: 'https://www.city.yokohama.lg.jp/business/bunyabetsu/doro-kasen/doro/kanri/hyojunzu/tanka.files/0169_20261026.pdf' } ]
     },
 
     /* ===== 鉄・鋼材 ===== */
     {
       id: 'tekkin', cat: 'steel', kind: 'buy',
-      name: '異形棒鋼（鉄筋）', spec: 'SD295 D16 ベース', keywords: ['鉄筋', 'D13', 'D16', 'SD345'],
+      name: '異形棒鋼（鉄筋）', spec: 'SD295 D16〜D25 ベース', keywords: ['鉄筋', 'D13', 'D16', 'SD345', '異形'],
+      price: { low: 114000, high: 117000, unit: '円/t', basis: '東京の問屋相場・現場直送（業界紙2紙）', asOf: '2026-11-05' },
+      history: [
+        { label: '2020年1月', text: '約68,000円/t（東京、日刊産業新聞）' },
+        { label: '2022〜23年', text: '約120,000円/t（2022年5月〜2023年7月の高値）' },
+        { label: '2025年10月', text: '約104,000円/t' },
+        { label: 'メーカー', text: '東京製鐵の11月販売価格 96,000円/t（D13〜D25、前月比+3,000円）' }
+      ],
       trend: { code: 'PRCG20_2200950003', label: '小形棒鋼' },
-      memo: '電炉で鉄スクラップから作るので、スクラップ価格と電気代の影響を強く受けます。2021〜2023年に急騰して2023年7月にピーク、2025年は需要の弱さで下がりましたが、2026年は再び上向きです。'
+      memo: '電炉で鉄スクラップから作るので、スクラップ価格と電気代の影響を強く受けます。2022〜23年に高値をつけ、2025年は需要の弱さで下がりましたが、2026年はスクラップ高を受けて再び上向きです。\n店の在庫から買う「店売り」は直送より2割ほど高め（東京で134,000〜138,000円/t）です。',
+      sources: [ { label: '日刊鉄鋼新聞「最新市場価格」（東京・問屋仲間相場）', url: 'https://www.japanmetaldaily.com/list/market/details' }, { label: '日刊産業新聞「鉄鋼市場価格」（東京）', url: 'https://www.japanmetal.com/iron-steel-price' }, { label: '東京製鐵「2026年11月 販売価格表（建材）」10月19日発表（PDF）', url: 'https://www.tokyosteel.co.jp/assets/docs/salesprice/kenzai.pdf' } ]
     },
     {
       id: 'h_kou', cat: 'steel', kind: 'buy',
-      name: 'H形鋼', spec: 'SS400 ベースサイズ', keywords: ['H鋼', '形鋼', '鉄骨'],
+      name: 'H形鋼', spec: '細幅 200×100 ベース', keywords: ['H鋼', '形鋼', '鉄骨', 'SS400'],
+      price: { low: 120000, high: 123000, unit: '円/t', basis: '東京の問屋相場・置き場渡し（業界紙2紙）', asOf: '2026-11-05' },
+      history: [
+        { label: '2020年1月', text: '約81,000〜83,000円/t' },
+        { label: '2023年7月', text: '約126,000円/t（高値）' },
+        { label: '2025年10月', text: '約114,000円/t' },
+        { label: 'メーカー', text: '東京製鐵の11月販売価格 119,000円/t（SS400ベース）' }
+      ],
       trend: { code: 'PRCG20_2200950002', label: '形鋼' },
-      memo: '2021〜2022年に急上昇し、2024年5月にピーク。2025年にいったん下がり、2026年は前年比+7%と持ち直しています。'
+      memo: '2021〜2022年に急上昇し、指数は2024年5月にピーク。2025年にいったん下がり、2026年は持ち直して「上値を試す展開」と報じられています。',
+      sources: [ { label: '日刊鉄鋼新聞「最新市場価格」（東京・問屋仲間相場）', url: 'https://www.japanmetaldaily.com/list/market/details' }, { label: '日刊産業新聞「鉄鋼市場価格」（東京）', url: 'https://www.japanmetal.com/iron-steel-price' }, { label: '東京製鐵「2026年11月 販売価格表（建材）」10月19日発表（PDF）', url: 'https://www.tokyosteel.co.jp/assets/docs/salesprice/kenzai.pdf' } ]
     },
     {
       id: 'atsuita', cat: 'steel', kind: 'buy',
-      name: '厚板', spec: 'SS400', keywords: ['鋼板', 'プレート', 'PL'],
+      name: '厚板', spec: '16〜25mm 5×10', keywords: ['鋼板', 'プレート', 'PL', '厚板'],
+      price: { low: 134000, high: 137000, unit: '円/t', basis: '東京の問屋相場・置き場渡し（業界紙2紙）', asOf: '2026-11-05' },
+      history: [
+        { label: '2020年1月', text: '約88,000円/t' },
+        { label: '2022年8月', text: '約146,000円/t（高値）' },
+        { label: 'メーカー', text: '東京製鐵の11月販売価格 113,000円/t（SS400、9〜40mm）' }
+      ],
       trend: { code: 'PRCG20_2200950005', label: '厚中板' },
-      memo: '鉄鉱石・原料炭の高騰と円安で2022年9月にピーク（2020年の1.8倍）。その後は下がりましたが、まだ2020年比+6割の水準です。'
+      memo: '鉄鉱石・原料炭の高騰と円安で2022年にピーク（指数は2020年の1.8倍）。その後は下がりましたが、まだ2020年比+6割の水準です。',
+      sources: [ { label: '日刊鉄鋼新聞「最新市場価格」（東京・問屋仲間相場）', url: 'https://www.japanmetaldaily.com/list/market/details' }, { label: '日刊産業新聞「鉄鋼市場価格」（東京）', url: 'https://www.japanmetal.com/iron-steel-price' }, { label: '東京製鐵「2026年11月 販売価格表（建材）」10月19日発表（PDF）', url: 'https://www.tokyosteel.co.jp/assets/docs/salesprice/kenzai.pdf' } ]
     },
     {
       id: 'netsuen', cat: 'steel', kind: 'buy',
-      name: '熱延鋼板', spec: '黒皮', keywords: ['薄板', 'コイル', 'SPHC'],
+      name: '熱延鋼板', spec: '黒皮 1.6mm 4×8', keywords: ['薄板', 'コイル', 'SPHC', '黒皮'],
+      price: { low: 107000, high: 110000, unit: '円/t', basis: '東京の問屋相場・置き場渡し（日刊鉄鋼新聞）', asOf: '2026-11-05' },
+      history: [
+        { label: '2020年1月', text: '約72,000〜74,000円/t' },
+        { label: '2022年8月', text: '約134,000円/t（高値）' },
+        { label: '2025年10月', text: '約101,000円/t' },
+        { label: 'メーカー', text: '東京製鐵の11月販売価格 111,000〜113,000円/t（板厚1.6〜6.0mm）' }
+      ],
       trend: { code: 'PRCG20_2200950006', label: '熱延広幅帯鋼' },
-      memo: '2022年10月がピーク。その後はアジアの鋼材市況の軟化で下がり、2026年は2020年比+4割前後で横ばいです。'
+      memo: '指数は2022年10月がピーク。その後はアジアの鋼材市況の軟化で下がり、2026年は2020年比+4割前後で横ばいです。',
+      sources: [ { label: '日刊鉄鋼新聞「最新市場価格」（東京・問屋仲間相場）', url: 'https://www.japanmetaldaily.com/list/market/details' }, { label: '日刊産業新聞「鉄鋼市場価格」（東京）', url: 'https://www.japanmetal.com/iron-steel-price' }, { label: '東京製鐵「2026年11月 販売価格表（鋼板）」（PDF）', url: 'https://www.tokyosteel.co.jp/assets/docs/salesprice/kouhan.pdf' } ]
     },
     {
       id: 'aen_mekki', cat: 'steel', kind: 'buy',
-      name: '亜鉛めっき鋼板', spec: 'ガルバリウム鋼板を含む', keywords: ['ガルバ', 'トタン', 'カラー鋼板', '板金'],
+      name: '亜鉛めっき鋼板', spec: '溶融亜鉛めっき Z18 0.27mm 平板 3×6', keywords: ['ガルバ', 'トタン', 'カラー鋼板', '板金', '亜鉛鉄板'],
+      price: { low: 240000, high: 242000, unit: '円/t', basis: '東京の問屋相場・置き場渡し（日刊鉄鋼新聞）。薄い板ほどトン単価は高くなります', asOf: '2026-11-05' },
+      history: [
+        { label: 'カラー鋼板', text: '小コイル0.35mm 334,000〜339,000円/t（2026年10月、東京）' },
+        { label: 'メーカー', text: '東京製鐵のめっきコイル 141,000〜151,000円/t（11月、板厚別）' },
+        { label: '同・推移', text: '2020年1月 96,000 → 2022年5月 158,000 → 2025年10月 127,000円/t（東京製鐵 T-ジンク 0.4〜0.6mm）' }
+      ],
       trend: { code: 'PRCG20_2200950019', link: 'PRCG15_2200950014' },
-      memo: '屋根・外壁の板金やデッキプレートの材料。2022年10月をピークに少し下がり、いまは2020年比+5割前後で高止まりです。'
+      memo: '屋根・外壁の板金やデッキプレートの材料。指数は2022年10月をピークに少し下がり、いまは2020年比+5割前後。カラー鋼板は2026年秋に「一段高」と報じられています。',
+      sources: [ { label: '日刊鉄鋼新聞「最新市場価格」（東京・問屋仲間相場）', url: 'https://www.japanmetaldaily.com/list/market/details' }, { label: '日刊鉄鋼新聞「東京／カラー鋼板／上昇基調、一段高へ」', url: 'https://www.japanmetaldaily.com/articles/-/268297' }, { label: '東京製鐵「2026年11月 販売価格表（鋼板）」（PDF）', url: 'https://www.tokyosteel.co.jp/assets/docs/salesprice/kouhan.pdf' } ]
     },
     {
       id: 'keiryou', cat: 'steel', kind: 'buy',
-      name: '軽量形鋼', spec: 'C形鋼など', keywords: ['Cチャン', 'リップ溝形鋼', '胴縁', '母屋'],
+      name: '軽量形鋼', spec: 'C形鋼 2.3×100×50×20', keywords: ['Cチャン', 'リップ溝形鋼', '胴縁', '母屋', '軽量C'],
+      price: { low: 174000, high: 193000, unit: '円/t', basis: '東京の問屋相場（日刊産業新聞 174,000円、日刊鉄鋼新聞 カラー品 190,000〜193,000円）', asOf: '2026-10-29' },
+      history: [
+        { label: '2020年', text: '約95,000円/t（東京、日刊産業新聞）' },
+        { label: '2021年11月〜', text: '約169,000円/t（2026年6月まで同水準）' },
+        { label: 'めっき品', text: '215,000〜217,000円/t（日刊鉄鋼新聞）' }
+      ],
       trend: { code: 'PRCG20_2200950015' },
-      memo: '2022年10月のピーク後もあまり下がらず、2020年比+6割台が続いています。'
+      memo: '指数は2022年10月がピーク。その後もあまり下がらず、2020年比+6割台が続いています。2026年7月に問屋相場が一段上がりました。',
+      sources: [ { label: '日刊鉄鋼新聞（東京・軽量C形鋼の市況、2026年10月29日）', url: 'https://www.japanmetaldaily.com/articles/-/269646' }, { label: '日刊産業新聞「鉄鋼市場価格」（東京）', url: 'https://www.japanmetal.com/iron-steel-price' } ]
     },
     {
       id: 'kakukan', cat: 'steel', kind: 'buy',
-      name: '角形鋼管・鋼管', spec: 'STKR・BCR・ガス管など', keywords: ['角パイプ', 'コラム', '単管', 'STK'],
+      name: '角形鋼管（コラム）', spec: '大径角形鋼管・切断開先などの一次加工込み', keywords: ['角パイプ', 'コラム', 'BCR', 'STKR', '鋼管'],
+      price: { low: 186000, high: 197000, unit: '円/t', basis: '東京の問屋相場・置き場（BCR 186,000〜187,000円、STKR 196,000〜197,000円）', asOf: '2026-11-06' },
+      history: [
+        { label: '中径角パイプ', text: '黒皮 2.3×100×100 195,000〜197,000円/t（11月、東京）' },
+        { label: 'メーカー', text: '東京製鐵 トウテツコラム 131,000円/t（11月、一次加工なし）' },
+        { label: '今後', text: '日鉄建材がコラムの12月契約で5,000円/t値上げを表明' }
+      ],
       trend: { code: 'PRCG20_2200950011', label: '普通鋼鋼管' },
-      memo: '柱やフレームに使う角パイプ・鋼管。2022年以降じわじわ上がり続け、2026年9月が過去最高です。'
+      memo: '柱やフレームに使う角パイプ・鋼管。指数は2022年以降じわじわ上がり続け、2026年9月が過去最高。コラムは「先高観が強まる」と報じられています。',
+      sources: [ { label: '日刊鉄鋼新聞「東京／コラム／先高観強まる」2026年11月6日', url: 'https://www.japanmetaldaily.com/articles/-/270140' }, { label: '日刊鉄鋼新聞「東京／中径角形鋼管／高値寄り商状」', url: 'https://www.japanmetaldaily.com/articles/-/270048' }, { label: '東京製鐵「2026年11月 販売価格表（建材）」10月19日発表（PDF）', url: 'https://www.tokyosteel.co.jp/assets/docs/salesprice/kenzai.pdf' } ]
     },
     {
       id: 'sus304', cat: 'steel', kind: 'buy',
-      name: 'ステンレス鋼板', spec: 'SUS304 2B（冷延）', keywords: ['ステンレス', 'SUS'],
+      name: 'ステンレス鋼板', spec: 'SUS304 冷延 2.0mm', keywords: ['ステンレス', 'SUS', '18-8'],
+      price: { low: 620000, high: 630000, unit: '円/t', basis: '東京の問屋相場（業界紙2紙）。kgあたり620〜630円', asOf: '2026-11-05' },
+      history: [
+        { label: '2020年12月', text: '約37万円/t' },
+        { label: '2022年9月', text: '約68万円/t（高値）' },
+        { label: '2025年11月', text: '約56万円/t' }
+      ],
       trend: { code: 'PRCG20_2200950016', label: 'ステンレス冷延鋼板' },
-      memo: 'ステンレスはニッケルの相場と円相場で大きく動きます。2022年10月がピーク、2025年に下がったあと2026年は前年比+7%と再び上昇しています。'
+      memo: 'ステンレスはニッケルの相場と円相場で大きく動きます。2022年秋がピークで、2025年に下がったあと2026年は再び上昇。メーカーは8〜10月契約で店売り価格を引き下げていますが、問屋相場は62万円前後で強含みです。',
+      sources: [ { label: '日刊鉄鋼新聞「最新市場価格」（東京・問屋仲間相場）', url: 'https://www.japanmetaldaily.com/list/market/details' }, { label: '日刊産業新聞「鉄鋼市場価格」（東京）', url: 'https://www.japanmetal.com/iron-steel-price' }, { label: '日刊鉄鋼新聞「東京／SUS304冷薄／強含み、需要堅調」', url: 'https://www.japanmetaldaily.com/articles/-/267835' } ]
     },
     {
       id: 'mesh', cat: 'steel', kind: 'buy',
-      name: '溶接金網', spec: 'ワイヤーメッシュ', keywords: ['メッシュ', '金網'],
+      name: '溶接金網', spec: 'ワイヤーメッシュ', keywords: ['メッシュ', '金網', '土間'],
+      priceNote: '規格の差が大きく公開の相場が見当たらないため非掲載。2026年5月出荷分から1万円/t以上の値上げ（ノブハラ）',
       trend: { code: 'PRCG20_2201150022', label: '金網' },
-      memo: '土間コンの補強などに使うメッシュ。原料の線材の値上がりで2022年に急騰し、2026年8月に過去最高を更新しました。'
-    },
-    {
-      id: 'bolt', cat: 'steel', kind: 'buy',
-      name: 'ボルト・ナット', spec: '高力ボルト・アンカーなど', keywords: ['ボルト', 'HTB', 'アンカー'],
-      trend: { code: 'PRCG20_2201150010' },
-      memo: '鋼材ほどの乱高下はありませんが、2022年以降は毎年じわじわ値上がり。2026年9月が過去最高です。'
+      memo: '土間コンの補強などに使うメッシュ。原料の線材の値上がりで2022年に急騰し、指数は2026年8月に過去最高を更新しました。',
+      sources: [ { label: '日刊産業新聞「ノブハラ 溶接金網販価 1万円以上上げ 5月出荷から」', url: 'https://www.japanmetal.com/news-t20260402148324.html' } ]
     },
     {
       id: 'fe_h2', cat: 'steel', kind: 'sell',
-      name: '鉄スクラップ（H2）', spec: '厚さ3〜6mm未満の重量くず', keywords: ['鉄くず', 'スクラップ', 'H2', 'ヘビー'],
+      name: '鉄スクラップ（H2）', spec: '厚さ3〜6mm未満の重量くず', keywords: ['鉄くず', 'スクラップ', 'H2', 'ヘビー', '特級'],
+      price: { low: 38500, high: 41000, unit: '円/t', basis: '東京の問屋ヤード持込の相場（業界紙2紙）。kgあたり38.5〜41円', asOf: '2026-11-05' },
+      history: [
+        { label: '電炉の買値', text: '東京製鐵 特級（H2相当）51,000〜52,500円/t（10月22日〜）。新断は52,500〜55,500円/t' },
+        { label: '輸出入札', text: '関東鉄源協同組合 52,077円/t（10月、H2・船側渡し）' },
+        { label: '小口持込', text: '業者の公開買取価格 35〜53円/kg（中心は47円/kg前後）' },
+        { label: '2020年1月', text: 'ヤード持込 約13,500〜14,500円/t' },
+        { label: '2022年4〜5月', text: 'ヤード持込 最高54,000円/t' }
+      ],
       trend: { code: 'PRCG20_2202350002', label: '鉄屑' },
-      memo: '鉄スクラップは建材の中でも値動きが激しい品目です。2008年（リーマン・ショック前）と2022年に大きな山があり、2026年は年初から上がったあと夏以降は下げています。\n解体や現場で出る鉄くずは、まとまった量なら買取価格が上がっているタイミングで出すと有利です。'
+      memo: '鉄スクラップは建材の中でも値動きが激しい品目です。2008年（リーマン・ショック前）と2022年に大きな山があり、2026年は5月に高値をつけたあと夏に下げ、10月に再び上がりました。\n現場や解体で出る鉄くずは、問屋のヤードに持ち込む値段（上の数字）が現実的な目安。電炉メーカーの買値はそれより1万円/tほど高い水準です。',
+      sources: [ { label: '日刊産業新聞「鉄鋼市場価格」（東京）', url: 'https://www.japanmetal.com/iron-steel-price' }, { label: '日刊鉄鋼新聞「最新市場価格」（東京・問屋仲間相場）', url: 'https://www.japanmetaldaily.com/list/market/details' }, { label: '東京製鐵「国内鉄スクラップ購入価格表」2026年10月22日適用（PDF）', url: 'https://www.tokyosteel.co.jp/assets/docs/scrapprice/price/2026/2026.10.22.pdf' }, { label: '日刊鉄鋼新聞「関東の鉄スクラップ輸出入札／5万2077円で2万トン落札」', url: 'https://www.japanmetaldaily.com/articles/-/268700' } ]
     },
     {
       id: 'sus_scrap', cat: 'steel', kind: 'sell',
@@ -426,9 +498,15 @@ window.KONYLOG_SOUBA = {
     },
     {
       id: 'd_wood', cat: 'wood', kind: 'dispose',
-      name: '木くず', spec: '建設発生木材', keywords: ['木くず', '廃材', '処分費'],
+      name: '木くず', spec: '建設発生木材・解体材（異物なし）', keywords: ['木くず', '廃材', '処分費', '解体材'],
+      price: { low: 10000, high: 35000, unit: '円/t', basis: '府県の公表受入単価（東北は中央値2.7万円/t、兵庫・大阪は1.2〜1.5万円/t）。運搬費は別', asOf: '2026-11-01' },
+      history: [
+        { label: 'm³建て', text: '広島県の解体材 中央値5,500円/m³、首都圏の民間 5,000円/m³前後' },
+        { label: '注意', text: '生木（枝葉・根）や異物の付いた木くずは割高' }
+      ],
       trend: { code: 'PRCS20_5202050003', label: '産業廃棄物処理（処分費全体）' },
-      memo: 'チップにして燃料などに再利用されるため、処分費は混合廃棄物より安めです。グラフは処分費全体の指数です。'
+      memo: 'チップにして燃料などに再利用されるため、処分費は混合廃棄物より安めです。地域差が大きい品目です。グラフは処分費全体の指数です。',
+      sources: [ { label: '青森県「建設廃棄物再資源化施設受入料金」2026年10月1日以降適用（PDF）', url: 'https://www.pref.aomori.lg.jp/soshiki/kendo/seibikikaku/files/04_R081001syobun.pdf' }, { label: '兵庫県「建設副産物の処理ならびに受入価格」2026年11月1日適用（PDF）', url: 'https://web.pref.hyogo.lg.jp/ks04/documents/fukusanbutsu081101.pdf' }, { label: '大阪府「建設廃棄物等受入価格 調査報告書」2026年2月1日適用（PDF）', url: 'https://www.pref.osaka.lg.jp/documents/106060/r7simohankikensetuhakibutu.pdf' }, { label: '広島市「建設発生土及び建設廃棄物処分費一覧表」2026年10月（PDF）', url: 'https://www.city.hiroshima.lg.jp/_res/projects/default_project/_page_/001/052/389/syobun_r810.pdf' } ]
     },
 
     /* ===== ウレタン・断熱 ===== */
@@ -449,6 +527,18 @@ window.KONYLOG_SOUBA = {
       name: 'グラスウール断熱材', spec: '住宅用・ビル用', keywords: ['グラスウール', '断熱材'],
       trend: { code: 'PRCG20_2200850005', label: 'ガラス繊維・同製品' },
       memo: 'ガラスを溶かす燃料・電気の値上がりで、2022年以降メーカーの値上げが続きました。2020年比+4割の水準です。'
+    },
+    {
+      id: 'd_foam', cat: 'insulation', kind: 'dispose',
+      name: '廃ウレタン・発泡スチロール', spec: '断熱材の端材・梱包材（単品）', keywords: ['ウレタン', '発泡スチロール', 'スタイロ', '処分費'],
+      price: { low: 4000, high: 11000, unit: '円/m³', basis: '民間の処理業者の公表料金（横浜：発泡スチロール4,000円・ウレタン/スタイロ11,000円、仙台：10,000円〜）', asOf: '2026-04-27', tax: '税抜' },
+      history: [
+        { label: 't建て', text: '重さで払うと12万〜30万円/tとかなり高い（軽くてかさばるため）' },
+        { label: 'グラスウール', text: '10,000〜13,000円/m³（同じく民間料金表）' }
+      ],
+      trend: { code: 'PRCS20_5202050003', label: '産業廃棄物処理（処分費全体）' },
+      memo: '発泡系は軽くてかさばるので容積（m³）建ての料金が一般的です。発泡スチロールは単品でまとめるとリサイクルに回せて安く、ウレタンやスタイロは割高になりがちです。公開料金は少ないので目安の確度は低めです。',
+      sources: [ { label: 'ミライズ（横浜）産業廃棄物処理単価表 2026年4月27日改定（PDF）', url: 'https://miraiz-yokohama.com/wp-content/uploads/2026/04/%E3%83%9F%E3%83%A9%E3%82%A4%E3%82%BA_%E5%8D%98%E4%BE%A1%E8%A1%A8_price.2026.4.27.pdf' }, { label: '仙台環境開発 処理料金表 2025年8月6日現在（PDF）', url: 'http://www.sendaikankyo.co.jp/pdf/fineness/authorization/11.pdf' } ]
     },
 
     /* ===== プラスチック ===== */
@@ -496,9 +586,15 @@ window.KONYLOG_SOUBA = {
     },
     {
       id: 'd_plastic', cat: 'plastic', kind: 'dispose',
-      name: '廃プラスチック', spec: '建設系（梱包材・端材など）', keywords: ['廃プラ', '処分費'],
+      name: '廃プラスチック', spec: '梱包材・シート・塩ビ管など（単品分別）', keywords: ['廃プラ', '処分費', 'ビニール'],
+      price: { low: 7000, high: 16000, unit: '円/m³', basis: '広島市が公表する13施設の受入単価（中央値10,000円/m³）。首都圏・仙台・京都の民間料金も同じくらい', asOf: '2026-10-01' },
+      history: [
+        { label: '民間料金', text: '首都圏・仙台・京都 9,000〜15,000円/m³' },
+        { label: 't建て', text: '重さで払う場合は 5万〜20万円/t と高くつく（青森県の中間処理 中央値7.25万円/t）' }
+      ],
       trend: { code: 'PRCS20_5202050003', label: '産業廃棄物処理（処分費全体）' },
-      memo: '2017年末に中国が廃プラの輸入を止めてから国内処理が増え、受入単価が上がった品目です。グラフは処分費全体の指数です。'
+      memo: '2017年末に中国が廃プラの輸入を止めてから国内処理が増え、受入単価が上がった品目です。かさばるので容積（m³）建てが多く、つぶして容積を減らすと安くなります。グラフは処分費全体の指数です。',
+      sources: [ { label: '広島市「建設発生土及び建設廃棄物処分費一覧表」2026年10月（PDF）', url: 'https://www.city.hiroshima.lg.jp/_res/projects/default_project/_page_/001/052/389/syobun_r810.pdf' }, { label: 'ミライズ（横浜）産業廃棄物処理単価表 2026年4月27日改定（PDF）', url: 'https://miraiz-yokohama.com/wp-content/uploads/2026/04/%E3%83%9F%E3%83%A9%E3%82%A4%E3%82%BA_%E5%8D%98%E4%BE%A1%E8%A1%A8_price.2026.4.27.pdf' }, { label: '仙台環境開発 処理料金表 2025年8月6日現在（PDF）', url: 'http://www.sendaikankyo.co.jp/pdf/fineness/authorization/11.pdf' }, { label: 'カンテク（京都・宇治）料金表', url: 'https://kanteku.co.jp/fee/' } ]
     },
 
     /* ===== ガラス・内外装 ===== */
@@ -540,9 +636,15 @@ window.KONYLOG_SOUBA = {
     },
     {
       id: 'd_gypsum', cat: 'finish', kind: 'dispose',
-      name: '廃石膏ボード', spec: '新築端材・解体材', keywords: ['石膏ボード', 'PB', '処分費'],
+      name: '廃石膏ボード', spec: 'リサイクルできる端材（新築系）', keywords: ['石膏ボード', 'PB', '処分費'],
+      price: { low: 30000, high: 65000, unit: '円/t', basis: '中間処理施設の公表料金（京都の民間 新築30円/kg〜、青森県の中央値56,300円/t など）。運搬費は別', asOf: '2026-10-01', tax: '税抜' },
+      history: [
+        { label: 'm³建て', text: '広島市 10,000〜20,000円/m³、横浜の民間 13,000円/m³（リサイクル不可は25,000円/m³）' },
+        { label: '解体材', text: '水濡れ・クロス付き・解体系は1.2〜3倍になることが多い' }
+      ],
       trend: { code: 'PRCS20_5202050003', label: '産業廃棄物処理（処分費全体）' },
-      memo: '廃石膏ボードは安定型処分場に埋められず、管理型での処分が必要なため処分費は高めです。新築端材はリサイクル（再生石膏）に回すルートも増えています。'
+      memo: '廃石膏ボードは安定型処分場に埋められず、管理型での処分が必要なため処分費は高め。濡らさず、新築端材だけで分けて出すとリサイクル（再生石膏）に回せて安くなります。グラフは処分費全体の指数です。',
+      sources: [ { label: 'カンテク（京都・宇治）料金表', url: 'https://kanteku.co.jp/fee/' }, { label: '青森県「建設廃棄物再資源化施設受入料金」2026年10月1日以降適用（PDF）', url: 'https://www.pref.aomori.lg.jp/soshiki/kendo/seibikikaku/files/04_R081001syobun.pdf' }, { label: '広島市「建設発生土及び建設廃棄物処分費一覧表」2026年10月（PDF）', url: 'https://www.city.hiroshima.lg.jp/_res/projects/default_project/_page_/001/052/389/syobun_r810.pdf' }, { label: 'ミライズ（横浜）産業廃棄物処理単価表 2026年4月27日改定（PDF）', url: 'https://miraiz-yokohama.com/wp-content/uploads/2026/04/%E3%83%9F%E3%83%A9%E3%82%A4%E3%82%BA_%E5%8D%98%E4%BE%A1%E8%A1%A8_price.2026.4.27.pdf' } ]
     },
 
     /* ===== アスファルト・燃料 ===== */
@@ -560,23 +662,31 @@ window.KONYLOG_SOUBA = {
     },
     {
       id: 'd_as', cat: 'fuel', kind: 'dispose',
-      name: 'アスファルトがら', spec: 'アスコン塊', keywords: ['アスガラ', 'がれき類', '処分費'],
+      name: 'アスファルトがら', spec: 'アスコン塊・切削材（中間処理施設への持込）', keywords: ['アスガラ', 'がれき類', '処分費', 'As塊'],
+      price: { low: 1000, high: 4500, unit: '円/t', basis: '5府県（青森・秋田・広島・兵庫・大阪）が公表する施設ごとの受入単価。運搬費は別', asOf: '2026-11-01' },
+      history: [
+        { label: '中央値', text: '府県ごとに 1,500〜3,000円/t（広島県 2,000円/t）' },
+        { label: '横浜市', text: '市発注工事の指定単価 アスファルト殻 7,050円/m³' },
+        { label: '値上がり', text: '兵庫県では2025年4月→2026年11月に83施設中31施設が値上げ（値下げは0）' }
+      ],
       trend: { code: 'PRCS20_5202050003', label: '産業廃棄物処理（処分費全体）' },
-      memo: '再生アスファルト合材の原料になるため、処分費は比較的安めです。グラフは処分費全体の指数です。'
+      memo: '再生アスファルト合材の原料になるため、処分費は比較的安めです。グラフは処分費全体の指数です。',
+      sources: [ { label: '兵庫県「建設副産物の処理ならびに受入価格」2026年11月1日適用（PDF）', url: 'https://web.pref.hyogo.lg.jp/ks04/documents/fukusanbutsu081101.pdf' }, { label: '広島県「再資源化施設一覧表（コンクリート塊・アスファルトコンクリート塊）」2026年7月一部改定（PDF）', url: 'https://chotatsu.pref.hiroshima.lg.jp/estimate/k20/k20hukusann/coas202607hiru.pdf' }, { label: '青森県「建設廃棄物再資源化施設受入料金」2026年10月1日以降適用（PDF）', url: 'https://www.pref.aomori.lg.jp/soshiki/kendo/seibikikaku/files/04_R081001syobun.pdf' }, { label: '大阪府「建設廃棄物等受入価格 調査報告書」2026年2月1日適用（PDF）', url: 'https://www.pref.osaka.lg.jp/documents/106060/r7simohankikensetuhakibutu.pdf' }, { label: '横浜市「土木工事資材等単価表」2026年11月版（PDF）', url: 'https://www.city.yokohama.lg.jp/business/bunyabetsu/doro-kasen/doro/kanri/hyojunzu/tanka.files/0169_20261026.pdf' } ]
     },
 
     /* ===== 混合・その他 ===== */
     {
       id: 'd_mixed', cat: 'misc', kind: 'dispose',
-      name: '建設混合廃棄物', spec: '分別していない廃棄物', keywords: ['混廃', '混合', '処分費'],
+      name: '建設混合廃棄物', spec: '分別していない廃棄物（中間処理で選別）', keywords: ['混廃', '混合', '処分費'],
+      price: { low: 11000, high: 25000, unit: '円/m³', basis: '民間の処理業者の公表料金（横浜・京都・仙台など）。運搬費は別', asOf: '2026-04-27', tax: '税抜' },
+      history: [
+        { label: '軽いもの中心', text: '新築系（木くず・紙・廃プラなど）11,000〜15,000円/m³' },
+        { label: '重いもの・石膏入り', text: '15,000〜25,000円/m³' },
+        { label: '業界の動き', text: '処理業者の「契約単価」は2022年から値上げ超が続き、2026年4〜6月期は調査期間で最大の上げ超（全国産業資源循環連合会）' }
+      ],
       trend: { code: 'PRCS20_5202050003', label: '産業廃棄物処理（処分費全体）' },
-      memo: '分別されていない混合廃棄物は処分費がいちばん高くなります。現場で分別するほど処分費は下がります。'
-    },
-    {
-      id: 'koshi', cat: 'misc', kind: 'sell',
-      name: '段ボール（古紙）', spec: '梱包材の段ボール', keywords: ['段ボール', '古紙'],
-      trend: { code: 'PRCG20_2202350001', label: '古紙' },
-      memo: '指数は2020年比+2割でほぼ横ばいです。現場で出た段ボールは、古紙回収業者に無料か少額の買取で引き取ってもらえることが多いです。'
+      memo: '分別されていない混合廃棄物は処分費がいちばん高くなります。木くず・コンがら・金属・段ボールを現場で分けるほど、混合で出す量が減って安くなります。',
+      sources: [ { label: 'ミライズ（横浜）産業廃棄物処理単価表 2026年4月27日改定（PDF）', url: 'https://miraiz-yokohama.com/wp-content/uploads/2026/04/%E3%83%9F%E3%83%A9%E3%82%A4%E3%82%BA_%E5%8D%98%E4%BE%A1%E8%A1%A8_price.2026.4.27.pdf' }, { label: 'カンテク（京都・宇治）料金表', url: 'https://kanteku.co.jp/fee/' }, { label: '仙台環境開発 処理料金表 2025年8月6日現在（PDF）', url: 'http://www.sendaikankyo.co.jp/pdf/fineness/authorization/11.pdf' }, { label: '全国産業資源循環連合会「産業廃棄物処理業景況動向調査」2026年4-6月期（PDF）', url: 'https://www.zensanpairen.or.jp/wp/wp-content/themes/sanpai/assets/pdf/activities/report_keikyou2604_06.pdf' } ]
     }
   ]
 };
