@@ -276,6 +276,7 @@
       if (!jc) { res.reason = `この条件（${res.zone.label.text}）のジブ性能表がありません`; return res; }
       res.chart = jc; res.chartKind = 'jib';
       const hk = jc.hook || 'aux'; res.hookKey = hk;
+      if (jc.note) res.msgs.push({ t: 'info', s: `この表の注記：${jc.note}` });
       if (jc.type === 'radius') {
         const cols = jc.cols.map((c, idx) => ({ idx, L: c.L, c })).filter((x) => Math.abs(x.c.offset - p.off) < EPS).sort((a, b) => a.L - b.L);
         const L = p.jibL ?? (cols.length ? cols[cols.length - 1].L : null);
@@ -341,6 +342,7 @@
     if (ga.angle != null && isFinite(minA) && minA > 0 && ga.angle < minA - 0.5) {
       res.msgs.push({ t: 'warn', s: `角度の目安（約${fmtM(ga.angle, 0)}°）が危険角度／作動可能範囲（${minA}°以上）を下回っています。この角度以下は無負荷でも転倒のおそれ。実機の角度表示で必ず確認` });
     }
+    for (const c of used) if (c.note) res.msgs.push({ t: 'info', s: `${fmtL(c.L)}mブームの注記：${c.note}` });
     let hk = forceHook || used[used.length - 1].hook || 'main';
     let cap = lk.value;
     res.parts = used.map((c) => c.parts).filter(Boolean);
@@ -1100,8 +1102,12 @@
       if (chart.cols.some((c) => c.angle)) foot.append(h('tr', {}, h('th', {}, '角度範囲'), chart.cols.map((c) => h('td', {}, c.angle ? `${c.angle[0]}〜${c.angle[1]}°` : ''))));
       if (chart.cols.some((c) => c.parts)) foot.append(h('tr', {}, h('th', {}, '巻掛本数'), chart.cols.map((c) => h('td', {}, c.parts ?? ''))));
       if (chart.cols.some((c) => c.telescope)) foot.append(h('tr', {}, h('th', {}, '伸縮割合'), chart.cols.map((c) => h('td', {}, c.telescope || ''))));
+      if (chart.cols.some((c) => isFinite(c.rMax))) foot.append(h('tr', {}, h('th', {}, '最大半径'), chart.cols.map((c) => h('td', {}, isFinite(c.rMax) ? `${fmtM(c.rMax)}m` : ''))));
       t.append(foot);
     }
+    const cn = chart.cols.filter((c) => c.note).map((c) => `${c.L != null ? fmtL(c.L) + 'm' : 'オフセット' + c.offset + '°'}${c.mode ? ' ' + c.mode : ''}：${c.note}`);
+    if (chart.note) cn.unshift(chart.note);
+    $('tableNotes').replaceChildren(...(cn.length ? [h('ul', { class: 'notes', style: 'margin:8px 0 0' }, cn.map((x) => h('li', {}, x)))] : []));
     box.append(t);
     box.append(h('p', { class: 'hint', style: 'padding:6px 8px;margin:0' }, `単位：t（定格総荷重・フック込み）。出典：${chart.src || ''}　黒セル＝今回採用した値、黄色行・水色列＝参照した行と列。`));
   }
