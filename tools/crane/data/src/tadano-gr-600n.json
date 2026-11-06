@@ -4230,6 +4230,11 @@
    "boom.maxRadius は標準性能の36.0m（スマートチャート性能38.0m）。jib.maxRadius も標準性能40.0m（スマートチャート42.0m）。",
    "3軸車のため vehicle.wheelbase は配列 [1850, 4450]、axles は前前軸・前後軸・後軸。turningRadius=6.7m は6輪ステアリング、turningRadius2ws=11.0m は前4輪ステアリング（前2軸操舵）。",
    "geometry.footY（約3.9m）は図中のピン位置からの目視概算。footX・hookPathY は円弧当てはめ値。"
-  ]
+  ],
+  "independent": {
+   "date": "2026-11-06",
+   "result": "no-discrepancy",
+   "method": "別の担当が原本PDFから独自に表を読み取り、全セル（荷重・半径/角度・角度範囲・巻掛本数・フック）を照合。値の不一致なし。"
+  }
  }
 }

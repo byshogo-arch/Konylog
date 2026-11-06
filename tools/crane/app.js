@@ -1287,7 +1287,8 @@
     if (m.onTireNote) notes.push(m.onTireNote);
     box.append(h('ul', { class: 'notes' }, notes.map((x) => h('li', {}, x))));
     const vf = m.verification || {};
-    box.append(h('p', { class: 'verif' }, `数値チェック：${vf.status === 'checked' ? '出典PDFの画像と全表を照合済み' : vf.status || '未確認'}${vf.method ? '（' + vf.method + '）' : ''}`));
+    box.append(h('p', { class: 'verif' }, `数値チェック①：${vf.status === 'checked' ? '出典PDFの画像と全表を照合済み' : vf.status || '未確認'}${vf.method ? '（' + vf.method + '）' : ''}`));
+    if (vf.independent) box.append(h('p', { class: 'verif' }, `数値チェック②（二重チェック ${vf.independent.date}）：${vf.independent.method}`));
     if (vf.issues && vf.issues.length) box.append(h('ul', { class: 'notes' }, vf.issues.map((x) => h('li', {}, `確認メモ：${x}`))));
     const g = geom(m);
     box.append(h('p', { class: 'verif' }, `図の寸法：ブームフートピン位置 旋回中心から${fmtM(g.footX, 1)}m・高さ${fmtM(g.footY, 1)}m（${g.estimated ? '概算' : '資料値'}）。車体形状は模式図です。`));

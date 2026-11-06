@@ -21956,6 +21956,11 @@
    "p.13 2.55m table: 標準巻掛本数 printed as 4 for every column although 10.0/13.0 m values reach 20.00/17.50 t (more than 4 x 4.6 tf); kept as printed.",
    "Strength/stability boundary lines (太線) of the charts are not captured.",
    "geometry.footX/footY estimated from the 作業範囲図 (radial boom-angle lines intersection), not a printed value."
-  ]
+  ],
+  "independent": {
+   "date": "2026-11-06",
+   "result": "no-discrepancy",
+   "method": "別の担当が原本PDFから独自に表を読み取り、全セル（荷重・半径/角度・角度範囲・巻掛本数・フック）を照合。値の不一致なし。"
+  }
  }
 }
