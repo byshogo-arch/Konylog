@@ -404,30 +404,60 @@
 
     // 広告の設定（data/souba-ads.js）
     const ADS = window.KONYLOG_SOUBA_ADS || {};
-    const AD_HOST_OK = (ADS.allowHosts || []).some((h) => location.hostname === h || location.hostname.endsWith('.' + h));
+    const hostIn = (list) => (list || []).some((h) => location.hostname === h || location.hostname.endsWith('.' + h));
+    const AD_HOST_OK = hostIn(ADS.allowHosts); // AdSense と計測を読み込むドメイン
+    const ASP_HOST_OK = hostIn(ADS.aspHosts);  // A8.net などの広告を出すドメイン（ASP にサイト登録したもの）
     const AD_PREVIEW = new URLSearchParams(location.search).get('adpreview') === '1';
     const fillName = (t, it) => String(t || '').replace(/\{name\}/g, it ? it.name : '');
 
-    // 詳細画面の「PR」枠：品目に合う最初の1件（url が空の枠は出さない）
+    // 広告のリンク：url（＋cta・pixel）の1つか、links に並べたもの。url が空のものは除く
+    function linksOf(p) {
+      const list = Array.isArray(p.links) && p.links.length ? p.links : [{ cta: p.cta, url: p.url, pixel: p.pixel }];
+      return list.filter((l) => l && l.url);
+    }
+    // 自社PRはどこでも、ASP の広告は aspHosts のドメインでだけ出す（?adpreview=1 では中身を確かめられるように出す）
+    const adUsable = (p) => !!p && linksOf(p).length > 0 && (p.own || ASP_HOST_OK || AD_PREVIEW);
+    // プレビューではリンクにしない・表示回数の画像も読み込まない
+    function adLinkOpen(p, l, cls) {
+      if (AD_PREVIEW) return `<div class="${cls}">`;
+      return `<a href="${esc(l.url)}" target="_blank" rel="${p.own ? 'noopener' : 'nofollow sponsored noopener'}" data-pr="${esc(p.id)}" class="${cls}">`;
+    }
+    const adLinkClose = () => (AD_PREVIEW ? '</div>' : '</a>');
+    const adPixels = (p) => (AD_PREVIEW ? '' : linksOf(p).filter((l) => l.pixel)
+      .map((l) => `<img src="${esc(l.pixel)}" width="1" height="1" alt="" loading="lazy" decoding="async" class="absolute bottom-0 left-0 w-px h-px">`).join(''));
+    const adPreviewTag = () => (AD_PREVIEW ? '<span class="px-1.5 py-0.5 bg-base-mustard text-base-charcoal">プレビュー（リンク・計測はオフ）</span>' : '');
+
+    // 詳細画面の「PR」枠：品目に合う最初の1件
     function prFor(it) {
-      return (ADS.pr || []).find((p) => p.url
+      return (ADS.pr || []).find((p) => adUsable(p)
         && (!p.kinds || p.kinds.indexOf(it.kind) >= 0)
         && (!p.cats || p.cats.indexOf(it.cat) >= 0)
         && (!p.items || p.items.indexOf(it.id) >= 0));
     }
     function prCardHTML(it) {
-      if (AD_PREVIEW) return '<div class="mt-4"><div class="ad-label">PR</div><div class="ad-preview">PR枠（品目に合わせて中身が変わります）</div></div>';
       const p = prFor(it);
-      if (!p) return '';
-      return `
-        <a href="${esc(p.url)}" target="_blank" rel="${p.own ? 'noopener' : 'sponsored noopener'}" data-pr="${esc(p.id)}" class="mt-4 block bg-yellow-50 border-2 border-base-charcoal shadow-solid-sm p-4 sm:p-5 hover:bg-yellow-100 transition-colors">
+      if (!p) return AD_PREVIEW ? '<div class="mt-4"><div class="ad-label">PR</div><div class="ad-preview">PR枠（この品目に合う広告はまだありません）</div></div>' : '';
+      const links = linksOf(p);
+      const box = 'relative mt-4 block bg-yellow-50 border-2 border-base-charcoal shadow-solid-sm p-4 sm:p-5';
+      const head = `
           <div class="flex flex-wrap items-center gap-2 font-mono text-[11px] font-bold">
-            <span class="px-1.5 py-0.5 border border-base-charcoal bg-white">PR</span><span class="text-gray-500">${p.own ? '運営者のサイト' : '広告'}</span>
+            <span class="px-1.5 py-0.5 border border-base-charcoal bg-white">PR</span><span class="text-gray-500">${p.own ? '運営者のサイト' : '広告'}</span>${adPreviewTag()}
           </div>
           <div class="mt-2 font-black text-base sm:text-lg leading-snug">${esc(fillName(p.title, it))}</div>
-          <p class="mt-1 text-sm text-gray-600 leading-relaxed">${esc(fillName(p.text, it))}</p>
-          <span class="mt-3 inline-flex items-center px-4 py-2 bg-base-charcoal text-white font-mono text-xs font-bold">${esc(p.cta)} →</span>
-        </a>`;
+          <p class="mt-1 text-sm text-gray-600 leading-relaxed">${esc(fillName(p.text, it))}</p>`;
+      if (links.length === 1) {
+        return `
+        ${adLinkOpen(p, links[0], box + ' hover:bg-yellow-100 transition-colors')}${head}
+          <span class="mt-3 inline-flex items-center px-4 py-2 bg-base-charcoal text-white font-mono text-xs font-bold leading-snug">${esc(links[0].cta)} →</span>${adPixels(p)}
+        ${adLinkClose()}`;
+      }
+      // リンクが2つのとき：1つ目を濃いボタン、2つ目を白いボタンにする
+      return `
+        <div class="${box}">${head}
+          <div class="mt-3 flex flex-col sm:flex-row sm:flex-wrap gap-2">
+            ${links.map((l, i) => `${adLinkOpen(p, l, 'inline-flex items-center justify-between gap-3 px-4 py-2 border-2 border-base-charcoal font-mono text-xs font-bold leading-snug transition-colors ' + (i ? 'bg-white text-base-charcoal hover:bg-yellow-100' : 'bg-base-charcoal text-white hover:bg-base-turquoise hover:text-base-charcoal'))}<span>${esc(l.cta)}</span><span aria-hidden="true">→</span>${adLinkClose()}`).join('')}
+          </div>${adPixels(p)}
+        </div>`;
     }
 
     function kindBadge(kind, size) {
@@ -1027,20 +1057,36 @@
       }
     }
 
-    function bannerHTML(b, id) {
-      return `
-        <a href="${esc(b.url)}" target="_blank" rel="${b.own ? 'noopener' : 'sponsored noopener'}" data-pr="${esc(id)}" class="block bg-base-white border-2 border-base-charcoal shadow-solid p-5 sm:p-6 hover:-translate-y-1 hover:shadow-solid-lg transition-all">
+    // ページ内のバナー（b.id は data-pr に入れる名前）
+    function bannerHTML(b) {
+      const links = linksOf(b);
+      const box = 'relative block bg-base-white border-2 border-base-charcoal shadow-solid p-5 sm:p-6';
+      const head = `
           <div class="flex flex-wrap items-center gap-2 font-mono text-[11px] font-bold">
-            <span class="px-1.5 py-0.5 border border-base-charcoal bg-yellow-100">PR</span><span class="text-gray-500">${esc(b.eyebrow || '広告')}</span>
-          </div>
-          <div class="mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <span class="px-1.5 py-0.5 border border-base-charcoal bg-yellow-100">PR</span><span class="text-gray-500">${esc(b.eyebrow || '広告')}</span>${adPreviewTag()}
+          </div>`;
+      const body = `
             <div>
               <div class="font-black text-xl sm:text-2xl leading-snug">${esc(b.title)}</div>
               <p class="mt-2 text-sm text-gray-600 leading-relaxed max-w-2xl">${esc(b.text)}</p>
+            </div>`;
+      if (links.length === 1) {
+        return `
+        ${adLinkOpen(b, links[0], box + ' hover:-translate-y-1 hover:shadow-solid-lg transition-all')}${head}
+          <div class="mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">${body}
+            <span class="shrink-0 self-start md:self-center inline-flex items-center px-5 py-3 bg-base-mustard text-base-charcoal border-2 border-base-charcoal shadow-solid-sm font-mono text-sm font-bold">${esc(links[0].cta)} →</span>
+          </div>${adPixels(b)}
+        ${adLinkClose()}`;
+      }
+      // リンクが2つのとき：右側（スマホでは下）にボタンを縦に並べる
+      return `
+        <div class="${box}">${head}
+          <div class="mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">${body}
+            <div class="shrink-0 flex flex-col gap-2 md:w-80">
+              ${links.map((l, i) => `${adLinkOpen(b, l, 'flex items-center justify-between gap-3 px-5 py-3 border-2 border-base-charcoal shadow-solid-sm font-mono text-sm font-bold leading-snug hover:-translate-y-0.5 transition-transform ' + (i ? 'bg-base-white text-base-charcoal' : 'bg-base-mustard text-base-charcoal'))}<span>${esc(l.cta)}</span><span aria-hidden="true">→</span>${adLinkClose()}`).join('')}
             </div>
-            <span class="shrink-0 self-start md:self-center inline-flex items-center px-5 py-3 bg-base-mustard text-base-charcoal border-2 border-base-charcoal shadow-solid-sm font-mono text-sm font-bold">${esc(b.cta)} →</span>
-          </div>
-        </a>`;
+          </div>${adPixels(b)}
+        </div>`;
     }
 
     function renderAdSlots() {
@@ -1049,14 +1095,16 @@
         const key = el.getAttribute('data-ad-key');
         const slot = (as.slots || {})[key];
         const houseId = (ADS.house || {})[key];
-        const banner = houseId ? (ADS.banners || {})[houseId] : null;
+        const banner = houseId && (ADS.banners || {})[houseId] ? { ...ADS.banners[houseId], id: houseId } : null;
         let html = '';
-        if (AD_PREVIEW) {
-          html = `<div class="ad-label">スポンサーリンク</div><div class="ad-preview">広告枠「${esc(key)}」<br>${slot ? 'AdSense ユニット ' + esc(slot) : banner ? 'いまは自社PRを表示中' : 'まだ何も出ません（ユニットIDを入れると表示）'}</div>`;
-        } else if (AD_HOST_OK && as.client && slot) {
+        if (slot && AD_PREVIEW) {
+          html = `<div class="ad-label">スポンサーリンク</div><div class="ad-preview">広告枠「${esc(key)}」<br>AdSense ユニット ${esc(slot)}</div>`;
+        } else if (slot && AD_HOST_OK && as.client) {
           html = `<div class="ad-label">スポンサーリンク</div><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(as.client)}" data-ad-slot="${esc(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
-        } else if (banner && banner.url) {
-          html = bannerHTML(banner, houseId);
+        } else if (adUsable(banner)) {
+          html = bannerHTML(banner);
+        } else if (AD_PREVIEW) {
+          html = `<div class="ad-label">スポンサーリンク</div><div class="ad-preview">広告枠「${esc(key)}」<br>まだ何も出ません（AdSense のユニットIDか、バナーを入れると表示）</div>`;
         }
         if (!html) { el.classList.add('hidden'); return; }
         el.innerHTML = html;
