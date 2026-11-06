@@ -154,6 +154,9 @@
         <button onclick="filterCategory('dev')" class="category-btn px-3 py-1.5 bg-base-sandDark hover:bg-base-mustard hover:text-base-charcoal border-2 border-base-charcoal shadow-solid-sm transition-all -rotate-2">
           #03 自作ツール
         </button>
+        <a href="souba.html" class="px-3 py-1.5 bg-base-mustard text-base-charcoal hover:bg-base-charcoal hover:text-white border-2 border-base-charcoal shadow-solid-sm transition-all rotate-1">
+          #04 建材相場 →
+        </a>
       </nav>
     </header>
 
@@ -193,7 +196,32 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="cardContainer"></div>
     </section>
 
-    <!-- 4. PHILOSOPHY / MANIFESTO -->
+    <!-- 4. MATERIAL PRICE BOARD（建材相場ボードへの入口。数字は data/ のファイルから自動で表示） -->
+    <section id="souba" class="mb-14">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="flex items-center space-x-3">
+          <span class="px-2.5 py-1 bg-base-mustard text-base-charcoal font-mono text-xs font-bold border border-base-charcoal">PRICE</span>
+          <h2 class="font-bebas text-3xl sm:text-4xl text-base-charcoal tracking-wider">
+            MATERIAL PRICE BOARD
+          </h2>
+        </div>
+        <a href="souba.html" class="font-mono text-xs font-bold text-gray-500 hover:text-base-turquoise">全品目を見る →</a>
+      </div>
+      <a href="souba.html" class="group block bg-base-white border-2 border-base-charcoal p-6 sm:p-8 shadow-solid hover:-translate-y-1 hover:shadow-solid-lg transition-all duration-200">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+          <div>
+            <div class="font-mono text-xs text-base-turquoise font-bold mb-2">[ #04 建材相場ボード ]</div>
+            <h3 class="font-sans font-black text-2xl sm:text-3xl text-base-charcoal leading-tight group-hover:text-base-turquoise transition-colors">建材の相場、ざっくり把握。</h3>
+            <p class="mt-2 text-sm text-gray-600 leading-relaxed">生コン・鉄筋・合板・ウレタン・塩ビ・スクラップなど<span id="soubaCount">約50</span>品目。新しく買う値段／スクラップで売れる値段／処分に払う値段と、過去の動きをまとめました。</p>
+          </div>
+          <span class="shrink-0 self-start md:self-auto font-mono text-xs font-bold px-4 py-2 bg-base-charcoal text-white border-2 border-base-charcoal">相場ボードを開く →</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="soubaTeaser"></div>
+        <p class="mt-4 font-mono text-[10px] text-gray-500" id="soubaTeaserNote"></p>
+      </a>
+    </section>
+
+    <!-- 5. PHILOSOPHY / MANIFESTO -->
     <section class="bg-base-charcoal text-base-sand p-8 sm:p-12 border-2 border-base-charcoal shadow-solid-lg relative mb-14">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
         <div class="md:col-span-1">
@@ -209,7 +237,7 @@
       </div>
     </section>
 
-    <!-- 5. FOOTER -->
+    <!-- 6. FOOTER -->
     <footer class="mt-auto bg-base-white border-2 border-base-charcoal p-6 shadow-solid flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs font-bold">
       <div class="flex items-center space-x-2">
         <span class="w-3 h-3 bg-base-turquoise inline-block"></span>
@@ -230,6 +258,10 @@
       <div id="modalContent"></div>
     </div>
   </div>
+
+  <!-- 建材相場ボードのデータ（souba.html と共通） -->
+  <script src="data/souba-items.js"></script>
+  <script src="data/souba-trends.js"></script>
 
   <!-- JAVASCRIPT -->
   <script>
@@ -305,6 +337,45 @@
         }
       });
     }
+
+    // 建材相場ボードの入口パネル（主要4品目の相場目安と前年比）
+    (function renderSoubaTeaser() {
+      const D = window.KONYLOG_SOUBA, T = window.KONYLOG_SOUBA_TRENDS;
+      const box = document.getElementById('soubaTeaser');
+      if (!D || !T || !box) return;
+      const PICK = ['namacon', 'tekkin', 'kouzou_gouhan', 'cu_pika'];
+      const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      const toIdx = (ym) => { const [y, m] = ym.split('-').map(Number); return y * 12 + m - 1; };
+      const man = (n) => String(+(n / 10000).toFixed(n >= 1000000 ? 0 : n >= 100000 ? 1 : 2));
+      function priceText(p) {
+        if (!p || (p.low == null && p.high == null)) return '';
+        const lo = p.low != null ? p.low : p.high, hi = p.high != null ? p.high : p.low;
+        const useMan = lo >= 10000 && hi >= 10000;
+        const f = (n) => (useMan ? man(n) : Math.round(n).toLocaleString('ja-JP'));
+        const unit = useMan ? String(p.unit).replace(/^円/, '万円') : p.unit;
+        return (lo === hi ? f(lo) : f(lo) + '〜' + f(hi)) + unit;
+      }
+      function yoy(code) {
+        const s = T.series[code];
+        if (!s) return null;
+        const vals = s.values, n = vals.length - 1, prev = vals[n - 12];
+        return prev ? vals[n] / prev - 1 : null;
+      }
+      document.getElementById('soubaCount').textContent = D.items.length;
+      box.innerHTML = PICK.map((id) => D.items.find((it) => it.id === id)).filter(Boolean).map((it) => {
+        const k = D.kinds[it.kind];
+        const y = yoy(it.trend && it.trend.code);
+        const ytxt = y == null ? '—' : (y >= 0 ? '▲ +' : '▼ −') + Math.abs(y * 100).toFixed(1) + '%';
+        return `<div class="border-2 border-base-charcoal p-3 bg-base-sand">
+          <div class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 text-[10px] font-mono font-bold border border-base-charcoal ${k.cls}">${esc(k.label)}</span><span class="text-xs font-bold truncate">${esc(it.name)}</span></div>
+          <div class="mt-2 font-black text-lg leading-tight">${esc(priceText(it.price) || '—')}</div>
+          <div class="mt-1 font-mono text-[11px] text-gray-600">前年比 ${esc(ytxt)}</div>
+        </div>`;
+      }).join('');
+      const lm = T.latestMonth || '';
+      document.getElementById('soubaTeaserNote').textContent =
+        `相場目安 ${String(D.checkedAt || '').replace(/-/g, '.')} 調べ／前年比は日銀の物価指数（${lm.replace('-', '.')}分まで）`;
+    })();
   </script>
 </body>
 </html>

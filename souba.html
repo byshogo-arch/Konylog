@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>建材相場ボード｜KONYLOG BASE</title>
+  <meta name="description" content="生コン・鉄筋・合板・ウレタン・塩ビ管・スクラップなど建材約50品目の「いまの相場の目安」と、日銀の物価指数でみる過去の動向。購入価格／スクラップ買取／処分費をまとめて確認できます。">
+  <meta property="og:title" content="建材相場ボード｜KONYLOG BASE">
+  <meta property="og:description" content="建材約50品目の相場目安と過去の動向。購入・スクラップ買取・処分費がひと目でわかる現場向けボード。">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            base: {
+              sand: '#F4F0E8', sandDark: '#E8E2D5', charcoal: '#1E2229',
+              white: '#FFFFFF', turquoise: '#00B4D8', mustard: '#F39C12',
+            }
+          },
+          fontFamily: {
+            bebas: ['"Bebas Neue"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Noto Sans JP"', 'sans-serif']
+          },
+          boxShadow: {
+            'solid': '4px 4px 0px #1E2229',
+            'solid-lg': '6px 6px 0px #1E2229',
+            'solid-sm': '2px 2px 0px #1E2229',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .bg-pegboard {
+      background-color: #F4F0E8;
+      background-image: radial-gradient(#D5CEBE 2px, transparent 2px);
+      background-size: 24px 24px;
+    }
+    .stamp {
+      display: inline-block;
+      border: 2px dashed #1E2229;
+      transform: rotate(-2deg);
+    }
+    /* グラフ用の色（上昇=オレンジ、下落=ティール。色だけに頼らず▲▼の記号も併記） */
+    :root {
+      --viz-accent: #0891B2;
+      --viz-up: #D9480F;
+      --viz-down: #0891B2;
+      --viz-muted: #A39E92;
+      --viz-grid: #ECE7DC;
+      --viz-axis: #C9C3B5;
+      --ink: #1E2229;
+      --ink-2: #4B5563;
+      --ink-3: #6B7280;
+    }
+    .num { font-variant-numeric: tabular-nums; }
+    .chip { transition: background-color .15s, color .15s, transform .15s; }
+    .chip[aria-pressed="true"] { background: #1E2229; color: #fff; }
+    .chip:focus-visible, .kind-opt:focus-visible, .card:focus-visible, .rank-row:focus-visible, .range-btn:focus-visible, .viz:focus-visible {
+      outline: 3px solid #00B4D8; outline-offset: 2px;
+    }
+    .kind-opt[aria-pressed="true"] { background: #1E2229; color: #fff; }
+    .range-btn[aria-pressed="true"] { background: #1E2229; color: #fff; }
+    .tri-up { color: var(--viz-up); }
+    .tri-down { color: var(--viz-down); }
+    .spark { position: relative; height: 44px; }
+    .spark svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .spark .dot {
+      position: absolute; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 9999px;
+      background: var(--viz-accent); box-shadow: 0 0 0 2px #fff;
+    }
+    .viz { position: relative; }
+    .viz svg { display: block; width: 100%; overflow: visible; }
+    .viz-tip {
+      position: absolute; pointer-events: none; background: #fff; border: 2px solid #1E2229;
+      box-shadow: 2px 2px 0 #1E2229; padding: 6px 9px; min-width: 120px; z-index: 5;
+      font-size: 12px; line-height: 1.35; white-space: nowrap;
+    }
+    .viz-tip .v { font-weight: 900; font-size: 16px; color: #1E2229; }
+    .viz-tip .k { display: inline-block; width: 12px; height: 2px; background: var(--viz-accent); vertical-align: middle; margin-right: 6px; }
+    .rank-bar { height: 14px; border-radius: 0; }
+    .rank-bar.pos { background: var(--viz-up); border-radius: 0 4px 4px 0; }
+    .rank-bar.neg { background: var(--viz-down); border-radius: 4px 0 0 4px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-pegboard text-base-charcoal font-sans antialiased selection:bg-base-turquoise selection:text-white min-h-screen flex flex-col">
+
+  <!-- TOP BAR -->
+  <div class="bg-base-charcoal text-base-sand text-xs font-mono py-2 px-4 flex justify-between items-center border-b-2 border-base-charcoal">
+    <div class="flex items-center space-x-3 min-w-0">
+      <span class="w-2 h-2 bg-base-turquoise rounded-full animate-ping shrink-0"></span>
+      <span class="tracking-widest truncate">KONYLOG BASE // MATERIAL PRICE BOARD</span>
+    </div>
+    <div class="hidden sm:flex space-x-6 text-[11px] text-gray-400">
+      <span id="uiTopIndex">INDEX: —</span>
+      <span id="uiTopChecked">PRICE CHECK: —</span>
+      <span>STATUS: ご安全に！</span>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-8 py-8 w-full flex-1 flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-base-white border-2 border-base-charcoal p-5 sm:p-6 shadow-solid flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 bg-base-turquoise border-2 border-base-charcoal flex items-center justify-center shadow-solid-sm -rotate-3">
+          <span class="font-bebas text-3xl text-white">K</span>
+        </div>
+        <div>
+          <a href="index.html" class="font-bebas text-4xl sm:text-5xl tracking-wider text-base-charcoal hover:text-base-turquoise transition-colors leading-none block">
+            KONYLOG <span class="text-base-turquoise">BASE</span>
+          </a>
+          <span class="font-mono text-[10px] tracking-widest text-gray-500 font-bold uppercase">Site Management &amp; Indie Development</span>
+        </div>
+      </div>
+      <nav class="flex flex-wrap items-center gap-2 sm:gap-3 font-mono text-xs font-bold">
+        <a href="index.html" class="px-3 py-1.5 bg-base-sandDark hover:bg-base-charcoal hover:text-white border-2 border-base-charcoal shadow-solid-sm transition-all">← トップ</a>
+        <a href="index.html#latest" class="px-3 py-1.5 bg-base-sandDark hover:bg-base-turquoise hover:text-white border-2 border-base-charcoal shadow-solid-sm transition-all rotate-1">記事 (LOGS)</a>
+        <span class="px-3 py-1.5 bg-base-charcoal text-white border-2 border-base-charcoal shadow-solid-sm -rotate-1" aria-current="page">#04 建材相場</span>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="mb-10 relative">
+      <div class="bg-base-white border-2 border-base-charcoal p-6 sm:p-12 shadow-solid-lg relative overflow-hidden">
+        <div class="absolute top-4 right-4 sm:top-6 sm:right-8 stamp px-3 py-1 bg-yellow-100 font-mono text-xs font-bold text-base-charcoal">PRICE CHECK.</div>
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 bg-base-turquoise/20 border border-base-turquoise font-mono text-xs font-bold mb-5">
+            <span>●</span><span>MATERIAL PRICE BOARD</span>
+          </div>
+          <h1 class="font-sans font-black text-4xl sm:text-6xl text-base-charcoal tracking-tight leading-tight">
+            建材の相場、<br><span class="text-base-turquoise underline decoration-base-charcoal decoration-4">ざっくり把握。</span>
+          </h1>
+          <p class="mt-5 text-base sm:text-lg text-gray-600 font-medium leading-relaxed">
+            生コン、鉄筋、合板、ウレタン、塩ビ管……現場でよく使う建材<span id="uiItemCount">約50</span>品目の「いまの相場の目安」と「過去の動き」をまとめました。<br class="hidden sm:inline">
+            新しく<strong>買う値段</strong>か、スクラップで<strong>売れる値段</strong>か、<strong>処分に払う値段</strong>かもひと目でわかるようにしています。
+          </p>
+          <div class="mt-6 flex flex-wrap gap-2 font-mono text-xs font-bold">
+            <span class="px-2.5 py-1 bg-base-charcoal text-white border border-base-charcoal shadow-solid-sm">購入 = 新材を買う</span>
+            <span class="px-2.5 py-1 bg-base-turquoise text-base-charcoal border border-base-charcoal shadow-solid-sm">買取 = スクラップで売れる</span>
+            <span class="px-2.5 py-1 bg-base-mustard text-base-charcoal border border-base-charcoal shadow-solid-sm">処分 = お金を払って引き取ってもらう</span>
+          </div>
+          <p class="mt-5 font-mono text-[11px] text-gray-500 leading-relaxed" id="uiAsOf"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HIGHLIGHTS -->
+    <section class="mb-10" aria-labelledby="hlTitle">
+      <div class="flex items-center space-x-3 mb-4">
+        <span class="px-2.5 py-1 bg-base-charcoal text-white font-mono text-xs font-bold">SUMMARY</span>
+        <h2 id="hlTitle" class="flex items-baseline gap-3"><span class="font-bebas text-3xl sm:text-4xl tracking-wider">NOW</span><span class="font-black text-base sm:text-lg">いまの全体感</span></h2>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="highlights"></div>
+    </section>
+
+    <!-- FILTERS + GRID -->
+    <section id="board" class="mb-12" aria-labelledby="boardTitle">
+      <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+        <div class="flex items-center space-x-3">
+          <span class="px-2.5 py-1 bg-base-turquoise text-base-charcoal font-mono text-xs font-bold border border-base-charcoal">BOARD</span>
+          <h2 id="boardTitle" class="flex items-baseline gap-3"><span class="font-bebas text-3xl sm:text-4xl tracking-wider">PRICE BOARD</span><span class="font-black text-base sm:text-lg">品目別の相場</span></h2>
+        </div>
+        <span class="font-mono text-xs text-gray-500">※カードをクリックすると過去の動向グラフが開きます</span>
+      </div>
+
+      <div class="bg-base-white border-2 border-base-charcoal shadow-solid p-4 sm:p-5 mb-6 space-y-4">
+        <div>
+          <div class="font-mono text-[11px] font-bold text-gray-500 mb-2">素材で絞る</div>
+          <div class="flex flex-wrap gap-2 font-mono text-xs font-bold" id="catChips" role="group" aria-label="素材で絞り込み"></div>
+        </div>
+        <div class="flex flex-col lg:flex-row lg:items-end gap-4">
+          <div class="flex-1">
+            <div class="font-mono text-[11px] font-bold text-gray-500 mb-2">購入・スクラップで絞る</div>
+            <div class="inline-flex flex-wrap border-2 border-base-charcoal font-mono text-xs font-bold" id="kindToggle" role="group" aria-label="購入・買取・処分で絞り込み"></div>
+          </div>
+          <label class="block">
+            <span class="font-mono text-[11px] font-bold text-gray-500 mb-2 block">並べ替え</span>
+            <select id="sortSel" class="w-full lg:w-56 border-2 border-base-charcoal bg-base-white px-3 py-2 font-mono text-xs font-bold">
+              <option value="default">素材の順（標準）</option>
+              <option value="yoy_desc">前年比 上昇が大きい順</option>
+              <option value="yoy_asc">前年比 下落が大きい順</option>
+              <option value="v2020_desc">2020年比 上昇が大きい順</option>
+              <option value="name">名前順</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="font-mono text-[11px] font-bold text-gray-500 mb-2 block">品目で探す</span>
+            <input id="searchBox" type="search" placeholder="例: 鉄筋、塩ビ、コンパネ" class="w-full lg:w-64 border-2 border-base-charcoal bg-base-white px-3 py-2 text-sm" autocomplete="off">
+          </label>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <p class="font-mono text-xs font-bold text-gray-600" id="resultCount" aria-live="polite"></p>
+        <div class="inline-flex border-2 border-base-charcoal bg-base-white font-mono text-xs font-bold" role="group" aria-label="表示の切り替え">
+          <button type="button" class="range-btn px-3 py-1.5" data-view="cards" aria-pressed="true">カード</button>
+          <button type="button" class="range-btn px-3 py-1.5 border-l-2 border-base-charcoal" data-view="table" aria-pressed="false">一覧表</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="cardGrid"></div>
+      <div class="hidden bg-base-white border-2 border-base-charcoal shadow-solid overflow-x-auto" id="tableWrap"></div>
+      <p class="hidden bg-base-white border-2 border-base-charcoal p-6 text-sm text-gray-600" id="emptyMsg">条件に合う品目がありません。絞り込みを変えてみてください。</p>
+    </section>
+
+    <!-- RANKING -->
+    <section id="ranking" class="mb-12" aria-labelledby="rankTitle">
+      <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+        <div class="flex items-center space-x-3">
+          <span class="px-2.5 py-1 bg-base-mustard text-base-charcoal font-mono text-xs font-bold border border-base-charcoal">RANKING</span>
+          <h2 id="rankTitle" class="flex items-baseline gap-3"><span class="font-bebas text-3xl sm:text-4xl tracking-wider">HOW MUCH UP?</span><span class="font-black text-base sm:text-lg">どれだけ上がった？</span></h2>
+        </div>
+        <div class="inline-flex border-2 border-base-charcoal font-mono text-xs font-bold" role="group" aria-label="比べる期間">
+          <button type="button" class="range-btn px-3 py-1.5" data-metric="v2020" aria-pressed="true">2020年比</button>
+          <button type="button" class="range-btn px-3 py-1.5 border-l-2 border-base-charcoal" data-metric="yoy" aria-pressed="false">前年比</button>
+        </div>
+      </div>
+      <div class="bg-base-white border-2 border-base-charcoal shadow-solid p-4 sm:p-6">
+        <p class="text-xs text-gray-500 mb-4" id="rankNote"></p>
+        <div id="rankList" class="space-y-1"></div>
+        <div class="mt-4 flex justify-center">
+          <button type="button" id="rankMore" class="px-4 py-2 bg-base-sandDark border-2 border-base-charcoal shadow-solid-sm font-mono text-xs font-bold hover:bg-base-charcoal hover:text-white transition-colors"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT DATA -->
+    <section id="about-data" class="bg-base-charcoal text-base-sand p-6 sm:p-10 border-2 border-base-charcoal shadow-solid-lg mb-14">
+      <span class="font-mono text-xs text-base-turquoise font-bold tracking-widest uppercase block mb-2">[ ABOUT THE DATA ]</span>
+      <h2 class="mb-6 flex items-baseline gap-3"><span class="font-bebas text-4xl text-white tracking-wide leading-none">HOW TO READ</span><span class="font-black text-white text-lg">数字の見かた</span></h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300 leading-relaxed">
+        <div class="space-y-3">
+          <h3 class="font-bold text-white">相場の目安（大きい数字）</h3>
+          <p>メーカーの公表価格、業界団体・新聞の市況、スクラップ業者の公開買取価格、自治体の受入単価などの<strong class="text-white">公開情報</strong>から拾った「だいたいこのくらい」の値です。地域・数量・規格・運搬条件で大きく変わるので、見積りの代わりにはなりません。各カードの詳細に時点と出典を書いています。</p>
+          <p>「処分」は排出する側が払う受入単価（運搬費は別のことが多い）、「買取」は持ち込んだときに業者が払ってくれる値段です。</p>
+        </div>
+        <div class="space-y-3">
+          <h3 class="font-bold text-white">過去の動向（グラフ・前年比）</h3>
+          <p>日本銀行の<strong class="text-white">企業物価指数</strong>（処分費は企業向けサービス価格指数）を使っています。全国の企業どうしの取引価格の動きを、2020年の平均を100として表した指数です。「163」なら2020年の1.63倍という意味。</p>
+          <p>指数は全国平均の“値動き”なので、上の相場目安（地域・規格つき）とは対象がずれます。品目そのものの指数がないものは、値動きが近い指数を「参考指標」として表示しています。</p>
+          <p class="font-mono text-[11px] text-gray-400" id="uiDataCredit"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto bg-base-white border-2 border-base-charcoal p-6 shadow-solid flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs font-bold">
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 bg-base-turquoise inline-block"></span>
+        <span>KONYLOG.COM // 現場とツールの備忘録</span>
+      </div>
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="hover:text-base-turquoise transition-colors">← TOP</a>
+        <span class="text-gray-400">ご安全に！</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- DETAIL MODAL -->
+  <div id="detailModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-base-white border-4 border-base-charcoal max-w-3xl w-full p-5 sm:p-8 shadow-solid-lg relative max-h-[92vh] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="mdTitle">
+      <button type="button" id="mdClose" class="absolute top-3 right-3 sm:top-4 sm:right-4 w-9 h-9 bg-base-charcoal text-white font-mono font-bold flex items-center justify-center hover:bg-base-turquoise transition-colors" aria-label="閉じる">✕</button>
+      <div id="mdBody"></div>
+    </div>
+  </div>
+
+  <noscript><p style="padding:16px;background:#fff;border:2px solid #1E2229;margin:16px">このページの表示にはJavaScriptが必要です。</p></noscript>
+
+  <script src="data/souba-items.js"></script>
+  <script src="data/souba-trends.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    const DATA = window.KONYLOG_SOUBA;
+    const TR = window.KONYLOG_SOUBA_TRENDS;
+    if (!DATA || !TR) {
+      document.getElementById('cardGrid').innerHTML = '<p class="text-sm">データファイルを読み込めませんでした。</p>';
+      return;
+    }
+
+    // ---------- helpers ----------
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const ymToIdx = (ym) => { const [y, m] = ym.split('-').map(Number); return y * 12 + (m - 1); };
+    const idxToYm = (i) => `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, '0')}`;
+    const ymLabel = (ym) => (ym ? `${ym.slice(0, 4)}年${Number(ym.slice(5, 7))}月` : '');
+    const dateLabel = (d) => {
+      if (!d) return '';
+      const p = d.split('-');
+      if (p.length === 1) return `${p[0]}年`;
+      if (p.length === 2) return `${p[0]}年${Number(p[1])}月`;
+      return `${p[0]}年${Number(p[1])}月${Number(p[2])}日`;
+    };
+    const trimZeros = (s) => (s.indexOf('.') >= 0 ? s.replace(/\.?0+$/, '') : s);
+    const fmtPct = (x, digits) => {
+      if (x == null || !isFinite(x)) return '—';
+      const v = x * 100;
+      const d = digits != null ? digits : (Math.abs(v) >= 100 ? 0 : 1);
+      const s = Math.abs(v).toFixed(d);
+      if (Number(s) === 0) return '±0%';
+      return (v > 0 ? '+' : '−') + s + '%';
+    };
+    const tri = (x) => (x == null || !isFinite(x) || Math.abs(x) < 0.0005 ? '<span class="text-gray-400" aria-hidden="true">―</span>'
+      : x > 0 ? '<span class="tri-up" aria-hidden="true">▲</span>' : '<span class="tri-down" aria-hidden="true">▼</span>');
+    const dirWord = (x) => (x == null || !isFinite(x) || Math.abs(x) < 0.0005 ? '横ばい' : x > 0 ? '上昇' : '下落');
+
+    function fmtYen(n, useMan) {
+      if (useMan) {
+        const man = n / 10000;
+        const d = man >= 100 ? 0 : man >= 10 ? 1 : 2;
+        return trimZeros(man.toFixed(d));
+      }
+      return Math.round(n).toLocaleString('ja-JP');
+    }
+    // price: { low, high, unit:'円/m³' }
+    function priceParts(p) {
+      if (!p || (p.low == null && p.high == null)) return null;
+      const lo = p.low != null ? p.low : p.high;
+      const hi = p.high != null ? p.high : p.low;
+      const useMan = lo >= 10000 && hi >= 10000;
+      const unit = String(p.unit || '');
+      const main = lo === hi ? fmtYen(lo, useMan) : `${fmtYen(lo, useMan)}〜${fmtYen(hi, useMan)}`;
+      const unitTxt = useMan ? unit.replace(/^円/, '万円') : unit;
+      return { main, unit: unitTxt, approx: p.approx !== false };
+    }
+
+    const seriesCache = {};
+    function getSeries(code) {
+      if (!code) return null;
+      if (seriesCache[code]) return seriesCache[code];
+      const s = TR.series[code];
+      if (!s) return null;
+      const s0 = ymToIdx(s.start);
+      const points = [];
+      s.values.forEach((v, i) => { if (v != null) points.push({ ym: idxToYm(s0 + i), v }); });
+      const byYm = {};
+      points.forEach((p) => { byYm[p.ym] = p; });
+      const out = { ...s, points, byYm };
+      seriesCache[code] = out;
+      return out;
+    }
+    function yearAvg(s, y) {
+      const v = s.points.filter((p) => p.ym.slice(0, 4) === String(y)).map((p) => p.v);
+      return v.length >= 6 ? v.reduce((a, b) => a + b, 0) / v.length : null;
+    }
+    function statsOf(item) {
+      const s = getSeries(item.trend && item.trend.code);
+      if (!s || !s.points.length) return null;
+      const last = s.points[s.points.length - 1];
+      const prev = s.byYm[idxToYm(ymToIdx(last.ym) - 12)];
+      const a2020 = yearAvg(s, 2020);
+      let peak = s.points[0];
+      s.points.forEach((p) => { if (p.v > peak.v) peak = p; });
+      const recent = s.points.filter((p) => p.ym >= '2020-01');
+      let peak20 = recent[0] || last;
+      recent.forEach((p) => { if (p.v > peak20.v) peak20 = p; });
+      let low20 = recent[0] || last;
+      recent.forEach((p) => { if (p.v < low20.v) low20 = p; });
+      return {
+        s, last,
+        yoy: prev ? last.v / prev.v - 1 : null,
+        vs2020: a2020 ? last.v / a2020 - 1 : null,
+        a2020, peak, peak20, low20,
+        fromPeak20: last.v / peak20.v - 1,
+      };
+    }
+
+    const CATS = DATA.categories;
+    const CAT = Object.fromEntries(CATS.map((c) => [c.id, c]));
+    const KINDS = DATA.kinds;
+    const ITEMS = DATA.items.map((it, i) => ({ ...it, order: i, st: statsOf(it) }));
+    const KIND_ORDER = ['buy', 'sell', 'dispose'];
+
+    function kindBadge(kind, size) {
+      const k = KINDS[kind];
+      if (!k) return '';
+      const pad = size === 'lg' ? 'px-3 py-1 text-xs' : 'px-2 py-0.5 text-[11px]';
+      return `<span class="${pad} ${k.cls} font-mono font-bold border border-base-charcoal shadow-solid-sm whitespace-nowrap">${esc(k.label)}</span>`;
+    }
+
+    // ---------- header texts ----------
+    const latestMonth = TR.latestMonth;
+    document.getElementById('uiItemCount').textContent = String(ITEMS.length);
+    document.getElementById('uiTopIndex').textContent = `INDEX: ${latestMonth.replace('-', '.')}`;
+    document.getElementById('uiTopChecked').textContent = `PRICE CHECK: ${String(DATA.checkedAt || '').replace(/-/g, '.')}`;
+    document.getElementById('uiAsOf').innerHTML =
+      `相場の目安: ${esc(dateLabel(DATA.checkedAt))}時点で調べた公開情報（品目ごとに時点・出典あり）<br>` +
+      `過去の動向: 日本銀行 企業物価指数ほか（${esc(ymLabel(latestMonth))}分まで、${esc(dateLabel(TR.generatedAt))}取得）`;
+    document.getElementById('uiDataCredit').textContent =
+      `出典: ${TR.source}。指数データ ${ymLabel(latestMonth)}分まで（${dateLabel(TR.generatedAt)}取得）。相場目安の調査日: ${dateLabel(DATA.checkedAt)}。`;
+
+    // ---------- sparkline ----------
+    const SPARK_FROM = '2019-01';
+    function sparkHTML(st) {
+      if (!st) return '<div class="spark"></div>';
+      const pts = st.s.points.filter((p) => p.ym >= SPARK_FROM);
+      if (pts.length < 2) return '<div class="spark"></div>';
+      const vals = pts.map((p) => p.v);
+      const lo = Math.min(...vals, 100), hi = Math.max(...vals, 100);
+      const pad = (hi - lo) * 0.08 || 1;
+      const L = lo - pad, H = hi + pad;
+      const n = pts.length - 1;
+      const X = (k) => (k / n) * 100;
+      const Y = (v) => (1 - (v - L) / (H - L)) * 100;
+      const path = (arr, off) => arr.map((p, k) => `${k ? 'L' : 'M'}${X(k + off).toFixed(2)} ${Y(p.v).toFixed(2)}`).join(' ');
+      const cut = Math.max(0, pts.length - 13);
+      const ref = Y(100).toFixed(2);
+      const last = pts[pts.length - 1];
+      return `<div class="spark" aria-hidden="true">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line x1="0" x2="100" y1="${ref}" y2="${ref}" stroke="var(--viz-axis)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+          <path d="${path(pts.slice(0, cut + 1), 0)}" fill="none" stroke="var(--viz-muted)" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          <path d="${path(pts.slice(cut), cut)}" fill="none" stroke="var(--viz-accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <span class="dot" style="left:${X(n).toFixed(2)}%;top:${Y(last.v).toFixed(2)}%"></span>
+      </div>`;
+    }
+
+    // ---------- highlights ----------
+    function renderHighlights() {
+      const buys = ITEMS.filter((it) => it.kind === 'buy' && it.st && it.st.vs2020 != null && !(it.trend && it.trend.proxy));
+      const vs = buys.map((it) => it.st.vs2020).sort((a, b) => a - b);
+      const median = vs.length ? (vs.length % 2 ? vs[(vs.length - 1) / 2] : (vs[vs.length / 2 - 1] + vs[vs.length / 2]) / 2) : null;
+      const withYoy = ITEMS.filter((it) => it.st && it.st.yoy != null);
+      const up = withYoy.filter((it) => it.st.yoy > 0.0005).length;
+      const down = withYoy.filter((it) => it.st.yoy < -0.0005).length;
+      const topUp = [...buys].sort((a, b) => b.st.yoy - a.st.yoy)[0];
+      const scrapFe = ITEMS.find((it) => it.id === 'fe_h2');
+      const tiles = [
+        { label: '購入品の値上がり（2020年比・中央値）', value: fmtPct(median, 0), sub: `${buys.length}品目の指数から。5〜6年で約${median != null ? (1 + median).toFixed(2) : '—'}倍` },
+        { label: '前年より上がった／下がった品目', value: `${up} ／ ${down}`, sub: `全${withYoy.length}品目・前年同月比（${ymLabel(latestMonth)}）` },
+        topUp ? { label: 'いちばん上がった購入品（前年比）', value: fmtPct(topUp.st.yoy), sub: topUp.name, id: topUp.id } : null,
+        scrapFe && scrapFe.st ? { label: '鉄スクラップの指数（前年比）', value: fmtPct(scrapFe.st.yoy), sub: `2020年比 ${fmtPct(scrapFe.st.vs2020, 0)}・ピーク比 ${fmtPct(scrapFe.st.fromPeak20, 0)}`, id: scrapFe.id } : null,
+      ].filter(Boolean);
+      document.getElementById('highlights').innerHTML = tiles.map((t) => `
+        <${t.id ? 'button type="button" data-open="' + esc(t.id) + '"' : 'div'} class="card text-left bg-base-white border-2 border-base-charcoal shadow-solid p-4 ${t.id ? 'hover:-translate-y-1 hover:shadow-solid-lg transition-all' : ''}">
+          <div class="text-[11px] font-bold text-gray-500 leading-snug">${esc(t.label)}</div>
+          <div class="mt-2 font-black text-3xl sm:text-4xl leading-none">${esc(t.value)}</div>
+          <div class="mt-2 text-xs text-gray-600 leading-snug">${esc(t.sub)}</div>
+        </${t.id ? 'button' : 'div'}>`).join('');
+    }
+
+    // ---------- filters ----------
+    let savedView = 'cards';
+    try { if (localStorage.getItem('souba-view') === 'table') savedView = 'table'; } catch (e) { /* 読めなければカード表示 */ }
+    const state = { cat: 'all', kind: 'all', sort: 'default', q: '', metric: 'v2020', rankAll: false, view: savedView };
+
+    function renderChips() {
+      const counts = {};
+      ITEMS.forEach((it) => { counts[it.cat] = (counts[it.cat] || 0) + 1; });
+      const chips = [{ id: 'all', label: 'すべて' }].concat(CATS.filter((c) => counts[c.id]));
+      document.getElementById('catChips').innerHTML = chips.map((c) => `
+        <button type="button" class="chip px-3 py-1.5 bg-base-sandDark hover:bg-base-charcoal hover:text-white border-2 border-base-charcoal shadow-solid-sm" data-cat="${esc(c.id)}" aria-pressed="${state.cat === c.id}">
+          ${esc(c.label)} <span class="opacity-60">${c.id === 'all' ? ITEMS.length : counts[c.id]}</span>
+        </button>`).join('');
+      const kinds = [{ id: 'all', label: 'すべて', sw: '' }].concat(KIND_ORDER.map((k) => ({ id: k, label: KINDS[k].label + '（' + KINDS[k].short + '）', sw: KINDS[k].swatch })));
+      document.getElementById('kindToggle').innerHTML = kinds.map((k, i) => `
+        <button type="button" class="kind-opt px-3 py-2 ${i ? 'border-l-2 border-base-charcoal' : ''} hover:bg-base-sandDark flex items-center gap-1.5" data-kind="${esc(k.id)}" aria-pressed="${state.kind === k.id}">
+          ${k.sw ? `<span class="inline-block w-2.5 h-2.5 border border-base-charcoal" style="background:${k.sw}"></span>` : ''}${esc(k.label)}
+        </button>`).join('');
+    }
+
+    function filtered() {
+      const q = state.q.trim().toLowerCase();
+      let list = ITEMS.filter((it) => (state.cat === 'all' || it.cat === state.cat) && (state.kind === 'all' || it.kind === state.kind));
+      if (q) {
+        list = list.filter((it) => [it.name, it.spec, (it.keywords || []).join(' '), CAT[it.cat] && CAT[it.cat].label]
+          .join(' ').toLowerCase().indexOf(q) >= 0);
+      }
+      const v = (it, k) => (it.st && it.st[k] != null ? it.st[k] : null);
+      const cmp = {
+        default: (a, b) => a.order - b.order,
+        yoy_desc: (a, b) => (v(b, 'yoy') ?? -9) - (v(a, 'yoy') ?? -9),
+        yoy_asc: (a, b) => (v(a, 'yoy') ?? 9) - (v(b, 'yoy') ?? 9),
+        v2020_desc: (a, b) => (v(b, 'vs2020') ?? -9) - (v(a, 'vs2020') ?? -9),
+        name: (a, b) => a.name.localeCompare(b.name, 'ja'),
+      }[state.sort];
+      return list.sort(cmp);
+    }
+
+    // ---------- cards ----------
+    function cardHTML(it) {
+      const st = it.st;
+      const pp = priceParts(it.price);
+      const cat = CAT[it.cat];
+      const k = KINDS[it.kind];
+      const priceBlock = pp
+        ? `<div class="mt-4">
+             <div class="text-[11px] font-bold text-gray-500">${esc(k.priceLabel)}</div>
+             <div class="font-black text-2xl sm:text-[28px] leading-tight mt-0.5">${pp.approx ? '<span class="text-base font-bold text-gray-500 mr-0.5">約</span>' : ''}${esc(pp.main)}<span class="text-sm font-bold ml-1">${esc(pp.unit)}</span></div>
+             <div class="text-[11px] text-gray-500 mt-1 leading-snug">${esc(it.price.basis || '')}${it.price.asOf ? '・' + esc(dateLabel(it.price.asOf)) : ''}</div>
+           </div>`
+        : `<div class="mt-4">
+             <div class="text-[11px] font-bold text-gray-500">${esc(k.priceLabel)}</div>
+             <div class="text-sm font-bold mt-1 leading-snug">${esc(it.priceNote || '相場目安は準備中')}</div>
+           </div>`;
+      const trendBlock = st
+        ? `<div class="mt-4 pt-3 border-t-2 border-base-sandDark">
+             <div class="flex items-center justify-between text-xs font-bold">
+               <span>前年比 ${tri(st.yoy)} <span class="num">${esc(fmtPct(st.yoy))}</span></span>
+               <span>2020年比 ${tri(st.vs2020)} <span class="num">${esc(fmtPct(st.vs2020, 0))}</span></span>
+             </div>
+             <div class="mt-2">${sparkHTML(st)}</div>
+             <div class="mt-1 flex justify-between font-mono text-[10px] text-gray-500"><span>2019</span><span>指数 ${esc(st.last.v.toFixed(1))}（${esc(ymLabel(st.last.ym))}）</span></div>
+           </div>`
+        : '';
+      return `
+        <article class="card cursor-pointer bg-base-white border-2 border-base-charcoal p-5 shadow-solid hover:-translate-y-1 hover:shadow-solid-lg transition-all duration-200 flex flex-col justify-between group" tabindex="0" role="button" data-open="${esc(it.id)}" aria-label="${esc(it.name)}の詳細を開く">
+          <div>
+            <div class="flex justify-between items-start gap-2">
+              <div class="flex flex-wrap items-center gap-1.5">${kindBadge(it.kind)}<span class="font-mono text-[11px] text-gray-500 font-bold">${esc(cat ? cat.label : '')}</span></div>
+              <span class="font-mono text-[11px] text-gray-400 whitespace-nowrap">No.${String(it.order + 1).padStart(2, '0')}</span>
+            </div>
+            <h3 class="mt-3 font-bold text-lg leading-snug group-hover:text-base-turquoise transition-colors">${esc(it.name)}</h3>
+            ${it.spec ? `<div class="text-xs text-gray-500 mt-0.5 leading-snug">${esc(it.spec)}</div>` : ''}
+            ${priceBlock}
+          </div>
+          ${trendBlock}
+        </article>`;
+    }
+
+    function tableRowHTML(it) {
+      const st = it.st;
+      const pp = priceParts(it.price);
+      const price = pp
+        ? `${pp.approx ? '<span class="text-[11px] text-gray-500 mr-0.5">約</span>' : ''}${esc(pp.main)}<span class="text-[11px] ml-0.5">${esc(pp.unit)}</span>`
+        : '<span class="text-gray-400">—</span>';
+      return `
+        <tr class="border-t border-base-sandDark hover:bg-base-sand cursor-pointer align-middle" data-open="${esc(it.id)}" tabindex="0" aria-label="${esc(it.name)}の詳細を開く">
+          <td class="px-3 py-2"><div class="font-bold leading-snug">${esc(it.name)}</div>${it.spec ? `<div class="text-[11px] text-gray-500 leading-snug">${esc(it.spec)}</div>` : ''}</td>
+          <td class="px-2 py-2">${kindBadge(it.kind)}</td>
+          <td class="px-2 py-2 text-right font-bold num whitespace-nowrap">${price}</td>
+          <td class="px-2 py-2 text-right font-bold num whitespace-nowrap">${st ? `${tri(st.yoy)} ${esc(fmtPct(st.yoy))}` : '—'}</td>
+          <td class="px-2 py-2 text-right font-bold num whitespace-nowrap">${st ? `${tri(st.vs2020)} ${esc(fmtPct(st.vs2020, 0))}` : '—'}</td>
+          <td class="px-3 py-2 w-28">${st ? sparkHTML(st).replace('class="spark"', 'class="spark" style="height:26px"') : ''}</td>
+        </tr>`;
+    }
+
+    function renderGrid() {
+      const list = filtered();
+      const grid = document.getElementById('cardGrid');
+      const tableWrap = document.getElementById('tableWrap');
+      const asTable = state.view === 'table';
+      grid.classList.toggle('hidden', asTable || !list.length);
+      tableWrap.classList.toggle('hidden', !asTable || !list.length);
+      document.querySelectorAll('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === state.view)));
+      if (asTable) {
+        grid.innerHTML = '';
+        tableWrap.innerHTML = `<table class="w-full text-sm min-w-[680px]">
+          <caption class="sr-only">建材の相場目安と前年比・2020年比の一覧</caption>
+          <thead class="bg-base-sandDark font-mono text-[11px] text-left">
+            <tr><th scope="col" class="px-3 py-2">品目</th><th scope="col" class="px-2 py-2">区分</th><th scope="col" class="px-2 py-2 text-right">相場の目安</th><th scope="col" class="px-2 py-2 text-right">前年比</th><th scope="col" class="px-2 py-2 text-right">2020年比</th><th scope="col" class="px-3 py-2">2019年〜</th></tr>
+          </thead>
+          <tbody>${list.map(tableRowHTML).join('')}</tbody>
+        </table>`;
+      } else {
+        tableWrap.innerHTML = '';
+        grid.innerHTML = list.map(cardHTML).join('');
+      }
+      document.getElementById('emptyMsg').classList.toggle('hidden', list.length > 0);
+      const kindTxt = state.kind === 'all' ? '' : `・${KINDS[state.kind].label}`;
+      const catTxt = state.cat === 'all' ? '全素材' : CAT[state.cat].label;
+      document.getElementById('resultCount').textContent = `${catTxt}${kindTxt}：${list.length}品目`;
+      renderRanking(list);
+    }
+
+    // ---------- ranking ----------
+    const RANK_TOP = 12;
+    function renderRanking(list) {
+      const key = state.metric === 'yoy' ? 'yoy' : 'vs2020';
+      // 同じ指数を使う品目は1行にまとめる（同じ値が何行も並ばないように）
+      const groups = [];
+      const byCode = {};
+      list.filter((it) => it.st && it.st[key] != null).forEach((it) => {
+        const code = it.trend.code;
+        if (!byCode[code]) { byCode[code] = { items: [], st: it.st }; groups.push(byCode[code]); }
+        byCode[code].items.push(it);
+      });
+      const rows = groups.sort((a, b) => b.st[key] - a.st[key]);
+      const shown = state.rankAll ? rows : rows.slice(0, RANK_TOP);
+      const vals = rows.map((g) => g.st[key]);
+      const lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
+      const span = hi - lo || 1;
+      const zero = ((0 - lo) / span) * 100;
+      document.getElementById('rankNote').textContent =
+        (key === 'yoy' ? `前年同月比（${ymLabel(latestMonth)}）` : `2020年の平均と比べた${ymLabel(latestMonth)}の水準`) +
+        '。日銀の指数ベースで、同じ指数を使う品目は1行にまとめています。行をクリックで詳細。';
+      document.getElementById('rankList').innerHTML = shown.length ? shown.map((g) => {
+        const it = g.items[0];
+        const v = g.st[key];
+        const w = (Math.abs(v) / span) * 100;
+        const left = v >= 0 ? zero : zero - w;
+        const label = g.items.length > 1 ? `${it.name} ほか${g.items.length - 1}品目` : it.name;
+        const all = g.items.map((x) => x.name).join('・');
+        return `
+          <button type="button" class="rank-row w-full grid grid-cols-[7.5rem_1fr_3.75rem] sm:grid-cols-[13rem_1fr_4.5rem] items-center gap-2 py-1 px-1 hover:bg-base-sand text-left" data-open="${esc(it.id)}" title="${esc(all)}" aria-label="${esc(all)} ${esc(fmtPct(v, key === 'vs2020' ? 0 : 1))}">
+            <span class="text-xs font-bold truncate">${esc(label)}</span>
+            <span class="relative block h-[14px]">
+              <span class="absolute top-[-3px] bottom-[-3px] w-px bg-[#C9C3B5]" style="left:${zero.toFixed(2)}%"></span>
+              <span class="rank-bar absolute top-0 ${v >= 0 ? 'pos' : 'neg'}" style="left:${left.toFixed(2)}%;width:${Math.max(w, 0.6).toFixed(2)}%"></span>
+            </span>
+            <span class="text-xs font-bold num text-right">${tri(v)} ${esc(fmtPct(v, key === 'vs2020' ? 0 : 1))}</span>
+          </button>`;
+      }).join('') : '<p class="text-sm text-gray-500">表示できる品目がありません。</p>';
+      const more = document.getElementById('rankMore');
+      more.classList.toggle('hidden', rows.length <= RANK_TOP);
+      more.textContent = state.rankAll ? '上位だけ表示する' : `すべて表示する（${rows.length}行）`;
+    }
+
+    // ---------- detail modal ----------
+    const modal = document.getElementById('detailModal');
+    const mdBody = document.getElementById('mdBody');
+    let lastFocus = null;
+    let current = null;
+    let rangeFrom = null;
+
+    function rangeOptions(st) {
+      const lastI = ymToIdx(st.last.ym);
+      const first = st.s.points[0].ym;
+      return [
+        { id: '5y', label: '5年', from: idxToYm(lastI - 59) },
+        { id: '10y', label: '10年', from: idxToYm(lastI - 119) },
+        { id: 'all', label: `全期間（${first.slice(0, 4)}〜）`, from: first },
+      ].map((r) => ({ ...r, from: r.from < first ? first : r.from }));
+    }
+
+    function tableHTML(st) {
+      const years = [];
+      const y0 = Number(st.s.points[0].ym.slice(0, 4)), y1 = Number(st.last.ym.slice(0, 4));
+      for (let y = y1; y >= y0; y--) {
+        const a = yearAvg(st.s, y);
+        const pts = st.s.points.filter((p) => p.ym.slice(0, 4) === String(y));
+        if (!pts.length) continue;
+        const avg = a != null ? a : pts.reduce((s, p) => s + p.v, 0) / pts.length;
+        const pa = yearAvg(st.s, y - 1);
+        years.push({ y, avg, partial: pts.length < 12 ? pts.length : 0, chg: pa != null && a != null ? a / pa - 1 : null });
+      }
+      return `<table class="w-full text-xs num">
+        <thead><tr class="text-left text-gray-500 border-b-2 border-base-sandDark"><th class="py-1.5 font-bold">年</th><th class="py-1.5 font-bold text-right">年平均の指数</th><th class="py-1.5 font-bold text-right">前年比</th></tr></thead>
+        <tbody>${years.map((r) => `<tr class="border-b border-base-sandDark"><td class="py-1">${r.y}${r.partial ? `<span class="text-gray-400">（${r.partial}か月）</span>` : ''}</td><td class="py-1 text-right font-bold">${r.avg.toFixed(1)}</td><td class="py-1 text-right">${r.partial ? '—' : esc(fmtPct(r.chg))}</td></tr>`).join('')}</tbody>
+      </table>`;
+    }
+
+    function openDetail(id, push) {
+      const it = ITEMS.find((x) => x.id === id);
+      if (!it) return;
+      current = it;
+      const st = it.st;
+      const pp = priceParts(it.price);
+      const k = KINDS[it.kind];
+      const cat = CAT[it.cat];
+      const s = st ? st.s : null;
+      const ranges = st ? rangeOptions(st) : [];
+      rangeFrom = ranges.length ? ranges[1].from : null;
+
+      const priceBox = pp
+        ? `<div class="font-black text-3xl sm:text-4xl leading-tight">${pp.approx ? '<span class="text-lg font-bold text-gray-500 mr-1">約</span>' : ''}${esc(pp.main)}<span class="text-base font-bold ml-1">${esc(pp.unit)}</span></div>
+           <div class="text-xs text-gray-600 mt-1.5 leading-relaxed">${esc(it.price.basis || '')}${it.price.asOf ? '・' + esc(dateLabel(it.price.asOf)) + '時点' : ''}${it.price.tax ? '・' + esc(it.price.tax) : ''}</div>`
+        : `<div class="text-base font-bold leading-snug">${esc(it.priceNote || '相場目安は準備中')}</div>`;
+
+      const historyBox = (it.history || []).length
+        ? `<div class="mt-3 pt-3 border-t-2 border-base-sandDark">
+             <div class="text-[11px] font-bold text-gray-500 mb-1.5">これまでの目安</div>
+             <ul class="text-xs text-gray-700 space-y-1">${it.history.map((h) => `<li class="flex gap-2"><span class="font-mono font-bold whitespace-nowrap">${esc(h.label)}</span><span>${esc(h.text)}</span></li>`).join('')}</ul>
+           </div>`
+        : '';
+
+      const statsRow = st
+        ? `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+            <div class="border-2 border-base-charcoal p-3"><div class="text-[11px] font-bold text-gray-500">最新の指数</div><div class="font-black text-xl mt-1">${esc(st.last.v.toFixed(1))}</div><div class="text-[11px] text-gray-500">${esc(ymLabel(st.last.ym))}</div></div>
+            <div class="border-2 border-base-charcoal p-3"><div class="text-[11px] font-bold text-gray-500">前年同月比</div><div class="font-black text-xl mt-1">${tri(st.yoy)} ${esc(fmtPct(st.yoy))}</div><div class="text-[11px] text-gray-500">${esc(dirWord(st.yoy))}</div></div>
+            <div class="border-2 border-base-charcoal p-3"><div class="text-[11px] font-bold text-gray-500">2020年平均と比べて</div><div class="font-black text-xl mt-1">${tri(st.vs2020)} ${esc(fmtPct(st.vs2020, 0))}</div><div class="text-[11px] text-gray-500">${st.vs2020 != null ? '約' + esc((1 + st.vs2020).toFixed(2)) + '倍' : ''}</div></div>
+            <div class="border-2 border-base-charcoal p-3"><div class="text-[11px] font-bold text-gray-500">2020年以降のピーク</div><div class="font-black text-xl mt-1">${esc(st.peak20.v.toFixed(1))}</div><div class="text-[11px] text-gray-500">${esc(ymLabel(st.peak20.ym))}${st.peak20.ym === st.last.ym ? '（いま）' : '・いまは' + esc(fmtPct(st.fromPeak20, 0))}</div></div>
+          </div>`
+        : '';
+
+      const trendLabel = it.trend ? (it.trend.label || (s ? s.name : '')) : '';
+      const trendNote = it.trend && it.trend.proxy
+        ? `<p class="text-xs text-gray-600 mt-2 leading-relaxed"><span class="font-bold">参考指標：</span>この品目そのものの指数はないので、値動きが近い「${esc(trendLabel)}」の指数を表示しています。${esc(it.trend.note || '')}</p>`
+        : (it.trend && it.trend.note ? `<p class="text-xs text-gray-600 mt-2 leading-relaxed">${esc(it.trend.note)}</p>` : '');
+
+      const sources = (it.sources || []).length
+        ? `<div class="mt-6 pt-4 border-t-2 border-base-sandDark">
+             <div class="text-[11px] font-bold text-gray-500 mb-2">相場目安の出典</div>
+             <ul class="text-xs space-y-1.5">${it.sources.map((src) => `<li class="leading-snug">・${src.url ? `<a href="${esc(src.url)}" target="_blank" rel="noopener" class="underline decoration-base-turquoise decoration-2 underline-offset-2 hover:text-base-turquoise break-all">${esc(src.label)}</a>` : esc(src.label)}</li>`).join('')}</ul>
+           </div>`
+        : '';
+
+      mdBody.innerHTML = `
+        <div class="flex flex-wrap items-center gap-2 pr-10">${kindBadge(it.kind, 'lg')}<span class="font-mono text-xs font-bold text-gray-500">${esc(cat ? cat.label : '')}</span></div>
+        <h2 id="mdTitle" class="font-black text-2xl sm:text-3xl mt-3 leading-tight">${esc(it.name)}</h2>
+        ${it.spec ? `<div class="text-sm text-gray-500 mt-1">${esc(it.spec)}</div>` : ''}
+
+        <div class="mt-5 bg-base-sand border-2 border-base-charcoal p-4 sm:p-5">
+          <div class="text-[11px] font-bold text-gray-500 mb-1">${esc(k.priceLabel)}（${esc(k.desc)}）</div>
+          ${priceBox}
+          ${historyBox}
+        </div>
+
+        ${st ? `
+        <div class="mt-7 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <div class="font-mono text-xs font-bold text-base-turquoise">[ 過去の動向 ]</div>
+            <div class="text-sm font-bold mt-1">指数：${esc(trendLabel)}<span class="font-normal text-gray-500">（2020年平均=100）</span></div>
+          </div>
+          <div class="inline-flex border-2 border-base-charcoal font-mono text-xs font-bold" role="group" aria-label="グラフの期間">
+            ${ranges.map((r, i) => `<button type="button" class="range-btn px-2.5 py-1.5 ${i ? 'border-l-2 border-base-charcoal' : ''}" data-from="${esc(r.from)}" aria-pressed="${r.from === rangeFrom}">${esc(r.label)}</button>`).join('')}
+          </div>
+        </div>
+        <div class="viz mt-3" id="mdChart"></div>
+        ${trendNote}
+        ${statsRow}` : ''}
+
+        ${it.memo ? `<div class="mt-6">
+          <div class="font-mono text-xs font-bold text-base-turquoise mb-2">[ 動きのポイント ]<span class="text-gray-400 font-normal ml-2">${esc(dateLabel(DATA.checkedAt).replace(/\d+日$/, ''))}時点のメモ</span></div>
+          <div class="text-sm text-gray-700 leading-relaxed space-y-2">${String(it.memo).split('\n').filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join('')}</div>
+        </div>` : ''}
+
+        ${st ? `<details class="mt-6 border-2 border-base-charcoal">
+          <summary class="cursor-pointer px-4 py-2.5 font-mono text-xs font-bold bg-base-sandDark">年ごとの数字（表）を見る</summary>
+          <div class="p-4 max-h-72 overflow-y-auto">${tableHTML(st)}</div>
+        </details>` : ''}
+
+        ${sources}
+        <p class="mt-5 text-[11px] text-gray-500 leading-relaxed">指数の出典：日本銀行「${esc(it.trend && it.trend.code && it.trend.code.startsWith('PRCS') ? '企業向けサービス価格指数' : '企業物価指数')}」（系列コード ${esc(it.trend ? it.trend.code : '')}${s && s.linkedFrom ? '、2019年以前は旧基準 ' + esc(s.linkedFrom) + ' をつないで表示' : ''}）。相場目安は目安であり、実際の取引価格を保証するものではありません。</p>
+      `;
+
+      lastFocus = document.activeElement;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      if (st) drawChart(document.getElementById('mdChart'), st, rangeFrom);
+      document.getElementById('mdClose').focus();
+      if (push !== false) window.history.replaceState(null, '', '#' + it.id);
+    }
+
+    function closeDetail() {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      current = null;
+      if (location.hash) window.history.replaceState(null, '', location.pathname + location.search);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    // ---------- line chart ----------
+    function niceNum(range, round) {
+      const exp = Math.floor(Math.log10(range));
+      const f = range / Math.pow(10, exp);
+      let nf;
+      if (round) nf = f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10;
+      else nf = f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10;
+      return nf * Math.pow(10, exp);
+    }
+    function niceScale(min, max, maxTicks) {
+      const range = niceNum(max - min || 1, false);
+      const step = niceNum(range / (maxTicks - 1), true);
+      const lo = Math.floor(min / step) * step;
+      const hi = Math.ceil(max / step) * step;
+      const ticks = [];
+      for (let v = lo; v <= hi + step / 2; v += step) ticks.push(Math.round(v * 1000) / 1000);
+      return { lo, hi, step, ticks };
+    }
+
+    function drawChart(host, st, fromYm) {
+      const pts = st.s.points.filter((p) => p.ym >= fromYm);
+      host.innerHTML = '';
+      if (pts.length < 2) { host.textContent = 'グラフにできるデータがありません'; return; }
+      const W = Math.max(280, Math.floor(host.clientWidth));
+      const H = W < 480 ? 220 : 260;
+      const m = { t: 22, r: 70, b: 26, l: 36 };
+      const iw = W - m.l - m.r, ih = H - m.t - m.b;
+      const vals = pts.map((p) => p.v);
+      const sc = niceScale(Math.min(...vals, 100), Math.max(...vals, 100), 5);
+      const i0 = ymToIdx(pts[0].ym), i1 = ymToIdx(pts[pts.length - 1].ym);
+      const X = (ym) => m.l + ((ymToIdx(ym) - i0) / (i1 - i0)) * iw;
+      const Y = (v) => m.t + (1 - (v - sc.lo) / (sc.hi - sc.lo)) * ih;
+      const f = (n) => n.toFixed(1);
+
+      // 年の目盛り
+      const y0 = Number(pts[0].ym.slice(0, 4)), y1 = Number(pts[pts.length - 1].ym.slice(0, 4));
+      const maxLabels = Math.max(2, Math.floor(iw / 52));
+      const steps = [1, 2, 3, 4, 5, 10];
+      const yStep = steps.find((s) => Math.ceil((y1 - y0 + 1) / s) <= maxLabels) || 10;
+      const xTicks = [];
+      for (let y = y0; y <= y1; y++) {
+        const ym = `${y}-01`;
+        if (ym < pts[0].ym) continue;
+        if ((y - y0) % yStep === 0 || yStep === 1) xTicks.push({ ym, y });
+      }
+
+      const line = pts.map((p, k) => `${k ? 'L' : 'M'}${f(X(p.ym))} ${f(Y(p.v))}`).join(' ');
+      const area = `${line} L${f(X(pts[pts.length - 1].ym))} ${f(Y(sc.lo))} L${f(X(pts[0].ym))} ${f(Y(sc.lo))} Z`;
+      const last = pts[pts.length - 1];
+      let peak = pts[0];
+      pts.forEach((p) => { if (p.v > peak.v) peak = p; });
+      const showPeak = peak.ym !== last.ym && last.v / peak.v < 0.97;
+      let peakLbl = '';
+      if (showPeak) {
+        const px = X(peak.ym), py = Y(peak.v);
+        const anchor = px < m.l + 40 ? 'start' : px > m.l + iw - 40 ? 'end' : 'middle';
+        const ly = py - 9 < m.t - 6 ? py + 16 : py - 9;
+        peakLbl = `<circle cx="${f(px)}" cy="${f(py)}" r="4" fill="var(--ink)" stroke="#fff" stroke-width="2"/>
+          <text x="${f(px)}" y="${f(ly)}" text-anchor="${anchor}" font-size="11" font-weight="700" fill="var(--ink)" paint-order="stroke" stroke="#fff" stroke-width="3" stroke-linejoin="round">ピーク ${peak.v.toFixed(1)}（${peak.ym.replace('-', '.')}）</text>`;
+      }
+      const refY = Y(100);
+      const ns = 'http://www.w3.org/2000/svg';
+      const desc = `${st.s.name}の指数。${ymLabel(pts[0].ym)}の${pts[0].v.toFixed(1)}から${ymLabel(last.ym)}の${last.v.toFixed(1)}へ。期間中の最高は${ymLabel(peak.ym)}の${peak.v.toFixed(1)}。矢印キーで1か月ずつ値を読めます。`;
+
+      host.innerHTML = `
+        <svg xmlns="${ns}" viewBox="0 0 ${W} ${H}" height="${H}" role="img" aria-label="${esc(desc)}" tabindex="0" class="viz-svg">
+          ${sc.ticks.map((t) => `<line x1="${m.l}" x2="${m.l + iw}" y1="${f(Y(t))}" y2="${f(Y(t))}" stroke="var(--viz-grid)" stroke-width="1"/>
+            <text x="${m.l - 6}" y="${f(Y(t) + 3.5)}" text-anchor="end" font-size="10.5" fill="var(--ink-3)" class="num">${t}</text>`).join('')}
+          <line x1="${m.l}" x2="${m.l + iw}" y1="${f(refY)}" y2="${f(refY)}" stroke="var(--viz-axis)" stroke-width="1.25"/>
+          <text x="${m.l + 4}" y="${f(refY - 4)}" font-size="10" fill="var(--ink-3)" paint-order="stroke" stroke="#fff" stroke-width="3" stroke-linejoin="round">2020年平均=100</text>
+          <line x1="${m.l}" x2="${m.l + iw}" y1="${f(m.t + ih)}" y2="${f(m.t + ih)}" stroke="var(--viz-axis)" stroke-width="1"/>
+          ${xTicks.map((t) => `<line x1="${f(X(t.ym))}" x2="${f(X(t.ym))}" y1="${m.t + ih}" y2="${m.t + ih + 4}" stroke="var(--viz-axis)"/>
+            <text x="${f(X(t.ym))}" y="${m.t + ih + 17}" text-anchor="middle" font-size="10.5" fill="var(--ink-3)" class="num">${t.y}</text>`).join('')}
+          <path d="${area}" fill="var(--viz-accent)" fill-opacity="0.1" stroke="none"/>
+          <path d="${line}" fill="none" stroke="var(--viz-accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          ${peakLbl}
+          <circle cx="${f(X(last.ym))}" cy="${f(Y(last.v))}" r="4.5" fill="var(--viz-accent)" stroke="#fff" stroke-width="2"/>
+          <text x="${f(X(last.ym) + 8)}" y="${f(Y(last.v) - 1)}" font-size="13" font-weight="900" fill="var(--ink)" paint-order="stroke" stroke="#fff" stroke-width="3" stroke-linejoin="round">${last.v.toFixed(1)}</text>
+          <text x="${f(X(last.ym) + 8)}" y="${f(Y(last.v) + 12)}" font-size="10" fill="var(--ink-3)" paint-order="stroke" stroke="#fff" stroke-width="3" stroke-linejoin="round">${last.ym.replace('-', '.')}</text>
+          <g class="hover" style="display:none">
+            <line class="hx" y1="${m.t}" y2="${m.t + ih}" stroke="var(--ink)" stroke-width="1"/>
+            <circle class="hd" r="4.5" fill="var(--viz-accent)" stroke="#fff" stroke-width="2"/>
+          </g>
+          <rect class="hit" x="${m.l}" y="${m.t}" width="${iw}" height="${ih}" fill="transparent"/>
+        </svg>
+        <div class="viz-tip" style="display:none"></div>`;
+
+      const svg = host.querySelector('svg');
+      const g = svg.querySelector('.hover');
+      const hx = svg.querySelector('.hx');
+      const hd = svg.querySelector('.hd');
+      const tip = host.querySelector('.viz-tip');
+      const a2020 = st.a2020;
+      let cur = pts.length - 1;
+
+      function show(k) {
+        cur = Math.max(0, Math.min(pts.length - 1, k));
+        const p = pts[cur];
+        const x = X(p.ym), y = Y(p.v);
+        g.style.display = '';
+        hx.setAttribute('x1', f(x)); hx.setAttribute('x2', f(x));
+        hd.setAttribute('cx', f(x)); hd.setAttribute('cy', f(y));
+        const prev = st.s.byYm[idxToYm(ymToIdx(p.ym) - 12)];
+        tip.innerHTML = `<div class="text-[11px] text-gray-500 font-bold">${esc(ymLabel(p.ym))}</div>
+          <div><span class="k"></span><span class="v">${p.v.toFixed(1)}</span></div>
+          <div class="text-[11px] text-gray-600">2020年比 ${esc(fmtPct(a2020 ? p.v / a2020 - 1 : null, 0))}${prev ? '・前年比 ' + esc(fmtPct(p.v / prev.v - 1)) : ''}</div>`;
+        tip.style.display = '';
+        const scale = host.clientWidth / W;
+        const tw = tip.offsetWidth;
+        let left = x * scale + 12;
+        if (left + tw > host.clientWidth) left = x * scale - tw - 12;
+        tip.style.left = Math.max(0, left) + 'px';
+        tip.style.top = Math.max(0, y * scale - 54) + 'px';
+      }
+      function hide() { g.style.display = 'none'; tip.style.display = 'none'; }
+      function kFromEvent(ev) {
+        const r = svg.getBoundingClientRect();
+        const x = ((ev.clientX - r.left) / r.width) * W;
+        const t = (x - m.l) / iw;
+        const ym = idxToYm(Math.round(i0 + t * (i1 - i0)));
+        let k = pts.findIndex((p) => p.ym === ym);
+        if (k < 0) k = t <= 0 ? 0 : pts.length - 1;
+        return k;
+      }
+      svg.addEventListener('pointermove', (ev) => show(kFromEvent(ev)));
+      svg.addEventListener('pointerdown', (ev) => show(kFromEvent(ev)));
+      svg.addEventListener('pointerleave', hide);
+      svg.addEventListener('focus', () => show(cur));
+      svg.addEventListener('blur', hide);
+      svg.addEventListener('keydown', (ev) => {
+        const map = { ArrowLeft: -1, ArrowRight: 1, ArrowDown: -12, ArrowUp: 12 };
+        if (ev.key in map) { ev.preventDefault(); show(cur + map[ev.key]); }
+        else if (ev.key === 'Home') { ev.preventDefault(); show(0); }
+        else if (ev.key === 'End') { ev.preventDefault(); show(pts.length - 1); }
+      });
+    }
+
+    // ---------- events ----------
+    document.addEventListener('click', (ev) => {
+      const opener = ev.target.closest('[data-open]');
+      if (opener && !modal.contains(opener)) { openDetail(opener.getAttribute('data-open')); return; }
+      const chip = ev.target.closest('[data-cat]');
+      if (chip) { state.cat = chip.getAttribute('data-cat'); state.rankAll = false; renderChips(); renderGrid(); return; }
+      const kind = ev.target.closest('[data-kind]');
+      if (kind) { state.kind = kind.getAttribute('data-kind'); state.rankAll = false; renderChips(); renderGrid(); return; }
+      const view = ev.target.closest('[data-view]');
+      if (view) {
+        state.view = view.getAttribute('data-view');
+        try { localStorage.setItem('souba-view', state.view); } catch (e) { /* 保存できなくても表示は切り替える */ }
+        renderGrid();
+        return;
+      }
+      const metric = ev.target.closest('[data-metric]');
+      if (metric) {
+        state.metric = metric.getAttribute('data-metric');
+        document.querySelectorAll('[data-metric]').forEach((b) => b.setAttribute('aria-pressed', String(b === metric)));
+        renderRanking(filtered());
+        return;
+      }
+      const rng = ev.target.closest('[data-from]');
+      if (rng && current && current.st) {
+        rangeFrom = rng.getAttribute('data-from');
+        mdBody.querySelectorAll('[data-from]').forEach((b) => b.setAttribute('aria-pressed', String(b === rng)));
+        drawChart(document.getElementById('mdChart'), current.st, rangeFrom);
+      }
+    });
+    document.getElementById('rankMore').addEventListener('click', () => { state.rankAll = !state.rankAll; renderRanking(filtered()); });
+    ['cardGrid', 'tableWrap'].forEach((id) => document.getElementById(id).addEventListener('keydown', (ev) => {
+      const card = ev.target.closest('[data-open]');
+      if (card && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); openDetail(card.getAttribute('data-open')); }
+    }));
+    document.getElementById('sortSel').addEventListener('change', (ev) => { state.sort = ev.target.value; renderGrid(); });
+    document.getElementById('searchBox').addEventListener('input', (ev) => { state.q = ev.target.value; state.rankAll = false; renderGrid(); });
+    document.getElementById('mdClose').addEventListener('click', closeDetail);
+    modal.addEventListener('click', (ev) => { if (ev.target === modal) closeDetail(); });
+    document.addEventListener('keydown', (ev) => {
+      if (modal.classList.contains('hidden')) return;
+      if (ev.key === 'Escape') { closeDetail(); return; }
+      if (ev.key === 'Tab') {
+        const f = modal.querySelectorAll('button, a[href], summary, [tabindex="0"], select, input');
+        const list = Array.prototype.filter.call(f, (el) => el.offsetParent !== null);
+        if (!list.length) return;
+        const first = list[0], lastEl = list[list.length - 1];
+        if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); lastEl.focus(); }
+        else if (!ev.shiftKey && document.activeElement === lastEl) { ev.preventDefault(); first.focus(); }
+      }
+    });
+    let rz;
+    window.addEventListener('resize', () => {
+      clearTimeout(rz);
+      rz = setTimeout(() => { if (current && current.st) drawChart(document.getElementById('mdChart'), current.st, rangeFrom); }, 150);
+    });
+
+    // ---------- init ----------
+    renderHighlights();
+    renderChips();
+    renderGrid();
+    const h = decodeURIComponent(location.hash.slice(1));
+    if (h && ITEMS.some((it) => it.id === h)) openDetail(h, false);
+  })();
+  </script>
+</body>
+</html>
