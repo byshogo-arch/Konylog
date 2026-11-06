@@ -174,6 +174,7 @@
       if (z.zone === 'front' && dF <= z.half + EPS) return { kind: z.use.zone === 'front' ? 'front' : 'front-max', rule: z, use: z.use };
       if (z.zone === 'rear' && dR <= z.half + EPS) return { kind: 'rear-max', rule: z, use: z.use };
     }
+    if (so.default) return { kind: so.default.zone === 'all' ? 'all' : 'side', rule: null, use: so.default };
     const own = ownZone(m, so.id);
     return { kind: own, rule: null, use: { state: so.id, zone: own } };
   }

@@ -96,7 +96,10 @@ def check(path):
             u = z.get('use', {})
             if z.get('zone') not in ('front', 'rear') or not is_num(z.get('half')): E.append(f'state {s["id"]}: bad zone rule {z}')
             if (u.get('state'), u.get('zone')) not in charts: E.append(f'state {s["id"]}: zone rule refers to missing chart {u}')
-        if not any(k[0] == s['id'] for k in charts): E.append(f'state {s["id"]} has no boom chart')
+        dflt = s.get('default')
+        if dflt:
+            if (dflt.get('state'), dflt.get('zone')) not in charts: E.append(f'state {s["id"]}: default refers to missing chart {dflt}')
+        elif not any(k[0] == s['id'] for k in charts): E.append(f'state {s["id"]} has no boom chart')
     # jib charts
     for i, c in enumerate(d.get('jibCharts', [])):
         tag = f'jibCharts[{i}]({c.get("state")},{c.get("jib")})'

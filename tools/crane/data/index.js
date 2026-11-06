@@ -941,6 +941,7 @@ window.CRANE_INDEX = [
   "hasOnTire": true,
   "outriggers": [
    7,
+   7,
    6.6,
    6.6,
    5.5,
