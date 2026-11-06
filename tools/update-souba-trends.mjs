@@ -150,6 +150,20 @@ async function main() {
     };
   }
 
+  // 数字が前回と同じなら書き換えない（毎週の自動チェックで、無駄なコミットを出さないため）
+  try {
+    const prevSrc = await readFile(OUT_FILE, 'utf8');
+    const box = { window: {} };
+    vm.runInNewContext(prevSrc, box, { filename: OUT_FILE });
+    const prev = box.window.KONYLOG_SOUBA_TRENDS;
+    if (prev && JSON.stringify(prev.series) === JSON.stringify(series)) {
+      console.log(`変更なし: 最新は ${latest} のままです（${path.relative(ROOT, OUT_FILE)} は書き換えません）`);
+      return;
+    }
+  } catch (err) {
+    // 前回のファイルがない・読めないときは、そのまま書き出す
+  }
+
   const today = new Date();
   const out = {
     generatedAt: `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`,

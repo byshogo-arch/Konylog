@@ -8,6 +8,8 @@
   <meta property="og:title" content="建材相場ボード｜KONYLOG BASE">
   <meta property="og:description" content="建材約50品目の相場目安と過去の動向。購入・スクラップ買取・処分費がひと目でわかる現場向けボード。">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://souba.konylog.com/">
+  <link rel="canonical" href="https://souba.konylog.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -87,6 +89,10 @@
     .rank-bar { height: 14px; border-radius: 0; }
     .rank-bar.pos { background: var(--viz-up); border-radius: 0 4px 4px 0; }
     .rank-bar.neg { background: var(--viz-down); border-radius: 4px 0 0 4px; }
+    /* 広告枠：「広告」とわかる見た目にして、操作ボタンとは離して置く */
+    .ad-label { font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 700; color: #6B7280; letter-spacing: .08em; margin-bottom: 6px; }
+    .ad-box { background: #fff; border: 2px dashed #C9C3B5; padding: 12px; min-height: 100px; }
+    .ad-preview { display: flex; align-items: center; justify-content: center; min-height: 120px; background: repeating-linear-gradient(45deg, #fff, #fff 10px, #F4F0E8 10px, #F4F0E8 20px); border: 2px dashed #F39C12; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; color: #1E2229; text-align: center; padding: 12px; }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; animation: none !important; }
     }
@@ -116,15 +122,14 @@
           <span class="font-bebas text-3xl text-white">K</span>
         </div>
         <div>
-          <a href="index.html" class="font-bebas text-4xl sm:text-5xl tracking-wider text-base-charcoal hover:text-base-turquoise transition-colors leading-none block">
+          <a href="https://konylog.com/" class="font-bebas text-4xl sm:text-5xl tracking-wider text-base-charcoal hover:text-base-turquoise transition-colors leading-none block">
             KONYLOG <span class="text-base-turquoise">BASE</span>
           </a>
           <span class="font-mono text-[10px] tracking-widest text-gray-500 font-bold uppercase">Site Management &amp; Indie Development</span>
         </div>
       </div>
       <nav class="flex flex-wrap items-center gap-2 sm:gap-3 font-mono text-xs font-bold">
-        <a href="index.html" class="px-3 py-1.5 bg-base-sandDark hover:bg-base-charcoal hover:text-white border-2 border-base-charcoal shadow-solid-sm transition-all">← トップ</a>
-        <a href="index.html#latest" class="px-3 py-1.5 bg-base-sandDark hover:bg-base-turquoise hover:text-white border-2 border-base-charcoal shadow-solid-sm transition-all rotate-1">記事 (LOGS)</a>
+        <a href="https://konylog.com/" class="px-3 py-1.5 bg-base-sandDark hover:bg-base-charcoal hover:text-white border-2 border-base-charcoal shadow-solid-sm transition-all">← konylog.com（記事）</a>
         <span class="px-3 py-1.5 bg-base-charcoal text-white border-2 border-base-charcoal shadow-solid-sm -rotate-1" aria-current="page">#04 建材相場</span>
       </nav>
     </header>
@@ -166,6 +171,9 @@
         <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5" id="topicsList"></ul>
       </div>
     </section>
+
+    <!-- 広告枠（設定は data/souba-ads.js） -->
+    <aside class="ad-slot hidden mb-12" data-ad-key="afterSummary" aria-label="広告"></aside>
 
     <!-- FILTERS + GRID -->
     <section id="board" class="mb-12" aria-labelledby="boardTitle">
@@ -216,6 +224,8 @@
       <p class="hidden bg-base-white border-2 border-base-charcoal p-6 text-sm text-gray-600" id="emptyMsg">条件に合う品目がありません。絞り込みを変えてみてください。</p>
     </section>
 
+    <aside class="ad-slot hidden mb-12" data-ad-key="afterBoard" aria-label="広告"></aside>
+
     <!-- RANKING -->
     <section id="ranking" class="mb-12" aria-labelledby="rankTitle">
       <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
@@ -237,6 +247,8 @@
       </div>
     </section>
 
+    <aside class="ad-slot hidden mb-12" data-ad-key="afterRanking" aria-label="広告"></aside>
+
     <!-- ABOUT DATA -->
     <section id="about-data" class="bg-base-charcoal text-base-sand p-6 sm:p-10 border-2 border-base-charcoal shadow-solid-lg mb-14">
       <span class="font-mono text-xs text-base-turquoise font-bold tracking-widest uppercase block mb-2">[ ABOUT THE DATA ]</span>
@@ -257,15 +269,21 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="mt-auto bg-base-white border-2 border-base-charcoal p-6 shadow-solid flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs font-bold">
-      <div class="flex items-center space-x-2">
-        <span class="w-3 h-3 bg-base-turquoise inline-block"></span>
-        <span>KONYLOG.COM // 現場とツールの備忘録</span>
+    <footer class="mt-auto bg-base-white border-2 border-base-charcoal p-6 shadow-solid font-mono text-xs font-bold space-y-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center space-x-2">
+          <span class="w-3 h-3 bg-base-turquoise inline-block"></span>
+          <span>KONYLOG.COM // 現場とツールの備忘録</span>
+        </div>
+        <nav class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2" aria-label="サイト情報">
+          <a href="https://konylog.com/" class="hover:text-base-turquoise transition-colors">← konylog.com</a>
+          <a href="https://konylog.com/%e3%83%97%e3%83%ad%e3%83%95%e3%82%a3%e3%83%bc%e3%83%ab%e9%81%8b%e5%96%b6%e8%80%85%e6%83%85%e5%a0%b1/" class="hover:text-base-turquoise transition-colors">運営者情報</a>
+          <a href="https://konylog.com/%e3%83%97%e3%83%a9%e3%82%a4%e3%83%90%e3%82%b7%e3%83%bc%e3%83%9d%e3%83%aa%e3%82%b7%e3%83%bc/" class="hover:text-base-turquoise transition-colors">プライバシーポリシー</a>
+          <a href="https://konylog.com/%e3%81%8a%e5%95%8f%e3%81%84%e5%90%88%e3%82%8f%e3%81%9b%e3%83%95%e3%82%a9%e3%83%bc%e3%83%a0/" class="hover:text-base-turquoise transition-colors">お問い合わせ</a>
+          <span class="text-gray-400">ご安全に！</span>
+        </nav>
       </div>
-      <div class="flex items-center space-x-6">
-        <a href="index.html" class="hover:text-base-turquoise transition-colors">← TOP</a>
-        <span class="text-gray-400">ご安全に！</span>
-      </div>
+      <p class="text-[11px] font-normal text-gray-500 text-center sm:text-left">このページには広告（アフィリエイト広告を含む）が表示されます。「PR」「スポンサーリンク」と書かれた枠が広告です。</p>
     </footer>
   </div>
 
@@ -281,6 +299,7 @@
 
   <script src="data/souba-items.js"></script>
   <script src="data/souba-trends.js"></script>
+  <script src="data/souba-ads.js"></script>
   <script>
   (function () {
     'use strict';
@@ -382,6 +401,34 @@
     const KINDS = DATA.kinds;
     const ITEMS = DATA.items.map((it, i) => ({ ...it, order: i, st: statsOf(it) }));
     const KIND_ORDER = ['buy', 'sell', 'dispose'];
+
+    // 広告の設定（data/souba-ads.js）
+    const ADS = window.KONYLOG_SOUBA_ADS || {};
+    const AD_HOST_OK = (ADS.allowHosts || []).some((h) => location.hostname === h || location.hostname.endsWith('.' + h));
+    const AD_PREVIEW = new URLSearchParams(location.search).get('adpreview') === '1';
+    const fillName = (t, it) => String(t || '').replace(/\{name\}/g, it ? it.name : '');
+
+    // 詳細画面の「PR」枠：品目に合う最初の1件（url が空の枠は出さない）
+    function prFor(it) {
+      return (ADS.pr || []).find((p) => p.url
+        && (!p.kinds || p.kinds.indexOf(it.kind) >= 0)
+        && (!p.cats || p.cats.indexOf(it.cat) >= 0)
+        && (!p.items || p.items.indexOf(it.id) >= 0));
+    }
+    function prCardHTML(it) {
+      if (AD_PREVIEW) return '<div class="mt-4"><div class="ad-label">PR</div><div class="ad-preview">PR枠（品目に合わせて中身が変わります）</div></div>';
+      const p = prFor(it);
+      if (!p) return '';
+      return `
+        <a href="${esc(p.url)}" target="_blank" rel="${p.own ? 'noopener' : 'sponsored noopener'}" data-pr="${esc(p.id)}" class="mt-4 block bg-yellow-50 border-2 border-base-charcoal shadow-solid-sm p-4 sm:p-5 hover:bg-yellow-100 transition-colors">
+          <div class="flex flex-wrap items-center gap-2 font-mono text-[11px] font-bold">
+            <span class="px-1.5 py-0.5 border border-base-charcoal bg-white">PR</span><span class="text-gray-500">${p.own ? '運営者のサイト' : '広告'}</span>
+          </div>
+          <div class="mt-2 font-black text-base sm:text-lg leading-snug">${esc(fillName(p.title, it))}</div>
+          <p class="mt-1 text-sm text-gray-600 leading-relaxed">${esc(fillName(p.text, it))}</p>
+          <span class="mt-3 inline-flex items-center px-4 py-2 bg-base-charcoal text-white font-mono text-xs font-bold">${esc(p.cta)} →</span>
+        </a>`;
+    }
 
     function kindBadge(kind, size) {
       const k = KINDS[kind];
@@ -716,6 +763,7 @@
           ${priceBox}
           ${historyBox}
         </div>
+        ${prCardHTML(it)}
 
         ${st ? `
         <div class="mt-7 flex flex-wrap items-end justify-between gap-2">
@@ -954,7 +1002,97 @@
       rz = setTimeout(() => { if (current && current.st) drawChart(document.getElementById('mdChart'), current.st, rangeFrom); }, 150);
     });
 
+    // ---------- ads（設定は data/souba-ads.js） ----------
+    function loadScript(src, attrs) {
+      const el = document.createElement('script');
+      el.async = true;
+      el.src = src;
+      Object.keys(attrs || {}).forEach((k) => el.setAttribute(k, attrs[k]));
+      document.head.appendChild(el);
+    }
+
+    function setupAds() {
+      if (!AD_HOST_OK) return; // konylog.com 以外（プレビューなど）では広告も計測も読み込まない
+      if (ADS.googleTag) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', ADS.googleTag);
+        loadScript('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ADS.googleTag));
+      }
+      const as = ADS.adsense || {};
+      const anySlot = Object.keys(as.slots || {}).some((k) => as.slots[k]);
+      if (as.client && (as.autoAds || anySlot)) {
+        loadScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(as.client), { crossorigin: 'anonymous' });
+      }
+    }
+
+    function bannerHTML(b, id) {
+      return `
+        <a href="${esc(b.url)}" target="_blank" rel="${b.own ? 'noopener' : 'sponsored noopener'}" data-pr="${esc(id)}" class="block bg-base-white border-2 border-base-charcoal shadow-solid p-5 sm:p-6 hover:-translate-y-1 hover:shadow-solid-lg transition-all">
+          <div class="flex flex-wrap items-center gap-2 font-mono text-[11px] font-bold">
+            <span class="px-1.5 py-0.5 border border-base-charcoal bg-yellow-100">PR</span><span class="text-gray-500">${esc(b.eyebrow || '広告')}</span>
+          </div>
+          <div class="mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div class="font-black text-xl sm:text-2xl leading-snug">${esc(b.title)}</div>
+              <p class="mt-2 text-sm text-gray-600 leading-relaxed max-w-2xl">${esc(b.text)}</p>
+            </div>
+            <span class="shrink-0 self-start md:self-center inline-flex items-center px-5 py-3 bg-base-mustard text-base-charcoal border-2 border-base-charcoal shadow-solid-sm font-mono text-sm font-bold">${esc(b.cta)} →</span>
+          </div>
+        </a>`;
+    }
+
+    function renderAdSlots() {
+      const as = ADS.adsense || {};
+      document.querySelectorAll('[data-ad-key]').forEach((el) => {
+        const key = el.getAttribute('data-ad-key');
+        const slot = (as.slots || {})[key];
+        const houseId = (ADS.house || {})[key];
+        const banner = houseId ? (ADS.banners || {})[houseId] : null;
+        let html = '';
+        if (AD_PREVIEW) {
+          html = `<div class="ad-label">スポンサーリンク</div><div class="ad-preview">広告枠「${esc(key)}」<br>${slot ? 'AdSense ユニット ' + esc(slot) : banner ? 'いまは自社PRを表示中' : 'まだ何も出ません（ユニットIDを入れると表示）'}</div>`;
+        } else if (AD_HOST_OK && as.client && slot) {
+          html = `<div class="ad-label">スポンサーリンク</div><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(as.client)}" data-ad-slot="${esc(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
+        } else if (banner && banner.url) {
+          html = bannerHTML(banner, houseId);
+        }
+        if (!html) { el.classList.add('hidden'); return; }
+        el.innerHTML = html;
+        el.classList.remove('hidden');
+        if (!AD_PREVIEW && el.querySelector('ins.adsbygoogle')) {
+          try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* 広告ブロッカーなどで読めないときは何もしない */ }
+        }
+      });
+    }
+
+    // 広告・PRリンクのクリックを konylog.com と同じイベント名で計測（GA4）
+    function trackClicks() {
+      if (!AD_HOST_OK) return;
+      const AFF = /(^|\.)(a8\.net|moshimo\.com|valuecommerce\.(com|ne\.jp)|accesstrade\.net|felmat\.net|afi-b\.com|amzn\.to|amazon\.co\.jp|rakuten\.co\.jp|linksynergy\.com)$/i;
+      document.addEventListener('click', (e) => {
+        const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!a || typeof window.gtag !== 'function') return;
+        let host = '';
+        try { host = new URL(a.href, location.href).hostname; } catch (err) { return; }
+        const params = {
+          link_url: a.href,
+          link_domain: host,
+          link_text: (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 100),
+          page_path: location.pathname,
+          souba_item: current ? current.id : '',
+          souba_slot: a.getAttribute('data-pr') || '',
+        };
+        if (AFF.test(host) || /\bsponsored\b/i.test(a.getAttribute('rel') || '')) window.gtag('event', 'affiliate_click', params);
+        else if (/(^|\.)mitsumoreal\.com$/i.test(host)) window.gtag('event', 'mitsumoreal_click', params);
+      }, true);
+    }
+
     // ---------- init ----------
+    setupAds();
+    trackClicks();
+    renderAdSlots();
     renderHighlights();
     renderChips();
     renderGrid();
