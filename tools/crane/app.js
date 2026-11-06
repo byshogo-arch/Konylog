@@ -858,6 +858,14 @@
       kv(st.work === 'jib' ? 'ジブ先端高さ' : 'フック最高高さ', st.work === 'jib' ? (ang != null ? fmtM(jibTipY(m, res)) : '—') : (hookTop != null ? fmtM(hookTop) : '—'), 'm', '目安（たわみ無視）')));
     if (!res.ok) {
       left.append(h('div', { class: 'cap-main na' }, h('div', { class: 'lbl' }, '定格総荷重'), h('div', { class: 'num' }, '吊れません'), h('div', { class: 'exp' }, res.reason || 'この条件は性能表の範囲外です')));
+      // suggest the boom length that works best at this radius / direction
+      if (st.work !== 'jib') {
+        const Ls = isTire(st.ost) ? tireLengths(m) : boomLengths(m, st.mode);
+        let best = null;
+        for (const L of Ls) { const r = evaluate(m, { ...params(), L }); if (r.ok && (!best || r.cap > best.cap + EPS)) best = { L, cap: r.cap }; }
+        if (best) left.append(h('button', { type: 'button', class: 'suggest', onclick: () => { st.L = best.L; update(); } }, `→ ${fmtL(best.L)}mブームなら ${fmtT(best.cap)}t（この半径・向きで一番吊れる長さ）にする`));
+        else left.append(h('p', { class: 'hint' }, 'この張出・向きでは、どのブーム長さでもこの半径は表の範囲外です。張出を広くするか、半径を小さくしてください。'));
+      }
     } else {
       left.append(h('div', { class: 'cap-main' },
         h('div', { class: 'lbl' }, '定格総荷重（性能表の値・フック込み）'),

@@ -279,3 +279,6 @@ table.cmp .cmp-model { font-weight: 700; white-space: nowrap; }
 .step.sub-total .n { color: var(--ink); }
 .step.total.sf { background: var(--warn-l); border-top-color: var(--warn); padding: 6px 6px 4px; }
 .step.total.sf .n { color: var(--warn); }
+
+.suggest { margin-top: 10px; width: 100%; text-align: left; font: 700 14px "Noto Sans JP", sans-serif; background: var(--tq-l); color: var(--ink); border: 2px solid var(--ink); box-shadow: var(--shadow-sm); padding: 10px 12px; cursor: pointer; }
+.suggest:hover { background: var(--tq); color: var(--white); }
