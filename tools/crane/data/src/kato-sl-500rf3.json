@@ -23,12 +23,12 @@
  ],
  "hooks": {
   "main": {
-   "label": "50tフック",
-   "mass": 0.5
-  },
-  "main34": {
    "label": "34tフック",
    "mass": 0.33
+  },
+  "main50": {
+   "label": "50tフック",
+   "mass": 0.5
   },
   "aux": {
    "label": "5.6tフック",
@@ -41,52 +41,47 @@
   "hook": "aux",
   "limits": [
    {
-    "L": 10.1,
-    "mode": "A,B",
-    "limit": 5.6
-   },
-   {
-    "L": 17.6,
-    "mode": "A,B",
-    "limit": 5.6
-   },
-   {
-    "L": 25.1,
     "mode": "A",
+    "L": [
+     10.1,
+     32.5
+    ],
     "limit": 5.6
    },
    {
-    "L": 25.0,
-    "mode": "B",
-    "limit": 5.6
-   },
-   {
-    "L": 32.5,
     "mode": "A",
-    "limit": 5.6
-   },
-   {
-    "L": 32.5,
-    "mode": "B",
-    "limit": 5.0
-   },
-   {
-    "L": 36.5,
-    "mode": "A",
+    "L": [
+     36.5,
+     36.5
+    ],
     "limit": 5.3
    },
    {
-    "L": 36.5,
-    "mode": "B",
+    "mode": "A",
+    "L": [
+     40.0,
+     40.0
+    ],
     "limit": 5.0
    },
    {
-    "L": 40.0,
-    "mode": "A,B",
+    "mode": "B",
+    "L": [
+     10.1,
+     25.0
+    ],
+    "limit": 5.6
+   },
+   {
+    "mode": "B",
+    "L": [
+     32.5,
+     40.0
+    ],
     "limit": 5.0
    }
   ],
-  "note": "ルースタシーブ（注意事項6）：ブームの定格総荷重から、ブームに取付けられているフックその他のつり具の質量を差し引いた値（deductは34tフック330kgの場合。50tフック装着時は500kg）。限度はブーム長さ・伸縮モード別（limits、最大5.6t）。使用フック5.6tフック(120kg)1本掛。ジブ装着のままのルースタ作業は不可。"
+  "note": "ルースタシーブ（注意事項6）：ブームの定格総荷重から、ブームに取付けられているフックその他のつり具の質量を差し引いた値（deductは34tフック330kgの場合。50tフック装着時は500kg）。限度はブーム長さ・伸縮モード別（limits：MODE A 10.1〜32.5m 5.6t／36.5m 5.3t／40.0m 5.0t、MODE B 10.1〜25.0m 5.6t／32.5〜40.0m 5.0t）。使用フック5.6tフック(120kg)1本掛。ジブ装着のままのルースタ作業は不可。"
  },
  "jibMounted": {
   "deduct": 3.5,
@@ -268,110 +263,120 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 12,
-     "hook": "main",
+     "hook": "main50",
      "telescope": "0/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
      "L": 25.1,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 6,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
      "L": 25.0,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     },
     {
      "L": 32.5,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/66/66/66"
     },
     {
      "L": 32.5,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/100/100/100"
     },
     {
      "L": 36.5,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/83/83/83"
     },
     {
      "L": 36.5,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "50/100/100/100"
     },
     {
      "L": 40.0,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/100/100/100"
     }
    ],
@@ -857,99 +862,108 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 12,
-     "hook": "main",
+     "hook": "main50",
      "telescope": "0/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
      "L": 25.1,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 6,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
      "L": 25.0,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     },
     {
      "L": 32.5,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/66/66/66"
     },
     {
      "L": 32.5,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/100/100/100"
     },
     {
      "L": 36.5,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/83/83/83"
     },
     {
      "L": 36.5,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "50/100/100/100"
     },
     {
@@ -957,10 +971,11 @@
      "mode": "A,B",
      "angle": [
       24.0,
-      84
+      84.0
      ],
+     "danger": 24.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/100/100/100"
     }
    ],
@@ -1420,77 +1435,84 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 12,
-     "hook": "main",
+     "hook": "main50",
      "telescope": "0/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
      "L": 25.1,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 6,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
      "L": 25.0,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     },
     {
      "L": 32.5,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/66/66/66"
     },
     {
      "L": 32.5,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/100/100/100"
     },
     {
@@ -1498,21 +1520,23 @@
      "mode": "A",
      "angle": [
       25.0,
-      84
+      84.0
      ],
+     "danger": 25.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/83/83/83"
     },
     {
      "L": 36.5,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "50/100/100/100"
     },
     {
@@ -1520,10 +1544,11 @@
      "mode": "A,B",
      "angle": [
       35.0,
-      84
+      84.0
      ],
+     "danger": 35.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/100/100/100"
     }
    ],
@@ -1970,55 +1995,60 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 12,
-     "hook": "main",
+     "hook": "main50",
      "telescope": "0/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
      "L": 25.1,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 6,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
      "L": 25.0,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     },
     {
@@ -2026,21 +2056,23 @@
      "mode": "A",
      "angle": [
       26.0,
-      84
+      84.0
      ],
+     "danger": 26.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/66/66/66"
     },
     {
      "L": 32.5,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/100/100/100"
     },
     {
@@ -2048,10 +2080,11 @@
      "mode": "A",
      "angle": [
       32.0,
-      84
+      84.0
      ],
+     "danger": 32.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/83/83/83"
     },
     {
@@ -2059,10 +2092,11 @@
      "mode": "B",
      "angle": [
       25.0,
-      84
+      84.0
      ],
+     "danger": 25.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "50/100/100/100"
     },
     {
@@ -2070,10 +2104,11 @@
      "mode": "A,B",
      "angle": [
       40.0,
-      84
+      84.0
      ],
+     "danger": 40.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/100/100/100"
     }
    ],
@@ -2494,33 +2529,36 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 12,
-     "hook": "main",
+     "hook": "main50",
      "telescope": "0/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
@@ -2528,21 +2566,23 @@
      "mode": "A",
      "angle": [
       17.0,
-      84
+      84.0
      ],
+     "danger": 17.0,
      "parts": 6,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
      "L": 25.0,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     },
     {
@@ -2550,21 +2590,23 @@
      "mode": "A",
      "angle": [
       40.0,
-      84
+      84.0
      ],
+     "danger": 40.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/66/66/66"
     },
     {
      "L": 32.5,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/100/100/100"
     },
     {
@@ -2572,10 +2614,11 @@
      "mode": "A",
      "angle": [
       44.0,
-      84
+      84.0
      ],
+     "danger": 44.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/83/83/83"
     },
     {
@@ -2583,10 +2626,11 @@
      "mode": "B",
      "angle": [
       38.0,
-      84
+      84.0
      ],
+     "danger": 38.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "50/100/100/100"
     },
     {
@@ -2594,10 +2638,11 @@
      "mode": "A,B",
      "angle": [
       50.0,
-      84
+      84.0
      ],
+     "danger": 50.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/100/100/100"
     }
    ],
@@ -3005,33 +3050,36 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
@@ -3039,21 +3087,23 @@
      "mode": "A",
      "angle": [
       40.0,
-      84
+      84.0
      ],
+     "danger": 40.0,
      "parts": 6,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
      "L": 25.0,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     },
     {
@@ -3061,10 +3111,11 @@
      "mode": "A",
      "angle": [
       52.0,
-      84
+      84.0
      ],
+     "danger": 52.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/66/66/66"
     },
     {
@@ -3072,10 +3123,11 @@
      "mode": "B",
      "angle": [
       34.0,
-      84
+      84.0
      ],
+     "danger": 34.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/100/100/100"
     },
     {
@@ -3083,10 +3135,11 @@
      "mode": "A",
      "angle": [
       57.0,
-      84
+      84.0
      ],
+     "danger": 57.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/83/83/83"
     },
     {
@@ -3094,10 +3147,11 @@
      "mode": "B",
      "angle": [
       53.0,
-      84
+      84.0
      ],
+     "danger": 53.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "50/100/100/100"
     },
     {
@@ -3105,10 +3159,11 @@
      "mode": "A,B",
      "angle": [
       61.0,
-      84
+      84.0
      ],
+     "danger": 61.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/100/100/100"
     }
    ],
@@ -3490,11 +3545,12 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/0/0/0"
     },
     {
@@ -3502,21 +3558,23 @@
      "mode": "A",
      "angle": [
       53.0,
-      84
+      84.0
      ],
+     "danger": 53.0,
      "parts": 7,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
@@ -3524,10 +3582,11 @@
      "mode": "A",
      "angle": [
       64.0,
-      84
+      84.0
      ],
+     "danger": 64.0,
      "parts": 6,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
@@ -3535,10 +3594,11 @@
      "mode": "B",
      "angle": [
       47.0,
-      84
+      84.0
      ],
+     "danger": 47.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     },
     {
@@ -3546,10 +3606,11 @@
      "mode": "A",
      "angle": [
       71.0,
-      84
+      84.0
      ],
+     "danger": 71.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/66/66/66"
     },
     {
@@ -3557,10 +3618,11 @@
      "mode": "B",
      "angle": [
       60.0,
-      84
+      84.0
      ],
+     "danger": 60.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/100/100/100"
     },
     {
@@ -3568,10 +3630,11 @@
      "mode": "A",
      "angle": [
       73.0,
-      84
+      84.0
      ],
+     "danger": 73.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/83/83/83"
     },
     {
@@ -3579,10 +3642,11 @@
      "mode": "B",
      "angle": [
       69.0,
-      84
+      84.0
      ],
+     "danger": 69.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "50/100/100/100"
     },
     {
@@ -3590,10 +3654,11 @@
      "mode": "A,B",
      "angle": [
       75.0,
-      84
+      84.0
      ],
+     "danger": 75.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/100/100/100"
     }
    ],
@@ -3871,37 +3936,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       14.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 14.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -4230,37 +4304,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       14.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 14.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -4589,37 +4672,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       41.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 41.0
     },
     {
      "offset": 25.0,
      "angle": [
       43.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 43.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -4870,37 +4962,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       19.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 19.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -5216,37 +5317,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       14.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 14.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -5575,37 +5685,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       49.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 49.0
     },
     {
      "offset": 25.0,
      "angle": [
       51.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 51.0
     },
     {
      "offset": 45.0,
      "angle": [
       51.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 51.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -5804,37 +5923,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -6124,37 +6252,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       14.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 14.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -6483,37 +6620,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 25.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 45.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -6686,37 +6832,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       39.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 39.0
     },
     {
      "offset": 25.0,
      "angle": [
       39.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 39.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -6980,37 +7135,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       14.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 14.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -7339,37 +7503,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       56.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 56.0
     },
     {
      "offset": 25.0,
      "angle": [
       56.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 56.0
     },
     {
      "offset": 45.0,
      "angle": [
       59.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 59.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -7529,37 +7702,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 25.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -7784,37 +7966,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -8104,37 +8295,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       64.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 64.0
     },
     {
      "offset": 25.0,
      "angle": [
       64.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 64.0
     },
     {
      "offset": 45.0,
      "angle": [
       64.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 64.0
     },
     {
      "offset": 60.0,
      "angle": [
       64.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 64.0
     }
    ],
    "angles": [
@@ -8255,37 +8455,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 25.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 45.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -8458,37 +8667,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       43.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 43.0
     },
     {
      "offset": 25.0,
      "angle": [
       43.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 43.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -8726,37 +8944,46 @@
    "type": "angle",
    "jib": 9.4,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       69.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 69.0
     },
     {
      "offset": 25.0,
      "angle": [
       71.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 71.0
     },
     {
      "offset": 45.0,
      "angle": [
       71.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 71.0
     },
     {
      "offset": 60.0,
      "angle": [
       71.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 71.0
     }
    ],
    "angles": [
@@ -8851,37 +9078,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       19.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 19.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -9197,37 +9433,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       19.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 19.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -9543,37 +9788,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       43.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 43.0
     },
     {
      "offset": 25.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -9811,37 +10065,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       24.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 24.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -10144,37 +10407,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       19.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 19.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -10490,37 +10762,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       51.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 51.0
     },
     {
      "offset": 25.0,
      "angle": [
       51.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 51.0
     },
     {
      "offset": 45.0,
      "angle": [
       51.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 51.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -10706,37 +10987,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -11026,37 +11316,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       19.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 19.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -11372,37 +11671,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 25.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 45.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -11575,37 +11883,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       39.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 39.0
     },
     {
      "offset": 25.0,
      "angle": [
       39.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 39.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -11869,37 +12186,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       19.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 19.0
     },
     {
      "offset": 25.0,
      "angle": [
       29.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 29.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -12215,37 +12541,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       56.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 56.0
     },
     {
      "offset": 25.0,
      "angle": [
       59.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 59.0
     },
     {
      "offset": 45.0,
      "angle": [
       59.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 59.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -12405,37 +12740,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       47.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 47.0
     },
     {
      "offset": 25.0,
      "angle": [
       47.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 47.0
     },
     {
      "offset": 45.0,
      "angle": [
       49.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 49.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -12647,37 +12991,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       34.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 34.0
     },
     {
      "offset": 25.0,
      "angle": [
       34.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 34.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -12954,37 +13307,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       64.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 64.0
     },
     {
      "offset": 25.0,
      "angle": [
       64.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 64.0
     },
     {
      "offset": 45.0,
      "angle": [
       64.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 64.0
     },
     {
      "offset": 60.0,
      "angle": [
       64.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 64.0
     }
    ],
    "angles": [
@@ -13105,37 +13467,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.1,
    "mode": "A",
+   "boomLRange": [
+    10.1,
+    25.1
+   ],
    "telescope": "100/33/33/33",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       54.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 54.0
     },
     {
      "offset": 25.0,
      "angle": [
       56.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 56.0
     },
     {
      "offset": 45.0,
      "angle": [
       56.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 56.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -13308,37 +13679,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 25.0,
    "mode": "B",
+   "boomLRange": [
+    10.1,
+    25.0
+   ],
    "telescope": "0/66/66/66",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 25.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 45.0,
      "angle": [
       45.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 45.0
     },
     {
      "offset": 60.0,
      "angle": [
       61.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 61.0
     }
    ],
    "angles": [
@@ -13563,37 +13943,46 @@
    "type": "angle",
    "jib": 13.7,
    "hook": "aux",
+   "parts": 1,
    "boomL": 40.0,
    "mode": "A,B",
+   "boomLRange": [
+    25.0,
+    40.0
+   ],
    "telescope": "100/100/100/100",
    "cols": [
     {
      "offset": 5.0,
      "angle": [
       71.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 71.0
     },
     {
      "offset": 25.0,
      "angle": [
       71.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 71.0
     },
     {
      "offset": 45.0,
      "angle": [
       71.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 71.0
     },
     {
      "offset": 60.0,
      "angle": [
       71.0,
-      84
-     ]
+      84.0
+     ],
+     "danger": 71.0
     }
    ],
    "angles": [
@@ -13679,33 +14068,36 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
@@ -13713,10 +14105,11 @@
      "mode": "A",
      "angle": [
       50.0,
-      84
+      84.0
      ],
+     "danger": 50.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
@@ -13724,10 +14117,11 @@
      "mode": "B",
      "angle": [
       50.0,
-      84
+      84.0
      ],
+     "danger": 50.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     }
    ],
@@ -13881,11 +14275,12 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/0/0/0"
     },
     {
@@ -13893,10 +14288,11 @@
      "mode": "A",
      "angle": [
       60.0,
-      84
+      84.0
      ],
+     "danger": 60.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
@@ -13904,10 +14300,11 @@
      "mode": "B",
      "angle": [
       50.0,
-      84
+      84.0
      ],
+     "danger": 50.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
@@ -13915,10 +14312,11 @@
      "mode": "A",
      "angle": [
       70.0,
-      84
+      84.0
      ],
+     "danger": 70.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
@@ -13926,10 +14324,11 @@
      "mode": "B",
      "angle": [
       64.0,
-      84
+      84.0
      ],
+     "danger": 64.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     }
    ],
@@ -14043,33 +14442,36 @@
      "L": 10.1,
      "mode": "A,B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "A",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
      "L": 17.6,
      "mode": "B",
      "angle": [
-      0,
-      84
+      0.0,
+      84.0
      ],
+     "danger": null,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
@@ -14077,10 +14479,11 @@
      "mode": "A",
      "angle": [
       50.0,
-      84
+      84.0
      ],
+     "danger": 50.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
@@ -14088,10 +14491,11 @@
      "mode": "B",
      "angle": [
       50.0,
-      84
+      84.0
      ],
+     "danger": 50.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     }
    ],
@@ -14246,10 +14650,11 @@
      "mode": "A,B",
      "angle": [
       39.0,
-      84
+      84.0
      ],
+     "danger": 39.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/0/0/0"
     },
     {
@@ -14257,10 +14662,11 @@
      "mode": "A",
      "angle": [
       66.0,
-      84
+      84.0
      ],
+     "danger": 66.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/0/0/0"
     },
     {
@@ -14268,10 +14674,11 @@
      "mode": "B",
      "angle": [
       56.0,
-      84
+      84.0
      ],
+     "danger": 56.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/33/33/33"
     },
     {
@@ -14279,10 +14686,11 @@
      "mode": "A",
      "angle": [
       74.0,
-      84
+      84.0
      ],
+     "danger": 74.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "100/33/33/33"
     },
     {
@@ -14290,10 +14698,11 @@
      "mode": "B",
      "angle": [
       67.0,
-      84
+      84.0
      ],
+     "danger": 67.0,
      "parts": 4,
-     "hook": "main34",
+     "hook": "main",
      "telescope": "0/66/66/66"
     }
    ],
@@ -14425,15 +14834,16 @@
   "method": "数値はPDFテキスト層から座標で抽出（builders/kato_slrf3_common.py。行=左端ラベル、列=本文トークンのx中心クラスタ、結合セル行はスパン推定）。全47表（ブーム7・ジブ36・アウトリガ不使用4）について、原寸の各行画像ストリップと、JSONの値を割当てセル位置に描いた行を交互に並べた比較画像（img/sl-500rf3/cmp/）および130〜200dpiの表画像・print_table出力を行ごと・列ごとに目視照合し全数一致を確認。末尾行（ブーム2〜5段伸長%・MODE・危険角度・標準フック・フック質量・巻掛本数）も照合。各ページの張出幅/『前方』はテキスト層（ビルダでassert）、作業範囲記号（全周/側方/前方）とアウトリガ不使用表の列記号（前方/全周）はヘッダ画像で確認。注意事項のα/β表・ルースタ限度表・ジブ装着時控除・フック質量、主要諸元（最大定格総荷重・寸法・重量）は150〜200dpi画像で確認。validate.py 0 errors / 0 warnings。",
   "issues": [
    "主要諸元に最大作業半径の記載がないため boom.maxRadius / jib.maxRadius は省略（定格表上の最大作業半径はブーム全周表34.0m・前方表37.0m）。",
-   "主フックが2種類あるため hooks に main（50tフック 500kg）と main34（34tフック 330kg）を定義し、各列の hook には表の『標準フック』を設定（スキーマの main/aux 以外のキー）。10.1m列は前方表および7.6m〜5.4m張出で50tフック（12本掛）、4.3m・2.43m張出では34tフック（7本掛）、アウトリガ不使用表は全列34tフック（4本掛）。",
-   "危険角度が『－』（危険角度なし）の列は angle=[0,84]（ブーム起伏範囲）とした。数値がある列は [危険角度,84]。",
+   "主フックが2種類あるため hooks に main（34tフック 330kg）と main50（50tフック 500kg）を定義し、各列の hook には表の『標準フック』を設定（SL-750/850RfⅢ と同じ命名：main＝34/35tフック、main<t>＝大容量フック）。10.1m列は前方表および7.6m〜5.4m張出で50tフック（12本掛）、4.3m・2.43m張出では34tフック（7本掛）、アウトリガ不使用表は全列34tフック（4本掛）。",
+   "危険角度が『－』（危険角度なし）の列は angle=[0,84]（ブーム起伏範囲）・danger=null とした。数値がある列は angle=[危険角度,84]・danger=危険角度。",
    "前方性能の定格総荷重表は張出幅によらず1枚のみ（ヘッダ記号『前方』）。state \"max\"/zone \"front\" に格納し全張出状態の前方ゾーン規則から参照。α表は前側・後側アウトリガ状態の組合せで決まり（例：前側7.6m×後側4.3m/2.43mでは35°）、4本同一張出の値のみをゾーン規則に反映した。",
-   "ルースタシーブ（注意事項6）：控除はブームに取付けられたフック等の質量（34tフック装着時330kg、50tフック装着時500kg）。singleTop.deduct は34tフックの値、限度はブーム長さ・モード別の表を singleTop.limits に格納（limit は最大値5.6t）。",
+   "ルースタシーブ（注意事項6）：控除はブームに取付けられたフック等の質量（34tフック装着時330kg、50tフック装着時500kg）。singleTop.deduct は34tフックの値、限度はブーム長さ・モード別の表を singleTop.limits に格納（同じ限度が続くブーム長さは範囲 L=[最小,最大] にまとめた。印刷されていない中間長さは範囲外になりうるので低い方の限度を使うこと。limit は最大値5.6t）。",
    "ジブ装着のままのブーム作業（注意事項8）は『フックその他のつり具等の質量の他に3,500kgを差し引く』→ jibMounted.deduct=3.5（フック質量は通常どおり別途控除）、上限18t。",
    "走行時寸法・重量は主要諸元の1構成のみ記載（カウンタウエイト取外し等の別構成の記載なし。最小通路軌跡図の注記は『カウンタウエイト付』）→ vehicle.configs は空。",
-   "ジブ表はブーム角度基準（type \"angle\"、各行の作業半径併記）で、25.1m(MODE A)/25.0m(MODE B)/40.0m(A,B)ブームのみ。中間のブーム長さでは注意事項3により40.0mまたは25.1m(25.0m)ブームの角度を基準とする。",
+   "ジブ表はブーム角度基準（type \"angle\"、各行の作業半径併記）で、25.1m(MODE A)/25.0m(MODE B)/40.0m(A,B)ブームのみ。中間のブーム長さでは注意事項3により40.0mまたは25.1m(25.0m)ブームの角度を基準とする。これを jibCharts[].boomLRange に反映（25.1m(A)表[10.1,25.1]、25.0m(B)表[10.1,25.0]、40.0m(A,B)表[25.0,40.0]）。各ジブ表は5.6tフック1本掛（parts=1）。",
    "geometry（footX/footY）は作業範囲図のブーム角度線の交点から求めた概算値。",
-   "アウトリガ不使用時の『走行つり』（2km/h未満）は onTire mode \"creep\" として格納。"
+   "アウトリガ不使用時の『走行つり』（2km/h未満）は onTire mode \"creep\" として格納。",
+   "主要諸元の「40.0mブーム 7,500kg×12.0m」は定格総荷重表（40.0m列 11.0m: 7.50t、12.0m: 7.40t）と一致しない（メーカー資料内の不一致）。本ツールは定格総荷重表の値を使用。"
   ]
  }
 }

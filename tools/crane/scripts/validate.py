@@ -62,12 +62,14 @@ def check(path):
             idx = [r for r in range(len(radii)) if loads[r][j] is not None]
             if idx and any(loads[r][j] is None for r in range(idx[0], idx[-1]+1)): W.append(f'{tag}: gap inside column L={col.get("L")}')
     # side chart <= max chart at same R/L
-    mx = [c for c in d['boomCharts'] if c['state'] == 'max' and c['zone'] == 'all']
-    if not mx: E.append('no boomChart for state "max" zone "all"')
-    else:
-        M = mx[0]; mi = {(R, col['L'], col.get('mode')): M['loads'][r][j] for r, R in enumerate(M['radii']) for j, col in enumerate(M['cols'])}
+    first = d['outriggers']['states'][0]['id'] if d['outriggers'].get('states') else 'max'
+    mx = [c for c in d['boomCharts'] if c['state'] == first and c['zone'] == 'all']
+    if not mx: E.append(f'no boomChart for the widest state "{first}" zone "all"')
+    for M in mx:
+        mi = {(R, col['L'], col.get('mode')): M['loads'][r][j] for r, R in enumerate(M['radii']) for j, col in enumerate(M['cols'])}
         for c in d['boomCharts']:
             if c is M or c['zone'] == 'front' or c.get('counterweight', '') != M.get('counterweight', ''): continue
+            if c.get('parts') != M.get('parts'): continue
             n = 0
             for r, R in enumerate(c['radii']):
                 for j, col in enumerate(c['cols']):
@@ -80,9 +82,11 @@ def check(path):
         return {(R, col['L'], col.get('mode')): c['loads'][r][j] for r, R in enumerate(c['radii']) for j, col in enumerate(c['cols'])}
     side_like = [c for c in d['boomCharts'] if c['zone'] in ('all', 'side') and c['state'] in order]
     side_like.sort(key=lambda c: order.index(c['state']))
-    for a_i in range(len(side_like) - 1):
-        A, B = side_like[a_i], side_like[a_i + 1]
-        if A.get('counterweight', '') != B.get('counterweight', ''): continue
+    for a_i in range(len(side_like)):
+      for b_i in range(a_i + 1, len(side_like)):
+        A, B = side_like[a_i], side_like[b_i]
+        if A['state'] == B['state'] or A.get('counterweight', '') != B.get('counterweight', '') or A.get('parts') != B.get('parts'): continue
+        if order.index(B['state']) != min([order.index(x['state']) for x in side_like if order.index(x['state']) > order.index(A['state']) and x.get('parts') == A.get('parts')] or [-1]): continue
         ma, mb = cellmap(A), cellmap(B)
         n = sum(1 for k, v in mb.items() if v is not None and ma.get(k) is not None and v > ma[k] + 1e-9)
         if n: W.append(f'boom chart {B["state"]} exceeds wider state {A["state"]} in {n} cells')

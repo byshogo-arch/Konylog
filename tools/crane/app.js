@@ -81,6 +81,7 @@
     ost: 'max', work: 'boom', L: null, mode: null, jib: null, off: null, jibL: null,
     R: 8, slew: 0, H: null, load: null, sling: 0.05, autoL: false, jibMounted: false,
     sf: 1, // 安全率（定格総荷重に掛ける係数）。1 = なし
+    parts: null, // 巻掛本数（表が巻掛本数ごとに分かれている機種のみ）
   };
   const SF_KEY = 'konylog-crane-sf';
   try { const v = parseFloat(localStorage.getItem(SF_KEY)); if (v > 0 && v <= 1) st.sf = v; } catch (e) { /* storage unavailable */ }
@@ -104,6 +105,7 @@
     st.autoL = g('a') === '1';
     st.jibMounted = g('jm') === '1';
     if (g('sf')) { const v = num(g('sf')); if (v > 0 && v <= 1) st.sf = v; }
+    if (g('p')) st.parts = num(g('p'));
   }
   function writeHash() {
     const p = new URLSearchParams();
@@ -114,6 +116,7 @@
     if (st.autoL) p.set('a', '1');
     if (st.jibMounted) p.set('jm', '1');
     if (st.sf < 1) p.set('sf', st.sf);
+    if (st.parts != null) p.set('p', st.parts);
     history.replaceState(null, '', '#' + p.toString());
   }
 
@@ -138,10 +141,14 @@
     return { len: (v.length || 10000) / 1000, wid: (v.width || 2500) / 1000 };
   }
   const stateOf = (m, id) => m.outriggers.states.find((x) => x.id === id) || m.outriggers.states[0];
-  /** Chart for (state, zone). Several charts may share it (e.g. one per telescoping mode): prefer the one
-   *  that has the selected mode and boom length. */
-  function findBoomChart(m, use, mode, L) {
-    const cands = m.boomCharts.filter((c) => c.state === use.state && c.zone === use.zone);
+  /** Some sheets print one chart per number of rope parts (chart-level `parts`). */
+  const partsOptions = (m) => [...new Set(m.boomCharts.map((c) => c.parts).filter((x) => typeof x === 'number'))].sort((a, b) => b - a);
+  const partsOk = (c, parts) => c.parts == null || parts == null || (Array.isArray(c.parts) ? c.parts.includes(parts) : c.parts === parts);
+  /** Chart for (state, zone). Several charts may share it (e.g. one per telescoping mode or rope parts): prefer
+   *  the one that has the selected mode, rope parts and boom length. */
+  function findBoomChart(m, use, mode, L, parts) {
+    let cands = m.boomCharts.filter((c) => c.state === use.state && c.zone === use.zone);
+    if (cands.some((c) => c.parts != null) && parts != null) { const pc = cands.filter((c) => partsOk(c, parts)); if (pc.length) cands = pc; }
     if (cands.length <= 1) return cands[0];
     const withMode = cands.filter((c) => c.cols.some((k) => modeOk(k, mode)));
     const pool = withMode.length ? withMode : cands;
@@ -240,9 +247,9 @@
   function boomCols(chart, mode) {
     return chart.cols.map((c, idx) => ({ idx, L: c.L, c })).filter((x) => modeOk(x.c, mode)).sort((a, b) => a.L - b.L);
   }
-  function boomLengths(m, mode) {
+  function boomLengths(m, mode, parts = st.parts) {
     const set = new Set();
-    for (const c of m.boomCharts) for (const k of c.cols) if (modeOk(k, mode)) set.add(k.L);
+    for (const c of m.boomCharts) if (partsOk(c, parts)) for (const k of c.cols) if (modeOk(k, mode)) set.add(k.L);
     return [...set].sort((a, b) => a - b);
   }
 
@@ -257,7 +264,8 @@
       const frontHalf = m.onTireFrontHalf ?? (m.maker === 'kato' ? 1 : 2);
       const a = norm360(p.slew), dF = Math.min(a, 360 - a);
       const zone = dF <= frontHalf + EPS ? 'front' : 'all';
-      let chart = (m.onTire || []).find((t) => t.mode === mode && t.zone === zone) || (m.onTire || []).find((t) => t.mode === mode && t.zone === 'all');
+      const tl = (m.onTire || []).filter((t) => partsOk(t, p.parts));
+      let chart = tl.find((t) => t.mode === mode && t.zone === zone) || tl.find((t) => t.mode === mode && t.zone === 'all');
       if (!chart) { res.reason = 'アウトリガ不使用の表がありません'; return res; }
       res.chart = chart; res.chartKind = 'tire';
       res.zone = { kind: chart.zone === 'front' ? 'tire-front' : 'tire-all', label: { text: `アウトリガ不使用・${mode === 'static' ? '静止' : '走行(1.6km/h以下)'}・${chart.zone === 'front' ? `前方(±${frontHalf}°)` : '360°'}`, cls: chart.zone === 'front' ? 'zone-front' : 'zone-side' } };
@@ -321,7 +329,7 @@
       return finishCommon(m, p, res, hookMass(hk));
     }
     // --- boom / single top ---
-    const chart = findBoomChart(m, z.use, p.mode, p.L);
+    const chart = findBoomChart(m, z.use, p.mode, p.L, p.parts);
     if (!chart) { res.reason = 'この条件の性能表がありません'; return res; }
     res.chart = chart; res.chartKind = 'boom';
     const cols = boomCols(chart, p.mode);
@@ -399,6 +407,8 @@
     if (![...states, ...tireModes].includes(st.ost)) st.ost = states[0];
     const modes = availableModes(m);
     if (!modes.length) st.mode = null; else if (!modes.includes(st.mode)) st.mode = modes[0];
+    const po = partsOptions(m);
+    if (!po.length) st.parts = null; else if (!po.includes(st.parts)) st.parts = po[0];
     if (isTire(st.ost)) ensureTireMode(m);
     const Ls = isTire(st.ost) ? tireLengths(m) : boomLengths(m, st.mode);
     if (!Ls.some((L) => Math.abs(L - st.L) < EPS)) {
@@ -428,7 +438,7 @@
   }
 
   function params() {
-    return { ost: st.ost, work: st.work, L: st.L, mode: st.mode, jib: st.jib, off: st.off, jibL: st.jibL, R: st.R, slew: st.slew, load: st.load, sling: st.sling, jibMounted: st.jibMounted, sf: st.sf };
+    return { ost: st.ost, work: st.work, L: st.L, mode: st.mode, parts: st.parts, jib: st.jib, off: st.off, jibL: st.jibL, R: st.R, slew: st.slew, load: st.load, sling: st.sling, jibMounted: st.jibMounted, sf: st.sf };
   }
 
   /** Auto boom length: best capacity at R with hook height >= H. */
@@ -516,6 +526,14 @@
     $('jibMountedWrap').hidden = !(m.jibMounted && st.work === 'boom' && !isTire(st.ost));
     $('jibMounted').checked = st.jibMounted;
     // boom lengths
+    const po = partsOptions(m);
+    $('partsSeg').hidden = !po.length || st.work === 'jib';
+    if (po.length) toggleGroup($('partsSeg'), po.map((n) => ({ value: n, label: `${n}本掛`, title: '巻掛本数ごとの表' })), st.parts, (v) => {
+      st.parts = v;
+      const Ls = isTire(st.ost) ? tireLengths(m) : boomLengths(m, st.mode);
+      if (Ls.length && !Ls.some((L) => Math.abs(L - st.L) < EPS)) st.L = Ls.reduce((a, b) => (Math.abs(b - st.L) < Math.abs(a - st.L) ? b : a), Ls[0]);
+      update();
+    });
     const modes = availableModes(m);
     $('modeSeg').hidden = !modes.length || st.work === 'jib' || isTire(st.ost);
     if (modes.length) toggleGroup($('modeSeg'), (m.boom.modes || []).map((x) => ({ value: x.id, label: `伸縮${x.label || x.id}` })), st.mode, (v) => { st.mode = v; const Ls = boomLengths(m, v); if (!Ls.some((L) => Math.abs(L - st.L) < EPS)) st.L = Ls[0]; update(); });
@@ -557,7 +575,7 @@
     if (tireLengths(m).length) return;
     for (const md of availableModes(m)) { st.mode = md; if (tireLengths(m).length) return; }
   }
-  const tireLengths = (m) => [...new Set((m.onTire || []).filter((c) => c.radii && c.radii.length).flatMap((c) => c.cols.filter((k) => modeOk(k, st.mode)).map((k) => k.L)))].sort((a, b) => a - b);
+  const tireLengths = (m) => [...new Set((m.onTire || []).filter((c) => c.radii && c.radii.length && partsOk(c, st.parts)).flatMap((c) => c.cols.filter((k) => modeOk(k, st.mode)).map((k) => k.L)))].sort((a, b) => a - b);
   function setIfNotFocused(id, v) { const e = $(id); if (document.activeElement !== e) e.value = v; }
 
   // ---------- rendering: side view ----------
@@ -797,6 +815,15 @@
     svg.append(tl);
   }
 
+  /** Model-level cautions shown next to every result (limits of the published data). */
+  function modelCautions(m) {
+    const out = [];
+    if (m.outriggers.states.length === 1) out.push('この機種の公開スペックシートには最大張出の表しかありません。中間・最小張出の性能は未収録です（実機の表で確認）。');
+    if ((m.notes || []).some((n) => /最大になる性能を抜粋/.test(n))) out.push('この機種の表は、ブーム長さごとに伸縮状態の中から最大の性能を抜粋した値です。実機の伸縮状態によっては表より小さくなります。');
+    for (const c of [].concat(m.caution || [])) if (c) out.push(c);
+    return out;
+  }
+
   // ---------- result ----------
   function judgeOf(ratio, sf = st.sf) {
     if (!isFinite(ratio)) return { cls: 'ng', msg: '吊れません', sub: '' };
@@ -820,7 +847,8 @@
       h('span', { class: 'pill' }, isTire(st.ost) ? 'アウトリガ不使用' : `${so.label} ${fmtL(so.width)}m`),
       zl ? h('span', { class: `pill ${zl.cls}` }, `適用：${zl.text}`) : null,
       h('span', { class: 'pill' }, st.work === 'jib' ? `ジブ${fmtL(st.jib)}m・${st.off}°` : st.work === 'single' ? 'シングルトップ' : 'ブーム作業'),
-      st.mode ? h('span', { class: 'pill' }, `伸縮${st.mode}`) : null));
+      st.mode ? h('span', { class: 'pill' }, `伸縮${st.mode}`) : null,
+      st.parts != null && st.work !== 'jib' ? h('span', { class: 'pill' }, `${st.parts}本掛の表`) : null));
     const ang = res.angle;
     const hookTop = res.hookY;
     left.append(h('div', { class: 'big-row' },
@@ -847,7 +875,9 @@
       }
       left.append(steps);
     }
-    // right column: bar + judgement + messages
+    // right column: model cautions, bar, judgement, messages
+    const cautions = modelCautions(m);
+    if (cautions.length) right.append(h('ul', { class: 'msgs' }, cautions.map((c) => h('li', { class: 'ng' }, c))));
     if (res.ok) {
       const capV = res.cap;
       const loadV = st.load;
@@ -931,7 +961,10 @@
     else if (so.zones && so.zones.length) {
       note = `いまの張出（${so.label}${so.width}m）では、` + so.zones.map((z) => `${z.zone === 'front' ? '前方' : '後方'}±${z.half}°の範囲が${z.use.zone === 'front' ? '前方性能表' : stateOf(m, z.use.state).label + 'の性能'}`).join('、') + '。それ以外（側方）は張出幅に応じた低い性能になります。旋回中に側方へ回ると過負荷になることがあるので注意。';
     } else note = 'いまの張出では全周同じ性能です（前方性能表がある機種は前方だけ高くなります）。';
-    if (m.frontSpecial) note += ` 前方特別性能：${m.frontSpecial.condition || ''}`;
+    if (m.frontSpecial) {
+      const fs = [].concat(m.frontSpecial);
+      note += ' ' + fs.map((x) => `${x.label || '前方特別性能'}${x.condition ? '：' + x.condition : ''}`).join(' ／ ');
+    }
     box.append(h('p', { class: 'dir-note' }, note));
     // full extension reference
     if (!isTire(st.ost) && st.ost !== m.outriggers.states[0].id) {
@@ -963,7 +996,7 @@
     // reference: max extension chart for the same boom length (if we are on a side chart)
     let ref = null;
     if (res.chartKind === 'boom' && res.zone && res.zone.use.zone === 'side') {
-      const mx = findBoomChart(m, { state: m.outriggers.states[0].id, zone: ownZone(m, m.outriggers.states[0].id) }, st.mode, st.L);
+      const mx = findBoomChart(m, { state: m.outriggers.states[0].id, zone: ownZone(m, m.outriggers.states[0].id) }, st.mode, st.L, st.parts);
       if (mx) { const j = mx.cols.findIndex((c) => Math.abs(c.L - st.L) < EPS && modeOk(c, st.mode)); if (j >= 0) ref = { name: `${m.outriggers.states[0].label}（前後方・参考）${fmtL(st.L)}m`, j, radii: mx.radii, loads: mx.loads }; }
     }
     const allV = series.flatMap((x) => x.loads.map((r) => r[x.j])).filter((v) => v != null);
@@ -1051,10 +1084,10 @@
       const so = stateOf(m, c.state);
       const ms = [...new Set(c.cols.map((k) => k.mode).filter(Boolean))];
       const mlabel = ms.length === 1 && (m.boom.modes || []).length ? ` 伸縮${((m.boom.modes || []).find((x) => x.id === ms[0]) || {}).label || ms[0]}` : '';
-      opts.push({ kind: 'boom', i, label: `ブーム ${so.label}${fmtL(so.width)}m ${({ all: '全周', side: '側方', front: '前方', rear: '後方' })[c.zone]}${mlabel}${c.counterweight ? ' ' + c.counterweight : ''}` });
+      opts.push({ kind: 'boom', i, label: `ブーム ${so.label}${fmtL(so.width)}m ${({ all: '全周', side: '側方', front: '前方', rear: '後方' })[c.zone]}${mlabel}${c.parts != null ? ' ' + c.parts + '本掛' : ''}${c.counterweight ? ' ' + c.counterweight : ''}` });
     });
     (m.jibCharts || []).forEach((c, i) => { const so = stateOf(m, c.state); opts.push({ kind: 'jib', i, label: `ジブ${fmtL(c.jib)}m ${so.label}${fmtL(so.width)}m${c.zone === 'front' ? ' 前方' : ''}${c.boomL ? ' (ブーム' + fmtL(c.boomL) + 'm)' : ''}` }); });
-    (m.onTire || []).forEach((c, i) => opts.push({ kind: 'tire', i, label: `不使用 ${c.mode === 'static' ? '静止' : '走行'} ${c.zone === 'front' ? '前方' : '360°'}` }));
+    (m.onTire || []).forEach((c, i) => opts.push({ kind: 'tire', i, label: `不使用 ${c.mode === 'static' ? '静止' : '走行'} ${c.zone === 'front' ? '前方' : '360°'}${c.parts != null ? ' ' + [].concat(c.parts).join('/') + '本掛' : ''}` }));
     const curKind = res.chartKind, curChart = res.chart;
     const curIdx = curChart ? (curKind === 'boom' ? m.boomCharts.indexOf(curChart) : curKind === 'jib' ? m.jibCharts.indexOf(curChart) : (m.onTire || []).indexOf(curChart)) : -1;
     const sel = tableSel && opts.some((o) => o.kind === tableSel.kind && o.i === tableSel.i) ? tableSel : { kind: curKind || 'boom', i: Math.max(0, curIdx) };
@@ -1216,13 +1249,15 @@
   function bestFor(m, base) {
     const ost = m.outriggers.states[0].id;
     const modes = (m.boom.modes || []).map((x) => x.id);
+    const po = partsOptions(m);
     let best = null;
+    for (const parts of po.length ? po : [null])
     for (const mode of modes.length ? modes : [null]) {
-      for (const L of boomLengths(m, mode)) {
-        const r = evaluate(m, { ...base, ost, work: 'boom', mode, L, jibMounted: false });
+      for (const L of boomLengths(m, mode, parts)) {
+        const r = evaluate(m, { ...base, ost, work: 'boom', mode, parts, L, jibMounted: false });
         if (!r.ok) continue;
         if (st.H != null && !(r.hookY >= st.H)) continue;
-        if (!best || r.cap > best.cap + EPS || (Math.abs(r.cap - best.cap) < EPS && L < best.L)) best = { ...r, L, mode };
+        if (!best || r.cap > best.cap + EPS || (Math.abs(r.cap - best.cap) < EPS && L < best.L)) best = { ...r, L, mode, parts };
       }
     }
     return best;
@@ -1258,7 +1293,7 @@
       const tr = h('tr', { class: `${cls}${r.x.id === st.id ? ' cmp-cur' : ''}`, tabindex: 0, title: 'クリックでこの機種を表示' },
         h('td', {}, MAKERS[r.x.maker]), h('td', { class: 'cmp-model' }, r.x.model, r.x.status === 'legacy' ? h('span', { class: 'badge legacy', style: 'margin-left:4px' }, '旧型') : null),
         h('td', { class: 'num' }, `${r.x.classTon}t`),
-        h('td', { class: 'num' }, b ? `${fmtL(b.L)}m${b.mode ? ' ' + b.mode : ''}` : '—'),
+        h('td', { class: 'num' }, b ? `${fmtL(b.L)}m${b.mode ? ' ' + b.mode : ''}${b.parts ? ' ' + b.parts + '本掛' : ''}` : '—'),
         h('td', { class: 'num' }, b ? fmtM(b.angle, 0) + '°' : '—'),
         h('td', { class: 'num strong' }, b ? fmtT(b.cap) : '—'),
         h('td', { class: 'num' }, b ? fmtT(st.sf < 1 ? b.netF : b.net) : '—'),

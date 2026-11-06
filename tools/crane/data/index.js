@@ -109,6 +109,60 @@ window.CRANE_INDEX = [
   "verified": "checked"
  },
  {
+  "id": "tadano-gr-130n-2w",
+  "maker": "tadano",
+  "model": "GR-130N(2W)",
+  "nickname": "CREVO mini G4",
+  "generation": "GR-130N(2W)(Ⅱ)",
+  "classTon": 4.9,
+  "status": "current",
+  "variant": "6段ブーム・2段パワーチルトジブ・2ウインチ・X型/H型アウトリガ（4.9t吊仕様: 定格総荷重表の( )内の値）",
+  "maxLoad": {
+   "t": 4.9,
+   "r": 4,
+   "L": 5.3,
+   "note": "5.3mブーム 4本掛（主要諸元 4,900kg×4.0m）"
+  },
+  "boom": {
+   "min": 5.3,
+   "max": 23.8
+  },
+  "boomLengths": [
+   5.3,
+   9,
+   12.7,
+   16.4,
+   20.1,
+   23.8
+  ],
+  "hasJib": true,
+  "hasFront": false,
+  "hasOnTire": true,
+  "outriggers": [
+   4.7,
+   4.3,
+   3.5,
+   2.5,
+   1.7
+  ],
+  "vehicle": {
+   "length": 7590,
+   "width": 2000,
+   "height": 2815,
+   "wheelbase": 2750,
+   "gvw": 14695,
+   "axles": [
+    7345,
+    7350
+   ],
+   "turningRadius": 3.8,
+   "turningRadius2ws": 6.5,
+   "maxSpeed": 49,
+   "note": "走行時寸法・重量は主要諸元による（NL/N共通の記載）。"
+  },
+  "verified": "checked"
+ },
+ {
   "id": "kato-mr-130rf2",
   "maker": "kato",
   "model": "MR-130RfⅡ",
@@ -213,6 +267,60 @@ window.CRANE_INDEX = [
    "turningRadius2ws": 6.5,
    "maxSpeed": 49,
    "note": "走行時寸法・重量は主要諸元による（GR-130NL/GR-130N共通の記載）。"
+  },
+  "verified": "checked"
+ },
+ {
+  "id": "tadano-gr-130nl-2w",
+  "maker": "tadano",
+  "model": "GR-130NL(2W)",
+  "nickname": "CREVO mini G4",
+  "generation": "GR-130NL(2W)(Ⅱ)",
+  "classTon": 13,
+  "status": "current",
+  "variant": "6段ブーム・2段パワーチルトジブ・2ウインチ・X型/H型アウトリガ（13t吊仕様）",
+  "maxLoad": {
+   "t": 13,
+   "r": 1.5,
+   "L": 5.3,
+   "note": "5.3mブーム 8本掛（主要諸元 13,000kg×1.5m）"
+  },
+  "boom": {
+   "min": 5.3,
+   "max": 23.8
+  },
+  "boomLengths": [
+   5.3,
+   9,
+   12.7,
+   16.4,
+   20.1,
+   23.8
+  ],
+  "hasJib": true,
+  "hasFront": false,
+  "hasOnTire": true,
+  "outriggers": [
+   4.7,
+   4.3,
+   3.5,
+   2.5,
+   1.7
+  ],
+  "vehicle": {
+   "length": 7590,
+   "width": 2000,
+   "height": 2815,
+   "wheelbase": 2750,
+   "gvw": 14695,
+   "axles": [
+    7345,
+    7350
+   ],
+   "turningRadius": 3.8,
+   "turningRadius2ws": 6.5,
+   "maxSpeed": 49,
+   "note": "走行時寸法・重量は主要諸元による（NL/N共通の記載）。"
   },
   "verified": "checked"
  },
@@ -636,7 +744,7 @@ window.CRANE_INDEX = [
    "maxSpeed": 49,
    "note": ""
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "kato-mr-350rf2",
@@ -972,7 +1080,7 @@ window.CRANE_INDEX = [
    "note": "走行時寸法・重量（主要諸元）。軸距は1,850mm＋4,450mm、軸重は前前軸・前後軸・後軸。最小回転半径 6.7m（6輪ステアリング）／11.0m（前4輪ステアリング）。「本機は、新規開発車両証明制度による適合証明書「基本通行条件 重量：D」の交付を受けていますが、実際の通行条件は、経路ごとの道路管理者の算定結果によって付与されます。」",
    "configs": []
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "tadano-gr-700n-3",
@@ -1036,7 +1144,7 @@ window.CRANE_INDEX = [
    "note": "走行時寸法・重量（主要諸元）。軸距1,500＋4,000＋1,500mm、軸重は前前・前後・後前・後後軸。最小回転半径 7.5m（8輪ステアリング）／11.5m（前4輪ステアリング）。「本機は、新規開発車両証明制度による適合証明書「基本通行条件 重量：D」の交付を受けていますが、実際の通行条件は、経路ごとの道路管理者の算定結果によって付与されます。」■搬送主要部品（別途搬送）：重荷重装置（35tフック340kg、アタッチメントシーブ50kg×2個）、e-PACK用架装台（オプション）。70t吊（35tフック×2、重荷重装置付き）には重荷重装置の装着が必要。e-PACK装着状態の全長は14,405mm（作業時の寸法図、走行時寸法としての記載なし）。",
    "configs": []
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "kato-sl-750rf3",
@@ -1097,7 +1205,7 @@ window.CRANE_INDEX = [
    "note": "走行時。軸距1,550+3,900+1,550=7,000mm、輪距 前後2,390mm、軸重は前前/前後/後前/後後。最小回転半径11.8m（4輪操向）、7.4m（8輪操向：最小通路軌跡図では「構内移動」）。「道路の走行には、道路法による通行の許可と道路運送車両法による保安基準の緩和が必要です。」「本車両は最低速度(50km/h)の定めのある「高速自動車国道」を走行することはできません。」「本機は、新規開発車両証明制度による適合証明書「基本通行条件 重量：D」の交付を受けていますが、実際の通行条件は、運行経路ごとの道路管理者の算定結果によって付与されます。」旋回後端半径3,550mm。",
    "configs": []
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "kato-sl-850rf3",
@@ -1163,7 +1271,7 @@ window.CRANE_INDEX = [
     }
    ]
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "tadano-gr-1000n",
@@ -1226,6 +1334,6 @@ window.CRANE_INDEX = [
    "note": "走行時寸法・重量（主要諸元、外観図「● 41.295 t」）＝カウンタウエイトを外した公道走行状態。軸距1,500＋4,000＋1,500mm、軸重は前前・前後・後前・後後軸。最小回転半径 7.5m（8輪ステアリング）／11.5m（前4輪ステアリング）。（公道走行時の注意）「1. 公道走行状態で取り付け可能なフックは35tフックです。2. 50ｔフック、重荷重用アタッチメントシーブ、カウンタウエイト装置は別送しなければなりません。」「本機は、新規開発車両証明制度による適合証明書「基本通行条件 重量：D」の交付を受けていますが、実際の通行条件は、経路ごとの道路管理者の算定結果によって付与されます。」搬送主要部品：カウンタウエイト ウエイト(1) 240kg、ウエイト(2) 1,870kg×2個、架装サポート 110kg、50tフック 430kg ほか。",
    "configs": []
   },
-  "verified": "pending"
+  "verified": "checked"
  }
 ];

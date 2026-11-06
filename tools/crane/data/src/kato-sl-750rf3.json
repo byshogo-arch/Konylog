@@ -44,7 +44,7 @@
   "hook": "aux",
   "limits": [
    {
-    "mode": "N",
+    "mode": "A",
     "L": [
      10.0,
      38.0
@@ -52,7 +52,7 @@
     "limit": 5.6
    },
    {
-    "mode": "N",
+    "mode": "A",
     "L": [
      42.0,
      42.0
@@ -60,7 +60,7 @@
     "limit": 5.3
    },
    {
-    "mode": "N",
+    "mode": "A",
     "L": [
      45.0,
      45.0
@@ -68,7 +68,7 @@
     "limit": 5.0
    },
    {
-    "mode": "S",
+    "mode": "B",
     "L": [
      10.0,
      24.0
@@ -76,7 +76,7 @@
     "limit": 5.6
    },
    {
-    "mode": "S",
+    "mode": "B",
     "L": [
      31.0,
      31.0
@@ -102,12 +102,12 @@
   "type": "箱型6段油圧伸縮式（2・3段同時、4・5・6段同時）",
   "modes": [
    {
-    "id": "N",
+    "id": "A",
     "label": "通常伸縮",
     "note": "ブーム長さ10.0～45.0m（表の列 10.0/13.0/17.0/20.0/24.0/31.0/38.0/42.0/45.0m）"
    },
    {
-    "id": "S",
+    "id": "B",
     "label": "特殊伸縮",
     "note": "アウトリガ使用時の表は17.0/24.0/31.0mブーム。アウトリガ不使用時（定置つり・走行つり）は特殊伸縮状態の10.0/17.0mブームのみ"
    }
@@ -262,17 +262,17 @@
     "note": "最縮小張出ではSLジブ作業不可。SLジブを装着したままのブーム作業も不可。"
    }
   ],
-  "note": "側方領域は各張出状態の表（7.6mは全周表）。前方領域（車両前方中心線から±α°）は前方性能の表（state \"max\", zone \"front\"）、後方領域（後方中心線から±β°）はアウトリガ最大張出の表（state \"max\", zone \"all\"）を使用（注意事項5）。α・βは前側・後側アウトリガの張出状態で決まり、ここでは4本同一張出の値（表の対角）を設定：α=7.6m:45°/7.2m:30°/6.5m:25°/5.4m:15°/4.3m:10°/2.55m:3°、β=7.6m:30°/7.2m:30°/6.5m:25°/5.4m:25°/4.3m:15°/2.55m:3°。（前後で張出が異なる場合：αは前側張出7.6mのとき後側7.6/7.2m:45°、6.5m:40°、5.4/4.3m:35°、2.55m:30°、前側7.2m以下は後側によらず30/25/15/10/3°。βは後側張出のみで決まる。）前方性能・最大張出の表は伸縮モード（mode N/S）ごとにあり、同じmodeの表を使う。ジブ作業も同じ領域区分（SLジブの前方性能表あり）。"
+  "note": "側方領域は各張出状態の表（7.6mは全周表）。前方領域（車両前方中心線から±α°）は前方性能の表（state \"max\", zone \"front\"）、後方領域（後方中心線から±β°）はアウトリガ最大張出の表（state \"max\", zone \"all\"）を使用（注意事項5）。α・βは前側・後側アウトリガの張出状態で決まり、ここでは4本同一張出の値（表の対角）を設定：α=7.6m:45°/7.2m:30°/6.5m:25°/5.4m:15°/4.3m:10°/2.55m:3°、β=7.6m:30°/7.2m:30°/6.5m:25°/5.4m:25°/4.3m:15°/2.55m:3°。（前後で張出が異なる場合：αは前側張出7.6mのとき後側7.6/7.2m:45°、6.5m:40°、5.4/4.3m:35°、2.55m:30°、前側7.2m以下は後側によらず30/25/15/10/3°。βは後側張出のみで決まる。）前方性能・最大張出の表は伸縮モード（mode A=通常伸縮 / B=特殊伸縮）ごとにあり、同じmodeの表を使う。ジブ作業も同じ領域区分（SLジブの前方性能表あり）。"
  },
  "boomCharts": [
   {
    "state": "max",
    "zone": "front",
-   "mode": "N",
+   "mode": "A",
    "cols": [
     {
      "L": 10.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -289,7 +289,7 @@
     },
     {
      "L": 13.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -306,7 +306,7 @@
     },
     {
      "L": 17.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -323,7 +323,7 @@
     },
     {
      "L": 20.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -340,7 +340,7 @@
     },
     {
      "L": 24.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -351,7 +351,7 @@
     },
     {
      "L": 31.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -362,7 +362,7 @@
     },
     {
      "L": 38.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -373,7 +373,7 @@
     },
     {
      "L": 42.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -384,7 +384,7 @@
     },
     {
      "L": 45.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -1279,11 +1279,11 @@
   {
    "state": "max",
    "zone": "all",
-   "mode": "N",
+   "mode": "A",
    "cols": [
     {
      "L": 10.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -1300,7 +1300,7 @@
     },
     {
      "L": 13.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -1317,7 +1317,7 @@
     },
     {
      "L": 17.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -1334,7 +1334,7 @@
     },
     {
      "L": 20.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -1351,7 +1351,7 @@
     },
     {
      "L": 24.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -1362,7 +1362,7 @@
     },
     {
      "L": 31.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -1373,7 +1373,7 @@
     },
     {
      "L": 38.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       19.0,
       84.0
@@ -1384,7 +1384,7 @@
     },
     {
      "L": 42.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       28.0,
       84.0
@@ -1395,7 +1395,7 @@
     },
     {
      "L": 45.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       33.0,
       84.0
@@ -2198,11 +2198,11 @@
   {
    "state": "m7.2",
    "zone": "side",
-   "mode": "N",
+   "mode": "A",
    "cols": [
     {
      "L": 10.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -2219,7 +2219,7 @@
     },
     {
      "L": 13.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -2236,7 +2236,7 @@
     },
     {
      "L": 17.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -2253,7 +2253,7 @@
     },
     {
      "L": 20.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -2270,7 +2270,7 @@
     },
     {
      "L": 24.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -2281,7 +2281,7 @@
     },
     {
      "L": 31.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -2292,7 +2292,7 @@
     },
     {
      "L": 38.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       26.0,
       84.0
@@ -2303,7 +2303,7 @@
     },
     {
      "L": 42.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       33.0,
       84.0
@@ -2314,7 +2314,7 @@
     },
     {
      "L": 45.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       37.0,
       84.0
@@ -3071,11 +3071,11 @@
   {
    "state": "m6.5",
    "zone": "side",
-   "mode": "N",
+   "mode": "A",
    "cols": [
     {
      "L": 10.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3092,7 +3092,7 @@
     },
     {
      "L": 13.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3109,7 +3109,7 @@
     },
     {
      "L": 17.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3126,7 +3126,7 @@
     },
     {
      "L": 20.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3143,7 +3143,7 @@
     },
     {
      "L": 24.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3154,7 +3154,7 @@
     },
     {
      "L": 31.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       21.0,
       84.0
@@ -3165,7 +3165,7 @@
     },
     {
      "L": 38.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       35.0,
       84.0
@@ -3176,7 +3176,7 @@
     },
     {
      "L": 42.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       41.0,
       84.0
@@ -3187,7 +3187,7 @@
     },
     {
      "L": 45.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       45.0,
       84.0
@@ -3898,11 +3898,11 @@
   {
    "state": "m5.4",
    "zone": "side",
-   "mode": "N",
+   "mode": "A",
    "cols": [
     {
      "L": 10.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3919,7 +3919,7 @@
     },
     {
      "L": 13.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3936,7 +3936,7 @@
     },
     {
      "L": 17.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3953,7 +3953,7 @@
     },
     {
      "L": 20.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -3970,7 +3970,7 @@
     },
     {
      "L": 24.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       24.0,
       84.0
@@ -3981,7 +3981,7 @@
     },
     {
      "L": 31.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       37.0,
       84.0
@@ -3992,7 +3992,7 @@
     },
     {
      "L": 38.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       48.0,
       84.0
@@ -4003,7 +4003,7 @@
     },
     {
      "L": 42.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       53.0,
       84.0
@@ -4014,7 +4014,7 @@
     },
     {
      "L": 45.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       55.0,
       84.0
@@ -4656,11 +4656,11 @@
   {
    "state": "m4.3",
    "zone": "side",
-   "mode": "N",
+   "mode": "A",
    "cols": [
     {
      "L": 10.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -4677,7 +4677,7 @@
     },
     {
      "L": 13.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -4694,7 +4694,7 @@
     },
     {
      "L": 17.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -4711,7 +4711,7 @@
     },
     {
      "L": 20.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       21.0,
       84.0
@@ -4728,7 +4728,7 @@
     },
     {
      "L": 24.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       43.0,
       84.0
@@ -4739,7 +4739,7 @@
     },
     {
      "L": 31.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       53.0,
       84.0
@@ -4750,7 +4750,7 @@
     },
     {
      "L": 38.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       59.0,
       84.0
@@ -4761,7 +4761,7 @@
     },
     {
      "L": 42.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       62.0,
       84.0
@@ -4772,7 +4772,7 @@
     },
     {
      "L": 45.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       64.0,
       84.0
@@ -5276,11 +5276,11 @@
   {
    "state": "min",
    "zone": "side",
-   "mode": "N",
+   "mode": "A",
    "cols": [
     {
      "L": 10.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -5291,7 +5291,7 @@
     },
     {
      "L": 13.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       0.0,
       84.0
@@ -5302,7 +5302,7 @@
     },
     {
      "L": 17.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       41.0,
       84.0
@@ -5313,7 +5313,7 @@
     },
     {
      "L": 20.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       55.0,
       84.0
@@ -5324,7 +5324,7 @@
     },
     {
      "L": 24.0,
-     "mode": "N",
+     "mode": "A",
      "angle": [
       64.0,
       84.0
@@ -5455,11 +5455,11 @@
   {
    "state": "max",
    "zone": "front",
-   "mode": "S",
+   "mode": "B",
    "cols": [
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -5470,7 +5470,7 @@
     },
     {
      "L": 24.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -5481,7 +5481,7 @@
     },
     {
      "L": 31.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -5674,11 +5674,11 @@
   {
    "state": "max",
    "zone": "all",
-   "mode": "S",
+   "mode": "B",
    "cols": [
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -5689,7 +5689,7 @@
     },
     {
      "L": 24.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -5700,7 +5700,7 @@
     },
     {
      "L": 31.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -5893,11 +5893,11 @@
   {
    "state": "m7.2",
    "zone": "side",
-   "mode": "S",
+   "mode": "B",
    "cols": [
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -5908,7 +5908,7 @@
     },
     {
      "L": 24.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -5919,7 +5919,7 @@
     },
     {
      "L": 31.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6112,11 +6112,11 @@
   {
    "state": "m6.5",
    "zone": "side",
-   "mode": "S",
+   "mode": "B",
    "cols": [
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6127,7 +6127,7 @@
     },
     {
      "L": 24.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6138,7 +6138,7 @@
     },
     {
      "L": 31.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6331,11 +6331,11 @@
   {
    "state": "m5.4",
    "zone": "side",
-   "mode": "S",
+   "mode": "B",
    "cols": [
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6346,7 +6346,7 @@
     },
     {
      "L": 24.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6357,7 +6357,7 @@
     },
     {
      "L": 31.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6550,11 +6550,11 @@
   {
    "state": "m4.3",
    "zone": "side",
-   "mode": "S",
+   "mode": "B",
    "cols": [
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6565,7 +6565,7 @@
     },
     {
      "L": 24.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6576,7 +6576,7 @@
     },
     {
      "L": 31.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6763,11 +6763,11 @@
   {
    "state": "min",
    "zone": "side",
-   "mode": "S",
+   "mode": "B",
    "cols": [
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -6778,7 +6778,7 @@
     },
     {
      "L": 24.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       29.0,
       84.0
@@ -6904,7 +6904,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -7297,7 +7297,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -7664,7 +7664,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -8005,7 +8005,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -8320,7 +8320,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -8570,7 +8570,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -8768,7 +8768,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -9148,7 +9148,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -9476,7 +9476,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -9804,7 +9804,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -10106,7 +10106,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -10343,7 +10343,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -10541,7 +10541,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -10934,7 +10934,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -11288,7 +11288,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -11616,7 +11616,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -11905,7 +11905,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -12155,7 +12155,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 24.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     10.0,
     24.0
@@ -12353,7 +12353,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -12629,7 +12629,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -12827,7 +12827,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -13012,7 +13012,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -13171,7 +13171,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -13317,7 +13317,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -13450,7 +13450,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -13726,7 +13726,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -13924,7 +13924,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -14122,7 +14122,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -14281,7 +14281,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -14414,7 +14414,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -14521,7 +14521,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -14784,7 +14784,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -14982,7 +14982,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -15167,7 +15167,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -15326,7 +15326,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -15459,7 +15459,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 45.0,
-   "mode": "N",
+   "mode": "A",
    "boomLRange": [
     24.0,
     45.0
@@ -15566,7 +15566,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -15946,7 +15946,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -16326,7 +16326,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -16706,7 +16706,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -17086,7 +17086,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -17375,7 +17375,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -17612,7 +17612,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -17966,7 +17966,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -18320,7 +18320,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -18674,7 +18674,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -19028,7 +19028,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -19330,7 +19330,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -19567,7 +19567,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -19908,7 +19908,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -20249,7 +20249,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -20590,7 +20590,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -20931,7 +20931,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -21220,7 +21220,7 @@
    "hook": "aux",
    "parts": 1,
    "boomL": 31.0,
-   "mode": "S",
+   "mode": "B",
    "boomLRange": [
     10.0,
     31.0
@@ -21457,7 +21457,7 @@
    "cols": [
     {
      "L": 10.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -21468,7 +21468,7 @@
     },
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -21570,7 +21570,7 @@
    "cols": [
     {
      "L": 10.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -21581,7 +21581,7 @@
     },
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       49.0,
       84.0
@@ -21683,7 +21683,7 @@
    "cols": [
     {
      "L": 10.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -21694,7 +21694,7 @@
     },
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -21796,7 +21796,7 @@
    "cols": [
     {
      "L": 10.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       0.0,
       84.0
@@ -21807,7 +21807,7 @@
     },
     {
      "L": 17.0,
-     "mode": "S",
+     "mode": "B",
      "angle": [
       54.0,
       84.0
@@ -21940,11 +21940,22 @@
   "危険角度：ブームを危険角度以下にすると無負荷でも転倒する（表の危険角度。「－」は危険角度なし→angle=[0,84]）。",
   "標準巻掛本数以外の掛数で使用する場合は、ワイヤロープ1本当たり45.1kN（4.6tf）を限度とする。巻掛本数20本で作業する場合はルースタシーブを使用。",
   "高速巻下作業はフックのみを降下するときに使用。クレーン作業は風速10m/sまで（受風面積の大きい荷は特別な注意）。",
-  "伸縮モード：通常伸縮（mode N）と特殊伸縮（mode S）で別々の定格総荷重表。ブーム作業・SLジブ作業とも、伸縮モードに対応した表を使う。"
+  "伸縮モード：通常伸縮（mode A）と特殊伸縮（mode B）で別々の定格総荷重表（mode idはSL-500/600RfⅢのMODE A/Bに合わせた）。ブーム作業・SLジブ作業とも、伸縮モードに対応した表を使う。"
  ],
  "verification": {
-  "status": "pending",
-  "method": "",
-  "issues": []
+  "status": "checked",
+  "method": "Numbers read from the PDF text layer by word coordinates (builders/kato_slrf3_lib.py; rows = radius/boom-angle labels, columns = header cells, cell rules from the vector lines for the merged 標準フック/フック質量/巻掛本数 cells; zone symbol 全周/側方/前方 classified from the vector icon and cross-checked with the アウトリガ header text). Verification of EVERY table: (1) automated cell-by-cell comparison against an independent OCR (tesseract, 300 dpi render, digits only) of every load cell, blank cell, row label (radius / boom angle), jib radius cell, 危険角度 cell and boom-length header: 11217 cells, 49 OCR disagreements, every one inspected on the rendered image (contact sheets in img/sl-750rf3/ocr/) and all were OCR misreads (e.g. 2.70->2.10, 7.4->74 next to thick rules) - the text layer was correct in every case; (2) every table rendered and looked at by eye (boom and on-tire tables in full at 85-90 dpi, SL jib tables as tiles: header at 110 dpi + table at 72 dpi with the parsed summary printed under it, img/sl-750rf3/vis and img/sl-750rf3/jib) and compared with the parsed output: header (伸縮モード/CW/ジブ長/張出幅/作業範囲記号), boom lengths and jib offsets, row count and range, the mark (*, ★, #) of every marked cell, the last value of every column/offset, 危険角度 row and hook rows; (3) validator 0 errors / 0 warnings. Extra cross-check: the parser was also run on the SL-850RfⅢ sheet, whose カウンタウエイト無 tables (another PDF layout) gave identical numbers for all 70 tables.",
+  "issues": [
+   "boom.maxRadius (41.0 m, 前方性能 45.0mブーム) and jib.maxRadius (48.6 m) are the largest radii printed in the charts; 主要諸元 lists no 最大作業半径.",
+   "危険角度「－」 is stored as angle [0, 84] with danger null (no danger angle); numeric 危険角度 d -> angle [d, 84].",
+   "Several main hooks: hooks.main = 35tフック (0.33 t), main40 = 40tフック (0.47 t), main75 = 75tフック (0.83 t), aux = 5.6tフック (0.12 t). cols[].hook/parts = hook and reeving of unmarked cells; cols[].alt[mark] = hook/reeving of cells marked * or ★ (chart.marks gives the mark of each cell).",
+   "singleTop.deduct = 0.33 t assumes the 35t hook is on the boom; the rule deducts the mass of whatever main hook/slings are fitted (0.47 t / 0.83 t for 40t / 75t hooks). Limits per boom length/mode in singleTop.limits.",
+   "vehicle.turningRadius2ws holds the 4輪操向 (front two axles steering) radius 11.8 m - the document has no 2-wheel steering; turningRadius = 7.4 m (8輪操向, 最小通路軌跡図 labels it 構内移動).",
+   "Zone rules use the diagonal of the α/β tables (uniform outrigger extension). Mixed front/rear extensions are described only in outriggers.note.",
+   "Jib charts are angle-type tables for 24.0 m / 45.0 m (通常伸縮) and 31.0 m (特殊伸縮) booms; for other boom lengths the document says to use the boom angle of the 24/45/31 m table (boomLRange; L=24.0 belongs to the 24 m table, 24.0<L≤45.0 to the 45 m table).",
+   "p.13 2.55m table: 標準巻掛本数 printed as 4 for every column although 10.0/13.0 m values reach 20.00/17.50 t (more than 4 x 4.6 tf); kept as printed.",
+   "Strength/stability boundary lines (太線) of the charts are not captured.",
+   "geometry.footX/footY estimated from the 作業範囲図 (radial boom-angle lines intersection), not a printed value."
+  ]
  }
 }
