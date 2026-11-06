@@ -13,7 +13,7 @@
  *     （url = 広告リンク、pixel = 表示回数を数える 1×1 の画像。A8 の広告コードに入っている2つの URL です）
  *   - ASP の広告は aspHosts のドメイン（とサブドメイン）で開いたときだけ出します。自社PR（own: true）はどこでも出します
  *   - A8.net は登録したサイトにしか広告を貼れず、サブドメインも「副サイト登録」が必要です。
- *     A8 の管理画面で souba.konylog.com を副サイトに登録してから公開してください
+ *     A8 の管理画面で base.konylog.com を副サイトに登録してから公開してください
  *
  * ■ PR枠（詳細画面の「相場目安」のすぐ下）
  *   - 上から順に、品目に合う最初の1件を出します（kinds: 購入/買取/処分、cats: 素材、items: 品目ID で絞れる）
@@ -28,7 +28,7 @@
  */
 window.KONYLOG_SOUBA_ADS = {
   allowHosts: ['konylog.com'],
-  aspHosts: ['souba.konylog.com'], // A8.net に副サイト登録したドメインだけを書く
+  aspHosts: ['base.konylog.com'], // A8.net に副サイト登録したドメインだけを書く
   googleTag: 'GT-TXX3B3WJ', // konylog.com と同じ Google タグ（アクセス・クリック計測）
   adsense: {
     client: 'ca-pub-8996027971502616',
