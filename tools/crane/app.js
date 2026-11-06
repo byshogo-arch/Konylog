@@ -1694,12 +1694,12 @@
   // ---------- ads (ads.js) ----------
   /** Put the ad codes from ads.js into their slots. Codes are the site owner's own A8.net HTML;
    *  script tags inside a code are re-created so they run. Empty slots stay hidden. */
-  // 広告は allowHosts のドメイン（とサブドメイン）でだけ出す（建材相場ボードと同じ決まり）。
-  // Vercel のプレビューや手元では出さない。?adpreview=1 なら位置と見た目だけ確認できる（リンク・計測画像は外す）
+  // A8 などの広告は aspHosts のドメイン（A8 に副サイト登録したもの）でだけ出す（建材相場ボードと同じ決まり）。
+  // konylog.vercel.app・プレビュー・手元では出さない。?adpreview=1 なら位置と見た目だけ確認できる（リンク・計測画像は外す）
   function mountAds() {
     const cfg = window.CRANE_ADS || {};
     const host = location.hostname;
-    const hostOk = (cfg.allowHosts || []).some((d) => host === d || host.endsWith('.' + d));
+    const hostOk = (cfg.aspHosts || []).some((d) => host === d || host.endsWith('.' + d));
     const preview = !hostOk && new URLSearchParams(location.search).get('adpreview') === '1';
     if (!hostOk && !preview) return;
     for (const [key, html] of Object.entries(cfg)) {
