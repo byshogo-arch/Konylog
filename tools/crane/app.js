@@ -745,6 +745,12 @@
       svg.append(s('line', { x1: X(st.R) - 14, y1: Y(st.H), x2: X(st.R) + 14, y2: Y(st.H), stroke: '#7B5CD6', 'stroke-width': 2 }));
       svg.append(s('text', { x: X(st.R) + 18, y: Y(st.H) + 4, 'font-size': 11, fill: '#7B5CD6', 'font-weight': 700 }, `必要揚程 ${fmtM(st.H)}m`));
     }
+    // maximum working radius for this set-up and direction
+    const mr = maxReach(m, params());
+    if (mr != null && mr <= xmax) {
+      svg.append(s('line', { x1: X(mr), y1: Y(0), x2: X(mr), y2: Y(reachY * 0.92), stroke: '#E07B00', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' }));
+      svg.append(s('text', { x: X(mr) - 4, y: Y(reachY * 0.92) - 4, 'font-size': 11, 'font-weight': 700, fill: '#E07B00', 'text-anchor': 'end' }, `最大半径 ${fmtM(mr)}m`));
+    }
     // reach envelope for the selected boom (thin)
     if (st.work !== 'jib') {
       const env = [];
@@ -761,7 +767,8 @@
     const { len, wid } = vehicleDims(m);
     const tire = isTire(st.ost);
     const so = tire ? null : stateOf(m, st.ost);
-    const E = Math.max(len / 2 + 2.5, (so ? so.width : wid) / 2 + 2, st.R + 2.5, 9);
+    const reachHere = maxReach(m, params()) || 0;
+    const E = Math.max(len / 2 + 2.5, (so ? so.width : wid) / 2 + 2, st.R + 2.5, Math.min(reachHere + 1.5, st.R * 1.6 + 6), 9);
     const sc = (c - 12) / E;
     const P = (fwd, right) => [c + right * sc, c - fwd * sc];
     topMap = { c, sc };
@@ -837,6 +844,15 @@
       g.append(s('text', { x: tx, y: ty + 10, 'font-size': 14, 'text-anchor': 'middle', fill: '#1E2229', 'font-weight': 700 }, txt));
       svg.append(g);
     }
+    // outline of the reachable area (max radius per direction)
+    const outline = [];
+    for (let ang = 0; ang < 360; ang += 3) {
+      const mr2 = maxReach(m, { ...params(), slew: ang });
+      if (mr2 == null) continue;
+      const rr = Math.min(mr2, E + 1) * sc;
+      outline.push(`${c + rr * Math.sin(rad(ang))},${c - rr * Math.cos(rad(ang))}`);
+    }
+    if (outline.length > 3) svg.append(s('polygon', { points: outline.join(' '), fill: 'none', stroke: '#E07B00', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' }));
     // boom line
     const a = rad(st.slew);
     const hx = c + st.R * sc * Math.sin(a), hy = c - st.R * sc * Math.cos(a);
@@ -893,7 +909,7 @@
     const ang = res.angle;
     const hookTop = res.hookY;
     left.append(h('div', { class: 'big-row' },
-      kv('作業半径', fmtM(st.R), 'm', '中心〜フック'),
+      kv('作業半径', fmtM(st.R), 'm', (() => { const mr = maxReach(m, params()); return mr != null ? `この条件の最大 ${fmtM(mr)}m` : '中心〜フック'; })()),
       kv(st.work === 'jib' ? 'ブーム長さ(基準)' : 'ブーム長さ', res.L != null ? fmtL(res.L) : '—', 'm', st.autoL && st.work !== 'jib' ? '自動選択' : (st.work === 'jib' && res.chart && res.chart.type === 'angle' ? '参考半径の基準' : '')),
       kv('ブーム角度', ang != null ? fmtM(ang, 1) : '—', '°', st.work === 'jib' && res.angleRow != null ? `表は${res.angleRow}°の行` : '幾何計算の目安'),
       kv(st.work === 'jib' ? 'ジブ先端高さ' : 'フック最高高さ', st.work === 'jib' ? (ang != null ? fmtM(jibTipY(m, res)) : '—') : (hookTop != null ? fmtM(hookTop) : '—'), 'm', '目安（たわみ無視）')));
@@ -963,6 +979,10 @@
     if (res.msgs.length) right.append(h('ul', { class: 'msgs' }, res.msgs.map((x) => h('li', { class: x.t }, x.s))));
     right.append(h('p', { class: 'hint' }, 'ブーム角度・高さは作業半径から幾何計算した目安です（ブームのたわみ・機種ごとの取付位置の差は含みません）。性能表は作業半径基準なので、実作業は必ず作業半径で確認してください。'));
     box.append(left, right);
+    const bar = h('div', { class: 'res-actions' },
+      h('button', { type: 'button', class: 'pdf-btn', onclick: (e) => exportPdf(e.currentTarget) }, 'PDFで保存（計算書）'),
+      h('span', { class: 'muted' }, '条件・結果・図・向き別・使用した表・公道判定をA4の計算書にまとめます'));
+    box.prepend(bar);
   }
   function kv(k, v, unit, sub) { return h('div', { class: 'kv' }, h('span', { class: 'k' }, k), h('span', { class: 'v' }, v, h('small', {}, unit)), sub ? h('span', { class: 's' }, sub) : null); }
   function step(k, v, cls, tip) { return h('div', { class: `step ${cls || ''}` }, h('span', {}, k, tip ? h('span', { class: 'tip' }, tip) : null), h('span', { class: 'n' }, v)); }
@@ -1295,6 +1315,42 @@
   }
 
 
+  // ---------- reach limit ----------
+  /** Largest working radius the current set-up can lift at all (chart has a value), for a given slew angle.
+   *  With 自動ブーム長さ every boom length counts. Cached per (state, zone, settings) because dragging calls it a lot. */
+  const reachCache = new Map();
+  function reachKey(m, p) {
+    let zk;
+    if (isTire(p.ost)) { const a = norm360(p.slew), dF = Math.min(a, 360 - a); zk = dF <= (m.onTireFrontHalf ?? 1) + EPS ? 'tf' : 'ta'; }
+    else { const z = resolveZone(m, p.ost, p.slew); zk = `${z.use.state}/${z.use.zone}`; }
+    const a = norm360(p.slew), dF = Math.min(a, 360 - a);
+    return [m.id, p.ost, zk, p.work, st.autoL && p.work !== 'jib' ? 'auto' : p.L, p.mode, p.parts, p.jib, p.off, p.jibL, p.jibMounted, dF <= 15 ? 'f15' : ''].join('|');
+  }
+  function maxReach(m, p) {
+    const key = reachKey(m, p);
+    if (reachCache.has(key)) return reachCache.get(key);
+    const cand = new Set();
+    const add = (c) => {
+      (c.radii || []).forEach((r) => cand.add(r));
+      (c.cols || []).forEach((k) => { if (isFinite(k.rMax)) cand.add(k.rMax); });
+      (c.radius || []).forEach((row) => row.forEach((r) => { if (r != null) cand.add(r); }));
+    };
+    if (isTire(p.ost)) (m.onTire || []).forEach(add);
+    else if (p.work === 'jib') (m.jibCharts || []).forEach(add);
+    else m.boomCharts.forEach(add);
+    const radii = [...cand].sort((a, b) => b - a);
+    const Ls = st.autoL && p.work !== 'jib' ? (isTire(p.ost) ? tireLengths(m) : boomLengths(m, p.mode, p.parts)) : [p.L];
+    let best = null;
+    outer: for (const R of radii) for (const L of Ls) { if (evaluate(m, { ...p, R, L, load: null }).ok) { best = R; break outer; } }
+    reachCache.set(key, best);
+    return best;
+  }
+  function clampToReach(slew) {
+    const mr = maxReach(st.m, { ...params(), slew });
+    if (mr != null && st.R > mr) { st.R = mr; return true; }
+    return false;
+  }
+
   // ---------- compare all models ----------
   let cmpState = { loaded: false, loading: false };
   function bestFor(m, base) {
@@ -1360,6 +1416,198 @@
     box.append(h('p', { class: 'hint' }, (st.sf < 1 ? `安全率${st.sf}：吊れる荷＝定格総荷重×${st.sf}−フック−玉掛け用具。` : '吊れる荷＝定格総荷重−フック−玉掛け用具。') + '前方性能（前方特別性能）のある機種は前方0°付近で高くなります。行をクリックするとその機種の詳細を表示。一度読み込んだ機種は、電波の悪い現場でも（対応ブラウザなら）表示できます。'));
   }
 
+
+  // ---------- PDF report (A4 計算書) ----------
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const dirName = (a) => { a = norm360(a); return a <= 45 || a >= 315 ? '前方' : a < 135 ? '右側方' : a <= 225 ? '後方' : '左側方'; };
+  function loadScript(src) {
+    return new Promise((resolve, reject) => { const sc = document.createElement('script'); sc.src = src; sc.onload = resolve; sc.onerror = () => reject(new Error('load ' + src)); document.head.append(sc); });
+  }
+  async function ensurePdfLibs() {
+    if (!window.html2canvas) await loadScript('vendor/html2canvas.min.js');
+    if (!window.jspdf) await loadScript('vendor/jspdf.umd.min.js');
+  }
+  /** Rasterise one of the live SVG views so the report shows exactly what is on screen. */
+  function svgToPng(svg) {
+    return new Promise((resolve) => {
+      const vb = svg.viewBox.baseVal;
+      const w = vb && vb.width ? vb.width : 640, hgt = vb && vb.height ? vb.height : 420;
+      const clone = svg.cloneNode(true);
+      clone.setAttribute('xmlns', NS); clone.setAttribute('width', w); clone.setAttribute('height', hgt);
+      const style = document.createElementNS(NS, 'style');
+      style.textContent = 'text{font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif}';
+      clone.insertBefore(style, clone.firstChild);
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas'); c.width = w * 2; c.height = hgt * 2;
+        const ctx = c.getContext('2d'); ctx.fillStyle = '#FBFAF6'; ctx.fillRect(0, 0, c.width, c.height);
+        ctx.drawImage(img, 0, 0, c.width, c.height);
+        resolve(c.toDataURL('image/png'));
+      };
+      img.onerror = () => resolve(null);
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(clone));
+    });
+  }
+  function rTable(rows, cls) {
+    return h('table', { class: `r-table ${cls || ''}` }, h('tbody', {}, rows.map(([k, v]) => h('tr', {}, h('th', {}, k), h('td', {}, v)))));
+  }
+  async function buildReport(res) {
+    const m = st.m, root = $('reportRoot');
+    root.replaceChildren();
+    const now = new Date();
+    const ts = `${now.getFullYear()}/${pad2(now.getMonth() + 1)}/${pad2(now.getDate())} ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+    const so = isTire(st.ost) ? null : stateOf(m, st.ost);
+    const mr = maxReach(m, params());
+    const hk = (m.hooks || {})[res.hookKey] || {};
+    const [sideImg, topImg] = await Promise.all([svgToPng($('sideSvg')), svgToPng($('topSvg'))]);
+    const foot = (n) => h('div', { class: 'r-foot' },
+      h('div', {}, '本書はメーカー公表の定格総荷重表に基づく計画・打合せ用の目安です。実作業は必ず実機の定格総荷重表と過負荷防止装置（AML/ACS）の表示に従ってください。'),
+      h('div', { class: 'r-foot-row' }, h('span', {}, `KONYLOG TOOLS / ラフター吊り荷計算　作成 ${ts}`), h('span', {}, `${n} / 2`)));
+    // ----- page 1 -----
+    const p1 = h('div', { class: 'rpage' });
+    p1.append(h('div', { class: 'r-head' },
+      h('div', {}, h('div', { class: 'r-title' }, 'ラフター吊り荷計算書'), h('div', { class: 'r-sub' }, `作成日時 ${ts}`)),
+      h('div', { class: 'r-stamp' }, '計画用の目安')));
+    p1.append(h('div', { class: 'r-model' }, h('b', {}, `${MAKERS[m.maker]} ${m.model}${m.nickname ? '（' + m.nickname + '）' : ''}`), m.variant ? h('span', {}, m.variant) : null));
+    const cond = [
+      ['アウトリガ', isTire(st.ost) ? `アウトリガ不使用（${st.ost === 'tire-static' ? '静止' : '走行 1.6km/h以下'}）` : `${so.label} ${so.nonUniform ? `前${fmtL(so.front)}m／後${fmtL(so.rear)}m` : fmtL(so.width) + 'm'}`],
+      ['旋回方向', `${Math.round(st.slew)}°（${dirName(st.slew)}）`],
+      ['適用した表', res.zone && res.zone.label ? res.zone.label.text : '—'],
+      ['作業', st.work === 'jib' ? `ジブ ${fmtL(st.jib)}m・オフセット ${st.off}°` : st.work === 'single' ? 'シングルトップ（ルースタ）' : 'ブーム（主巻）'],
+      ['ブーム長さ', res.L != null ? `${fmtL(res.L)}m${st.autoL && st.work !== 'jib' ? '（自動選択）' : ''}` : '—'],
+    ];
+    if (st.mode) cond.push(['伸縮モード', ((m.boom.modes || []).find((x) => x.id === st.mode) || {}).label || st.mode]);
+    if (st.parts != null && st.work !== 'jib') cond.push(['巻掛本数の表', `${st.parts}本掛`]);
+    cond.push(['作業半径', `${fmtM(st.R)}m${mr != null ? `（この条件の最大 ${fmtM(mr)}m）` : ''}`],
+      ['必要揚程', st.H != null ? `${fmtM(st.H)}m` : '指定なし'],
+      ['吊り荷質量', st.load != null ? `${fmtT(st.load)}t` : '未入力'],
+      ['玉掛け用具', `${fmtT(st.sling || 0)}t`],
+      ['安全率', st.sf < 1 ? `×${st.sf}` : 'なし']);
+    const resBox = h('div', { class: 'r-res' });
+    if (!res.ok) {
+      resBox.append(h('div', { class: 'r-cap na' }, h('span', {}, '定格総荷重'), h('b', {}, '吊れません')), h('p', { class: 'r-small' }, res.reason || 'この条件は性能表の範囲外です'));
+    } else {
+      resBox.append(h('div', { class: 'r-cap' }, h('span', {}, '定格総荷重（表の値・フック込み）'), h('b', {}, `${fmtT(res.cap)} t`)));
+      const steps = [
+        ['定格総荷重（表の値）', `${fmtT(res.cap)} t`],
+        [`− フック質量（${hk.label || 'フック'}）`, `− ${fmtT(res.hook)} t`],
+        ['＝ 定格荷重', `${fmtT(res.rated)} t`],
+        ['− 玉掛け用具', `− ${fmtT(st.sling || 0)} t`],
+        [res.sf < 1 ? '＝ 吊れる荷（定格いっぱい）' : '＝ 吊れる荷の質量（最大）', `${fmtT(res.net)} t`],
+      ];
+      if (res.sf < 1) steps.push([`安全率×${res.sf}：${fmtT(res.cap)}×${res.sf} − フック − 玉掛`, `${fmtT(res.netF)} t`]);
+      resBox.append(rTable(steps, 'r-steps'));
+      if (res.ratio != null) {
+        const j = judgeOf(res.ratio);
+        resBox.append(h('div', { class: `r-judge ${j.cls}` }, h('b', {}, `負荷率 ${Math.round(res.ratio * 100)}%`), h('span', {}, j.msg),
+          h('div', { class: 'r-small' }, `（吊り荷${fmtT(st.load)} + 玉掛${fmtT(st.sling || 0)} + フック${fmtT(res.hook)}）÷ 定格総荷重${fmtT(res.cap)} ＝ ${fmtT(res.total)}t ÷ ${fmtT(res.cap)}t`)));
+      } else resBox.append(h('div', { class: 'r-judge idle' }, h('span', {}, '吊り荷質量が未入力のため負荷率は未判定')));
+      const extra = [];
+      if (res.angle != null) extra.push(`ブーム角度 約${fmtM(res.angle, 1)}°（目安）`);
+      if (st.work !== 'jib' && res.hookY != null) extra.push(`フック最高高さ 約${fmtM(res.hookY)}m（目安）`);
+      if (res.parts && res.parts.length) extra.push(`標準巻掛 ${[...new Set(res.parts)].join('/')}本`);
+      if (extra.length) resBox.append(h('p', { class: 'r-small' }, extra.join('　')));
+    }
+    p1.append(h('div', { class: 'r-cols' }, h('div', {}, h('h3', {}, '計算条件'), rTable(cond)), h('div', {}, h('h3', {}, '計算結果'), resBox)));
+    p1.append(h('div', { class: 'r-views' },
+      h('figure', {}, sideImg ? h('img', { src: sideImg, alt: '側面図' }) : h('div', { class: 'r-small' }, '側面図を画像化できませんでした'), h('figcaption', {}, '側面図（ブーム角度・高さは幾何計算の目安）')),
+      h('figure', {}, topImg ? h('img', { src: topImg, alt: '平面図' }) : h('div', { class: 'r-small' }, '平面図を画像化できませんでした'), h('figcaption', {}, '平面図（性能領域と届く範囲）'))));
+    const msgs = [...modelCautions(m).map((x) => ({ t: 'ng', s: x })), ...(res.msgs || [])].slice(0, 7);
+    if (msgs.length) p1.append(h('div', { class: 'r-msgs' }, h('h3', {}, '注意・補足'), h('ul', {}, msgs.map((x) => h('li', { class: x.t }, x.s)))));
+    p1.append(h('div', { class: 'r-sign' }, ['作成', '確認', '承認'].map((t) => h('div', {}, h('span', {}, t)))));
+    p1.append(foot(1));
+    // ----- page 2 -----
+    const p2 = h('div', { class: 'rpage' });
+    p2.append(h('div', { class: 'r-head small' }, h('div', { class: 'r-title' }, `${m.model}　向き別・性能表・車両`), h('div', { class: 'r-stamp' }, '計画用の目安')));
+    const dirRows = [['前方', 0], ['右側方', 90], ['後方', 180], ['左側方', 270]].map(([n, a]) => {
+      const r = evaluate(m, { ...params(), slew: a });
+      return h('tr', {}, h('th', {}, `${n}（${a}°）`), h('td', {}, r.zone && r.zone.label ? r.zone.label.text : '—'),
+        h('td', { class: 'num' }, r.ok ? `${fmtT(r.cap)} t` : '×'), h('td', { class: 'num' }, r.ok ? `${fmtT(r.rated)} t` : '—'), h('td', { class: 'num' }, r.ok ? `${fmtT(r.sf < 1 ? r.netF : r.net)} t` : '—'));
+    });
+    p2.append(h('h3', {}, `向きで変わる吊り能力（作業半径 ${fmtM(st.R)}m・ブーム ${res.L != null ? fmtL(res.L) + 'm' : '—'}）`),
+      h('table', { class: 'r-grid' }, h('thead', {}, h('tr', {}, ['方向', '適用した表', '定格総荷重', '定格荷重', st.sf < 1 ? `吊れる荷(×${st.sf})` : '吊れる荷'].map((t) => h('th', {}, t)))), h('tbody', {}, dirRows)));
+    // the chart used (radius-type charts), highlighting the cells used
+    const ch = res.chart;
+    let chartBody = null, chartTitle = null;
+    if (ch && ch.radii && ch.cols) {
+      const lk = res.lk && res.lk.rows && res.lk.cols ? res.lk : null;
+      const colLabel = (c) => res.chartKind === 'jib' ? `${fmtL(c.L)}m/${c.offset}°` : `${fmtL(c.L)}m${c.mode ? ' ' + c.mode : ''}`;
+      const keep = ch.cols.map((c, j) => j).filter((j) => res.chartKind !== 'jib' || Math.abs(ch.cols[j].offset - st.off) < EPS);
+      const rowsIdx = ch.radii.map((r, i) => i).filter((i) => keep.some((j) => ch.loads[i][j] != null));
+      const lim = rowsIdx.length > 34 ? (() => { const c0 = lk ? lk.rows[0] : 0; const pos = Math.max(0, rowsIdx.indexOf(c0)); return rowsIdx.slice(Math.max(0, pos - 14), Math.max(0, pos - 14) + 34); })() : rowsIdx;
+      chartTitle = h('h3', {}, `適用した定格総荷重表（単位 t）　${res.zone && res.zone.label ? res.zone.label.text : ''}${lim.length < rowsIdx.length ? '　※抜粋' : ''}`);
+      p2.append(chartTitle,
+        h('table', { class: 'r-grid r-chart' },
+          h('thead', {}, h('tr', {}, h('th', {}, '半径＼ブーム'), keep.map((j) => h('th', { class: lk && lk.cols.includes(j) ? 'cur' : null }, colLabel(ch.cols[j]))))),
+          chartBody = h('tbody', {}, lim.map((i) => h('tr', { class: lk && lk.rows.includes(i) ? 'cur' : null }, h('th', {}, `${fmtM(ch.radii[i])}m`),
+            keep.map((j) => { const v = ch.loads[i][j]; const hit = lk && lk.rows.includes(i) && lk.cols.includes(j); const sp = v == null ? null : cellSpecial(ch, i, j); return h('td', { class: `num${hit ? ' hit' : ''}` }, v == null ? '' : fmtT(v) + (sp ? sp.symbol : '')); }))))),
+        h('p', { class: 'r-small' }, `出典：${ch.src || ''}。黒地＝今回採用した値。表の行・列の間は前後の小さい方の値で判定。`));
+    } else if (ch && res.chartKind === 'jib') {
+      p2.append(h('p', { class: 'r-small' }, `ジブ性能表（ブーム角度基準）：${ch.src || ''}。ブーム角度${res.angleRow != null ? res.angleRow + '°' : ''}の行を採用。`));
+    }
+    // vehicle / road
+    const pc = permitCheck(m.vehicle || {});
+    p2.append(h('h3', {}, `車両サイズと公道走行：${pc.need ? '特殊車両通行許可が必要' : '一般的制限値内（特車許可は不要）'}`),
+      h('table', { class: 'r-grid' }, h('thead', {}, h('tr', {}, ['項目', 'この機種（走行時）', '一般的制限値', '判定'].map((t) => h('th', {}, t)))),
+        h('tbody', {}, pc.items.map((x) => { const f = (n) => x.unit === 'm' ? `${fmtM(n)} m` : x.unit === 'mm' ? `${fmtKg(n)} mm` : `${fmtKg(n)} kg`; return h('tr', {}, h('th', {}, x.label), h('td', { class: 'num' }, f(x.val)), h('td', { class: 'num' }, f(x.lim)), h('td', { class: x.over ? 'over' : '' }, x.over ? '超過' : '以内')); }))));
+    if (m.vehicle && m.vehicle.note) p2.append(h('p', { class: 'r-small' }, `メーカー資料の注記：${m.vehicle.note}`));
+    // notes & sources
+    const hooks = Object.values(m.hooks || {}).map((x) => `${x.label} ${fmtT(x.mass)}t`).join('、');
+    const vf = m.verification || {};
+    let notesList;
+    p2.append(h('h3', {}, '出典・データの確認'), notesList = h('ul', { class: 'r-notes' },
+      (m.sources || []).map((x) => h('li', {}, `${x.title || ''}：${x.url}`)),
+      hooks ? h('li', {}, `フック質量：${hooks}`) : null,
+      h('li', {}, `数値チェック：出典PDFと全表を照合${vf.independent ? '。別の担当による二重チェックでも全セル一致（' + vf.independent.date + '）' : ''}`),
+      h('li', {}, '定格総荷重はフック・つり具の質量を含む値。定格荷重＝定格総荷重−フック等の質量。吊り荷＋玉掛け用具≦定格荷重（安全率を使う場合はその値以下）。'),
+      h('li', {}, `この条件をもう一度開くURL：${location.href}`)));
+    p2.append(foot(2));
+    root.append(p1, p2);
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    await new Promise((r) => setTimeout(r, 60));
+    // keep page 2 on one sheet: drop chart rows farthest from the row used until the notes clear the footer
+    const limitY = () => p2.querySelector('.r-foot').getBoundingClientRect().top - 6;
+    let trimmed = false;
+    while (chartBody && notesList.getBoundingClientRect().bottom > limitY() && chartBody.rows.length > 6) {
+      const rows = [...chartBody.rows];
+      const ci = Math.max(0, rows.findIndex((r) => r.classList.contains('cur')));
+      (rows.length - 1 - ci >= ci ? rows[rows.length - 1] : rows[0]).remove();
+      trimmed = true;
+    }
+    if (trimmed && chartTitle && !/抜粋/.test(chartTitle.textContent)) chartTitle.textContent += '　※抜粋';
+  }
+  async function exportPdf(btn) {
+    if (!st.m) return;
+    const label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'PDFを作成中…';
+    try {
+      const res = evaluate(st.m, params());
+      await buildReport(res);
+      await ensurePdfLibs();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: true });
+      const pages = [...$('reportRoot').querySelectorAll('.rpage')];
+      for (let i = 0; i < pages.length; i++) {
+        const canvas = await window.html2canvas(pages[i], { scale: 2, backgroundColor: '#ffffff', logging: false });
+        if (i) doc.addPage();
+        doc.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
+      }
+      const d = new Date();
+      // ASCII file name: some browsers replace non-ASCII download names with "download"
+      const asciiModel = st.m.model.replace(/Ⅲ/g, 'III').replace(/Ⅱ/g, 'II').replace(/Ⅴ/g, 'V').replace(/[^A-Za-z0-9.-]+/g, '-').replace(/^-|-$/g, '');
+      doc.save(`crane-load_${asciiModel}_R${fmtM(st.R)}m_${d.getFullYear()}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}.pdf`);
+      $('reportRoot').replaceChildren();
+    } catch (e) {
+      // fall back to the browser's print dialog with only the report pages (choose 「PDFに保存」)
+      document.body.classList.add('print-report');
+      const done = () => { document.body.classList.remove('print-report'); $('reportRoot').replaceChildren(); window.removeEventListener('afterprint', done); };
+      window.addEventListener('afterprint', done);
+      try { window.print(); } catch (e2) { done(); }
+    } finally {
+      btn.disabled = false; btn.textContent = label;
+    }
+  }
+
   // ---------- main update ----------
   function update() {
     const m = st.m;
@@ -1389,6 +1637,7 @@
       return;
     }
     tableSel = null;
+    if (reachCache.size > 4000) reachCache.clear();
     pickDefaults(st.m);
     renderRoad();
     renderSources();
@@ -1426,6 +1675,7 @@
       if (!sideMap || !st.m) return;
       const w = sideMap.inv(p.x, p.y);
       st.R = Math.max(0.5, Math.round(w.x * 10) / 10);
+      clampToReach(st.slew); // stop at the largest radius this set-up can lift
       st.H = w.y > 1.0 ? Math.round(w.y * 2) / 2 : null;
       schedule();
     });
@@ -1434,7 +1684,7 @@
       const dx = p.x - topMap.c, dy = p.y - topMap.c;
       const r = Math.hypot(dx, dy) / topMap.sc;
       st.slew = norm360(Math.round(deg(Math.atan2(dx, -dy))));
-      if (r > 1) st.R = Math.round(r * 10) / 10;
+      if (r > 1) { st.R = Math.round(r * 10) / 10; clampToReach(st.slew); }
       schedule();
     });
   }
