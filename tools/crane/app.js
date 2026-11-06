@@ -197,7 +197,7 @@
     const sym = chart.marks && chart.marks[r] ? chart.marks[r][j] : null;
     if (sym) {
       const alt = (col.alt && col.alt[sym]) || {};
-      return { symbol: sym, parts: alt.parts, hook: alt.hook, note: alt.note || '' };
+      return { symbol: sym, parts: alt.parts, hook: alt.hook, half: isFinite(alt.half) ? alt.half : null, note: alt.note || '' };
     }
     if (col.partsStar && R != null && (col.partsStar.radii || []).some((x) => Math.abs(x - R) < EPS)) {
       return { symbol: '＊', parts: col.partsStar.parts, hook: col.partsStar.hook, note: col.partsStar.note || `＊印は${col.partsStar.parts}本掛` };
@@ -352,7 +352,18 @@
     if (!chart) { res.reason = 'この条件の性能表がありません'; return res; }
     res.chart = chart; res.chartKind = 'boom';
     const cols = boomCols(chart, p.mode);
-    const lk = lookupGrid(chart.radii, cols, (r, c) => chart.loads[r][c], p.R, p.L);
+    // a marked cell may be limited to a narrower front sector (e.g. SL-850RfⅢ 80.00# only within ±15°)
+    const aS = norm360(p.slew), dFront = Math.min(aS, 360 - aS);
+    let sectorBlocked = null;
+    const val = (r, c) => {
+      const v = chart.loads[r][c];
+      if (v == null) return null;
+      const sp = chart.marks ? cellSpecial(chart, r, c) : null;
+      if (sp && sp.half != null && dFront > sp.half + EPS) { sectorBlocked = sp; return null; }
+      return v;
+    };
+    const lk = lookupGrid(chart.radii, cols, val, p.R, p.L);
+    if (lk.value == null && sectorBlocked) lk.reason = `この値（${sectorBlocked.symbol}印）は前方左右${sectorBlocked.half}°以内でのみ使用できます`;
     return finishBoom(m, p, res, lk, chart, null, hookMass);
   }
 
