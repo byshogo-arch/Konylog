@@ -202,6 +202,10 @@
       if (blankLo && !blankHi) { colsFinal = [useCols[1]]; note = `短い方（${fmtL(useCols[0].L)}m）は届かない半径のため長い方（${fmtL(useCols[1].L)}m）の値を使用`; }
       else if (blankHi) return { value: null, reason: `${fmtL(useCols[1].L)}mブームの表にこの半径の値がありません（近すぎる/遠すぎる）` };
     }
+    // a column may state its maximum working radius (e.g. "2.70(7.7m)") — beyond it the boom cannot reach
+    for (const c of colsFinal) {
+      if (c.c && isFinite(c.c.rMax) && R > c.c.rMax + EPS) return { value: null, reason: `${fmtL(c.L)}mブームの最大作業半径は${fmtM(c.c.rMax)}mです` };
+    }
     let v = Infinity;
     for (const r of rows) for (const c of colsFinal) {
       const x = val(r, c.idx);
@@ -393,6 +397,7 @@
     if (![...states, ...tireModes].includes(st.ost)) st.ost = states[0];
     const modes = availableModes(m);
     if (!modes.length) st.mode = null; else if (!modes.includes(st.mode)) st.mode = modes[0];
+    if (isTire(st.ost)) ensureTireMode(m);
     const Ls = isTire(st.ost) ? tireLengths(m) : boomLengths(m, st.mode);
     if (!Ls.some((L) => Math.abs(L - st.L) < EPS)) {
       // nearest available length (or the 2nd shortest when nothing selected yet)
@@ -475,7 +480,13 @@
     const tireOk = (m.onTire || []).filter((t) => t.radii && t.radii.length);
     if (tireOk.some((t) => t.mode === 'static')) items.push({ value: 'tire-static', label: '不使用・静止', sub: 'タイヤ' });
     if (tireOk.some((t) => t.mode === 'creep')) items.push({ value: 'tire-creep', label: '不使用・走行', sub: '1.6km/h以下' });
-    toggleGroup($('ostChips'), items, st.ost, (v) => { st.ost = v; if (isTire(v)) { st.work = 'boom'; const Ls = tireLengths(m); if (!Ls.some((L) => Math.abs(L - st.L) < EPS)) st.L = Ls[0]; } update(); });
+    toggleGroup($('ostChips'), items, st.ost, (v) => {
+      st.ost = v;
+      if (isTire(v)) { st.work = 'boom'; ensureTireMode(m); }
+      const Ls = isTire(v) ? tireLengths(m) : boomLengths(m, st.mode);
+      if (Ls.length && !Ls.some((L) => Math.abs(L - st.L) < EPS)) st.L = Ls.reduce((a, b) => (Math.abs(b - st.L) < Math.abs(a - st.L) ? b : a), Ls[0]);
+      update();
+    });
     const so = isTire(st.ost) ? null : stateOf(m, st.ost);
     let hint = '';
     if (isTire(st.ost)) hint = m.onTireNote || 'アウトリガを使わずタイヤで支える状態。前方（ブームが車両の真正面付近）とそれ以外で性能が違います。';
@@ -539,6 +550,11 @@
       q.append(h('button', { type: 'button', onclick: () => { st.slew = a; update(); } }, lbl));
     }
   }
+  /** On-tire tables may exist only for some telescoping modes (e.g. 特殊伸縮): switch to one that has them. */
+  function ensureTireMode(m) {
+    if (tireLengths(m).length) return;
+    for (const md of availableModes(m)) { st.mode = md; if (tireLengths(m).length) return; }
+  }
   const tireLengths = (m) => [...new Set((m.onTire || []).filter((c) => c.radii && c.radii.length).flatMap((c) => c.cols.filter((k) => modeOk(k, st.mode)).map((k) => k.L)))].sort((a, b) => a - b);
   function setIfNotFocused(id, v) { const e = $(id); if (document.activeElement !== e) e.value = v; }
 
@@ -548,7 +564,8 @@
     const m = st.m, svg = $('sideSvg');
     const g = geom(m);
     const W = 640, H = 430, padL = 34, padR = 14, padT = 12, padB = 30;
-    const Lcur = (res && res.L != null ? res.L : st.L) || m.boom.min;
+    const Lraw = res && res.L != null ? res.L : st.L;
+    const Lcur = isFinite(Lraw) && Lraw > 0 ? Lraw : m.boom.min;
     const Jcur = st.work === 'jib' ? (st.jib || 0) : 0;
     const reach = g.footX + Lcur + Jcur;
     const reachX = Math.max(reach + 2, st.R + 3, 12);
@@ -604,8 +621,8 @@
     // slewing centre line
     svg.append(s('line', { x1: X(0), y1: Y(0), x2: X(0), y2: Y(upH + 1), stroke: '#1E2229', 'stroke-dasharray': '3 3', 'stroke-width': 1 }));
     // boom & jib
-    const L = res && res.L != null ? res.L : st.L;
-    const angle = res && res.angle != null ? res.angle : null;
+    const L = Lcur;
+    const angle = res && res.angle != null && isFinite(res.angle) ? res.angle : null;
     const th = angle != null ? angle : 0;
     const fx = g.footX, fy = g.footY;
     const ux = Math.cos(rad(th)), uy = Math.sin(rad(th));

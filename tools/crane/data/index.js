@@ -55,6 +55,60 @@ window.CRANE_INDEX = [
   "verified": "checked"
  },
  {
+  "id": "tadano-gr-130n",
+  "maker": "tadano",
+  "model": "GR-130N",
+  "nickname": "CREVO mini G4",
+  "generation": "GR-130N(Ⅱ)",
+  "classTon": 4.9,
+  "status": "current",
+  "variant": "6段ブーム・2段パワーチルトジブ・X型/H型アウトリガ・シングルウインチ（4.9t吊仕様: 定格総荷重表の( )内の値）",
+  "maxLoad": {
+   "t": 4.9,
+   "r": 4,
+   "L": 5.5,
+   "note": "5.5mブーム 4本掛（主要諸元 4,900kg×4.0m）"
+  },
+  "boom": {
+   "min": 5.5,
+   "max": 24
+  },
+  "boomLengths": [
+   5.5,
+   9.2,
+   12.9,
+   16.6,
+   20.3,
+   24
+  ],
+  "hasJib": true,
+  "hasFront": false,
+  "hasOnTire": true,
+  "outriggers": [
+   4.7,
+   4.3,
+   3.5,
+   2.5,
+   1.7
+  ],
+  "vehicle": {
+   "length": 7570,
+   "width": 2000,
+   "height": 2815,
+   "wheelbase": 2750,
+   "gvw": 14535,
+   "axles": [
+    7230,
+    7305
+   ],
+   "turningRadius": 3.8,
+   "turningRadius2ws": 6.5,
+   "maxSpeed": 49,
+   "note": "走行時寸法・重量は主要諸元による（GR-130NL/GR-130N共通の記載）。"
+  },
+  "verified": "checked"
+ },
+ {
   "id": "kato-mr-130rf2",
   "maker": "kato",
   "model": "MR-130RfⅡ",
@@ -105,6 +159,60 @@ window.CRANE_INDEX = [
    "turningRadius2ws": 6.5,
    "maxSpeed": 49,
    "note": ""
+  },
+  "verified": "checked"
+ },
+ {
+  "id": "tadano-gr-130nl",
+  "maker": "tadano",
+  "model": "GR-130NL",
+  "nickname": "CREVO mini G4",
+  "generation": "GR-130NL(Ⅱ)",
+  "classTon": 13,
+  "status": "current",
+  "variant": "6段ブーム・2段パワーチルトジブ・X型/H型アウトリガ・シングルウインチ（13t吊仕様）",
+  "maxLoad": {
+   "t": 13,
+   "r": 1.5,
+   "L": 5.5,
+   "note": "5.5mブーム 4本掛（主要諸元 13,000kg×1.5m）"
+  },
+  "boom": {
+   "min": 5.5,
+   "max": 24
+  },
+  "boomLengths": [
+   5.5,
+   9.2,
+   12.9,
+   16.6,
+   20.3,
+   24
+  ],
+  "hasJib": true,
+  "hasFront": false,
+  "hasOnTire": true,
+  "outriggers": [
+   4.7,
+   4.3,
+   3.5,
+   2.5,
+   1.7
+  ],
+  "vehicle": {
+   "length": 7570,
+   "width": 2000,
+   "height": 2815,
+   "wheelbase": 2750,
+   "gvw": 14535,
+   "axles": [
+    7230,
+    7305
+   ],
+   "turningRadius": 3.8,
+   "turningRadius2ws": 6.5,
+   "maxSpeed": 49,
+   "note": "走行時寸法・重量は主要諸元による（GR-130NL/GR-130N共通の記載）。"
   },
   "verified": "checked"
  },
@@ -160,7 +268,7 @@ window.CRANE_INDEX = [
    "maxSpeed": 49,
    "note": "走行時寸法・重量は主要諸元による（X型/H型の区別記載なし）。"
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "kato-mr-200rf",
@@ -266,7 +374,7 @@ window.CRANE_INDEX = [
    "turningRadius": 5,
    "turningRadius2ws": 8.3,
    "maxSpeed": 49,
-   "note": "主要諸元の値。本機は、新規開発車両証明制度による適合証明書「基本通行条件重量:B」の交付を受けていますが、実際の通行条件は、運行経路ごとの道路管理者の算定結果によって付与されます。道路の走行には、道路法による通行の許可と道路運送車両法による保安基準の緩和が必要。"
+   "note": "主要諸元の値。本機は、新規開発車両証明制度による適合証明書「基本通行条件 重量:B」の交付を受けていますが、実際の通行条件は、運行経路ごとの道路管理者の算定結果によって付与されます。道路の走行には、道路法による通行の許可と道路運送車両法による保安基準の緩和が必要。"
   },
   "verified": "checked"
  },
@@ -582,7 +690,7 @@ window.CRANE_INDEX = [
    "maxSpeed": 49,
    "note": "新規開発車両証明制度「基本通行条件 重量：D」。高速自動車国道は走行不可。4輪ステアリング最小回転半径4.9mは構内移動時（最小通路軌跡図）。"
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "tadano-gr-350n-1",
@@ -689,10 +797,10 @@ window.CRANE_INDEX = [
    "turningRadius": 6.7,
    "turningRadius2ws": 10.8,
    "maxSpeed": 49,
-   "note": "主要諸元の寸法・重量（走行時）。軸距4,250+1,500mm、軸重は前軸/後前軸/後後軸。輪距 前2,300/後2,300mm。最小回転半径 6輪操向6.7m・2輪操向10.8m。新規開発車両証明制度の適合証明書「基本通行条件 重量：D」交付。公道走行には道路法の通行許可と保安基準緩和が必要、高速自動車国道は走行不可。走行時はフックを所定の位置に格納。",
+   "note": "主要諸元の寸法・重量（走行時）。軸距4,250+1,500mm、軸重は前軸/後前軸/後後軸。輪距 前2,300/後2,300mm。最小回転半径 6輪操向6.7m（構内走行）・2輪操向10.8m。新規開発車両証明制度の適合証明書「基本通行条件 重量：D」交付。公道走行には道路法の通行許可と保安基準緩和が必要、高速自動車国道は走行不可。走行時はフックを所定の位置に格納。",
    "configs": []
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "tadano-gr-500n-2",
@@ -804,10 +912,10 @@ window.CRANE_INDEX = [
    "turningRadius": 6.7,
    "turningRadius2ws": 10.8,
    "maxSpeed": 49,
-   "note": "主要諸元の寸法・重量（走行時）。軸距4,250+1,500mm、軸重は前軸/後前軸/後後軸。輪距 前2,300/後2,300mm。最小回転半径 6輪操向6.7m・2輪操向10.8m。車名及び型式 カトウ YDS-KRC027。新規開発車両証明制度の適合証明書「基本通行条件 重量：D」交付。公道走行には道路法の通行許可と保安基準緩和が必要、高速自動車国道は走行不可。走行時はフックを所定の位置に格納。",
+   "note": "主要諸元の寸法・重量（走行時）。軸距4,250+1,500mm、軸重は前軸/後前軸/後後軸。輪距 前2,300/後2,300mm。最小回転半径 6輪操向6.7m（構内走行）・2輪操向10.8m。車名及び型式 カトウ YDS-KRC027。新規開発車両証明制度の適合証明書「基本通行条件 重量：D」交付。公道走行には道路法の通行許可と保安基準緩和が必要、高速自動車国道は走行不可。走行時はフックを所定の位置に格納。",
    "configs": []
   },
-  "verified": "pending"
+  "verified": "checked"
  },
  {
   "id": "tadano-gr-600n",
@@ -1054,6 +1162,69 @@ window.CRANE_INDEX = [
      "note": "主要諸元の「作業時総重量 カウンタウエイト付 46,155kg」（カウンタウエイト無 41,155kg）。公道走行不可。軸重・寸法の記載なし。"
     }
    ]
+  },
+  "verified": "pending"
+ },
+ {
+  "id": "tadano-gr-1000n",
+  "maker": "tadano",
+  "model": "GR-1000N",
+  "nickname": "CREVO1000 G4",
+  "generation": "GR-1000N(Ⅰ)（スペック番号 GR-1000N-1-00101 / -00111）",
+  "classTon": 100,
+  "status": "current",
+  "variant": "6段ブーム（各段ピンロック）・3段フルオートジブ・H型アウトリガ。スペックシートに載っているアウトリガ最大7.8m張出・カウンタウエイト4.0t装着時の性能のみ（ブームは各ブーム長さで伸縮状態の中の最大値）",
+  "maxLoad": {
+   "t": 100,
+   "r": 1.6,
+   "L": 10.2,
+   "note": "10.2mブーム 10本掛×2。キャリヤの前方2°以内の前方つり（※印性能、frontSpecial参照）。全周（360°）では1.6mで75.00t"
+  },
+  "boom": {
+   "min": 10.2,
+   "max": 48
+  },
+  "boomLengths": [
+   10.2,
+   13.7,
+   17.2,
+   20.7,
+   24.2,
+   27.7,
+   31.2,
+   34.7,
+   38.2,
+   41.7,
+   45.2,
+   48
+  ],
+  "hasJib": true,
+  "hasFront": true,
+  "hasOnTire": false,
+  "outriggers": [
+   7.8
+  ],
+  "vehicle": {
+   "length": 13240,
+   "width": 2780,
+   "height": 3750,
+   "wheelbase": [
+    1500,
+    4000,
+    1500
+   ],
+   "gvw": 41295,
+   "axles": [
+    10240,
+    10500,
+    10320,
+    10235
+   ],
+   "turningRadius": 7.5,
+   "turningRadius2ws": 11.5,
+   "maxSpeed": 49,
+   "note": "走行時寸法・重量（主要諸元、外観図「● 41.295 t」）＝カウンタウエイトを外した公道走行状態。軸距1,500＋4,000＋1,500mm、軸重は前前・前後・後前・後後軸。最小回転半径 7.5m（8輪ステアリング）／11.5m（前4輪ステアリング）。（公道走行時の注意）「1. 公道走行状態で取り付け可能なフックは35tフックです。2. 50ｔフック、重荷重用アタッチメントシーブ、カウンタウエイト装置は別送しなければなりません。」「本機は、新規開発車両証明制度による適合証明書「基本通行条件 重量：D」の交付を受けていますが、実際の通行条件は、経路ごとの道路管理者の算定結果によって付与されます。」搬送主要部品：カウンタウエイト ウエイト(1) 240kg、ウエイト(2) 1,870kg×2個、架装サポート 110kg、50tフック 430kg ほか。",
+   "configs": []
   },
   "verified": "pending"
  }
