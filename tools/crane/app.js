@@ -583,7 +583,9 @@
   function renderSide(res) {
     const m = st.m, svg = $('sideSvg');
     const g = geom(m);
-    const W = 640, H = 430, padL = 34, padR = 14, padT = 12, padB = 30;
+    // narrow screens: smaller drawing so the labels stay readable after scaling
+    const narrow = (svg.clientWidth || 640) < 520;
+    const W = narrow ? 460 : 640, H = narrow ? 380 : 430, padL = 34, padR = 14, padT = 12, padB = 30;
     const Lraw = res && res.L != null ? res.L : st.L;
     const Lcur = isFinite(Lraw) && Lraw > 0 ? Lraw : m.boom.min;
     const Jcur = st.work === 'jib' ? (st.jib || 0) : 0;
@@ -1408,5 +1410,10 @@
   });
   if (!INDEX.length) { $('result').textContent = 'データがありません'; return; }
   if (!st.id || !INDEX.some((x) => x.id === st.id)) st.id = (INDEX.find((x) => x.id === 'tadano-gr-250n-5') || INDEX[0]).id;
+  // on phones start with the selected model's class so the list stays short ("全部" shows every model)
+  if (window.matchMedia && window.matchMedia('(max-width: 720px)').matches) {
+    const cur = INDEX.find((x) => x.id === st.id);
+    if (cur) st.cls = cur.classTon;
+  }
   selectModel(st.id);
 })();

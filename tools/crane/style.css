@@ -243,7 +243,9 @@ table.road .okv { color: var(--ok); font-weight: 700; }
   .dir-grid { grid-template-columns: 1fr 1fr; }
   .hero-stamp { display: none; }
   .cap-main .num { font-size: 54px; }
-  .models { grid-template-columns: 1fr 1fr; }
+  .models { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .models button { min-height: 0; padding: 8px 10px; }
+  .models .m-name { font-size: 15px; }
 }
 @media (max-width: 480px) {
   table.road th, table.road td { padding: 5px 5px; font-size: 12px; }
