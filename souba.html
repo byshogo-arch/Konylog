@@ -161,6 +161,10 @@
         <h2 id="hlTitle" class="flex items-baseline gap-3"><span class="font-bebas text-3xl sm:text-4xl tracking-wider">NOW</span><span class="font-black text-base sm:text-lg">いまの全体感</span></h2>
       </div>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="highlights"></div>
+      <div class="hidden mt-4 bg-base-white border-2 border-base-charcoal shadow-solid p-4 sm:p-5" id="topicsBox">
+        <div class="font-mono text-xs font-bold text-base-turquoise mb-2" id="topicsTitle">[ 今年のポイント ]</div>
+        <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5" id="topicsList"></ul>
+      </div>
     </section>
 
     <!-- FILTERS + GRID -->
@@ -325,7 +329,7 @@
       if (!p || (p.low == null && p.high == null)) return null;
       const lo = p.low != null ? p.low : p.high;
       const hi = p.high != null ? p.high : p.low;
-      const useMan = lo >= 10000 && hi >= 10000;
+      const useMan = lo >= 100000 && hi >= 100000;
       const unit = String(p.unit || '');
       const main = lo === hi ? fmtYen(lo, useMan) : `${fmtYen(lo, useMan)}〜${fmtYen(hi, useMan)}`;
       const unitTxt = useMan ? unit.replace(/^円/, '万円') : unit;
@@ -361,7 +365,7 @@
       s.points.forEach((p) => { if (p.v > peak.v) peak = p; });
       const recent = s.points.filter((p) => p.ym >= '2020-01');
       let peak20 = recent[0] || last;
-      recent.forEach((p) => { if (p.v > peak20.v) peak20 = p; });
+      recent.forEach((p) => { if (p.v >= peak20.v) peak20 = p; });
       let low20 = recent[0] || last;
       recent.forEach((p) => { if (p.v < low20.v) low20 = p; });
       return {
@@ -446,6 +450,12 @@
           <div class="mt-2 font-black text-3xl sm:text-4xl leading-none">${esc(t.value)}</div>
           <div class="mt-2 text-xs text-gray-600 leading-snug">${esc(t.sub)}</div>
         </${t.id ? 'button' : 'div'}>`).join('');
+      const topics = DATA.topics || [];
+      if (topics.length) {
+        document.getElementById('topicsTitle').textContent = `[ ${String(DATA.checkedAt || '').slice(0, 4)}年のポイント ]`;
+        document.getElementById('topicsList').innerHTML = topics.map((t) => `<li class="flex gap-2"><span class="text-base-turquoise font-bold" aria-hidden="true">●</span><span>${esc(t)}</span></li>`).join('');
+        document.getElementById('topicsBox').classList.remove('hidden');
+      }
     }
 
     // ---------- filters ----------
@@ -625,11 +635,13 @@
     function rangeOptions(st) {
       const lastI = ymToIdx(st.last.ym);
       const first = st.s.points[0].ym;
-      return [
+      const opts = [
         { id: '5y', label: '5年', from: idxToYm(lastI - 59) },
         { id: '10y', label: '10年', from: idxToYm(lastI - 119) },
-        { id: 'all', label: `全期間（${first.slice(0, 4)}〜）`, from: first },
-      ].map((r) => ({ ...r, from: r.from < first ? first : r.from }));
+      ].filter((r) => r.from > first);
+      // データが短い品目では「10年」と「全期間」が同じになるので、重なるボタンは出さない
+      opts.push({ id: 'all', label: `全期間（${first.slice(0, 4)}〜）`, from: first });
+      return opts;
     }
 
     function tableHTML(st) {
@@ -659,7 +671,7 @@
       const cat = CAT[it.cat];
       const s = st ? st.s : null;
       const ranges = st ? rangeOptions(st) : [];
-      rangeFrom = ranges.length ? ranges[1].from : null;
+      rangeFrom = ranges.length ? (ranges.find((r) => r.id === '10y') || ranges[ranges.length - 1]).from : null;
 
       const priceBox = pp
         ? `<div class="font-black text-3xl sm:text-4xl leading-tight">${pp.approx ? '<span class="text-lg font-bold text-gray-500 mr-1">約</span>' : ''}${esc(pp.main)}<span class="text-base font-bold ml-1">${esc(pp.unit)}</span></div>

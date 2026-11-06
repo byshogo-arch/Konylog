@@ -8,6 +8,14 @@
  */
 window.KONYLOG_SOUBA = {
   checkedAt: '2026-11-06',
+  /* 「いまの全体感」に出す、今年の大きな流れ（調べ直したら書き換える） */
+  topics: [
+    '2026年春、中東情勢（イラン情勢）の悪化で原油・ナフサが急騰。5〜7月に塩ビ管・床材・断熱材・防水材・塗料・ガラスなどが一斉に10〜30%値上げ。',
+    '銅は過去最高を更新（銅建値は10月13日に244万円/t）。電線・配管・設備機器の見積りに直結。',
+    '生コン・セメントは2026年度は据え置きだが、2027年4月に再値上げの予定（東京の生コン定価は25,000→30,000円/m³、セメントは各社+3,000円/t以上）。',
+    '鉄スクラップは夏に下げたあと10月に反発。鋼材は高止まりで、コラム・角パイプは先高観。',
+    '処分費はじわじわ上がり続け、処理業者の値上げ超は2026年4〜6月期に調査期間で最大。'
+  ],
   categories: [
     { id: 'concrete', label: 'コンクリート・骨材' },
     { id: 'steel', label: '鉄・鋼材' },
@@ -203,7 +211,7 @@ window.KONYLOG_SOUBA = {
         { label: 'メーカー', text: '東京製鐵の11月販売価格 111,000〜113,000円/t（板厚1.6〜6.0mm）' }
       ],
       trend: { code: 'PRCG20_2200950006', label: '熱延広幅帯鋼' },
-      memo: '指数は2022年10月がピーク。その後はアジアの鋼材市況の軟化で下がり、2026年は2020年比+4割前後で横ばいです。',
+      memo: '指数は2022年10月がピーク。その後は需要の弱さなどで下がり、2026年は2020年比+4割前後で横ばいです。',
       sources: [ { label: '日刊鉄鋼新聞「最新市場価格」（東京・問屋仲間相場）', url: 'https://www.japanmetaldaily.com/list/market/details' }, { label: '日刊産業新聞「鉄鋼市場価格」（東京）', url: 'https://www.japanmetal.com/iron-steel-price' }, { label: '東京製鐵「2026年11月 販売価格表（鋼板）」（PDF）', url: 'https://www.tokyosteel.co.jp/assets/docs/salesprice/kouhan.pdf' } ]
     },
     {
@@ -573,21 +581,67 @@ window.KONYLOG_SOUBA = {
     /* ===== ウレタン・断熱 ===== */
     {
       id: 'urethane_board', cat: 'insulation', kind: 'buy',
-      name: '硬質ウレタンフォーム断熱材', spec: 'ボード品', keywords: ['ウレタン', '断熱材', '発泡'],
+      name: '硬質ウレタンフォーム断熱材', spec: 'ボード品', keywords: ['ウレタン', '断熱材', '発泡', 'キューワンボード'],
+      priceNote: 'メーカー価格が公開されていないため非掲載。2026年5月に原料MDIが+80円/kg以上、防水用の断熱材は40〜50%程度の値上げ',
+      history: [
+        { label: '原料（MDI）', text: '東ソーが+80円/kg以上（2026年5月出荷分〜）' },
+        { label: '田島ルーフィング', text: '断熱材（ポリスチレン・ウレタンフォーム類）40〜50%程度（2026年5月〜）' }
+      ],
       trend: { code: 'PRCG20_2200750011', label: '硬質プラスチック発泡製品' },
-      memo: '硬質ウレタンやポリスチレンフォームなど「硬質プラスチック発泡製品」の指数です。2025年までは年5%前後の上昇でしたが、2026年は前年比+27%と急上昇しています。'
+      memo: '硬質ウレタンやポリスチレンフォームなど「硬質プラスチック発泡製品」の指数は、2025年までは年5%前後の上昇でしたが、2026年は前年比+27%と急上昇しています。中東情勢の悪化で原料が値上がりし、メーカーの供給制限も出ました。',
+      sources: [
+        { label: '東ソー「ポリウレタン原料MDIの価格改定のお知らせ」2026年4月23日', url: 'https://www.tosoh.co.jp/news/release/2026/20260423.html' },
+        { label: '田島ルーフィング「イラン情勢の悪化に伴う製品価格改定及び供給に関するお願い（第1報）」2026年4月1日', url: 'https://tajima.jp/corporate/news/20260401_01/' },
+        { label: 'アキレス「中東情勢の緊迫化に伴う当社製品の供給対応について」2026年3月24日（PDF）', url: 'https://www.achilles.jp/assets/pdf/news/info/2026/0324.pdf' }
+      ]
     },
     {
       id: 'urethane_spray', cat: 'insulation', kind: 'buy',
-      name: '吹付け硬質ウレタン', spec: '現場発泡（材工）', keywords: ['ウレタン', '吹付', '断熱', '発泡'],
+      name: '吹付け硬質ウレタン', spec: '現場発泡 A種1H（材料＋施工）', keywords: ['ウレタン', '吹付', '断熱', '発泡', '現場発泡'],
+      price: { low: 1500, high: 2520, unit: '円/m²', basis: '公共工事の積算単価（材工共）：厚15mm 1,500円（東京都 2026年11月）〜厚50mm 2,520円（愛知県 2026年4月）' },
+      history: [
+        { label: '注意', text: '公共工事の単価なので、民間の見積りとは違うことがあります' }
+      ],
       trend: { code: 'PRCG20_2200550014', proxy: true, label: '酸化プロピレン・ポリプロピレングリコール' },
-      memo: '吹付けウレタンの値段は、原料（ポリオールとイソシアネート）と施工費で決まります。グラフはポリオール原料の指数で、2026年5月に急騰したあと反落しました。'
+      memo: '吹付けウレタンの値段は、原料（ポリオールとイソシアネート）と施工費で決まります。グラフはポリオール原料の指数で、2026年5月に急騰したあと反落しました。東京都の単価は2026年度中は据え置きです。',
+      sources: [
+        { label: '東京都「工事設計単価表 建築資材」2026年11月1日発行', url: 'https://www.zaimu.metro.tokyo.lg.jp/documents/d/zaimu/kenchiku_zaimur0811' },
+        { label: '愛知県「公共建築工事積算単価表」2026年4月（PDF）', url: 'https://www.pref.aichi.jp/uploaded/life/640524_2952728_misc.pdf' }
+      ]
+    },
+    {
+      id: 'urethane_bousui', cat: 'insulation', kind: 'buy',
+      name: 'ウレタン塗膜防水', spec: '通気緩衝工法（材料＋施工）', keywords: ['ウレタン', '防水', '屋上', 'サラセーヌ'],
+      price: { low: 14800, high: 15800, unit: '円/m²', basis: 'メーカー標準価格（AGCポリマー建材 サラセーヌ QV工法、300m²以上、材工共）', asOf: '2026-06', tax: '税抜' },
+      history: [
+        { label: 'AGCポリマー建材', text: '15〜30%程度の値上げ（2026年6月）。4月には新規受注を一時停止' },
+        { label: '田島ルーフィング', text: 'ウレタン系防水材 10〜30%程度（2026年5月21日納品分〜）。ベランダ防水材は20〜50%程度' }
+      ],
+      trend: { code: 'PRCG20_2200550014', proxy: true, label: '酸化プロピレン・ポリプロピレングリコール' },
+      memo: 'ウレタン防水材の原料（ポリオール・イソシアネート）は石油化学品。2026年春は中東情勢の悪化で原料が足りなくなり、大手が一時受注を止めるほどでした。グラフはポリオール原料の指数です。下地補修や足場は別にかかります。',
+      sources: [
+        { label: 'サラセーヌ標準価格表（2026年6月現在）（PDF）', url: 'https://www.saracenu.com/download/pdf/pricelist-a4.pdf' },
+        { label: 'AGCポリマー建材「ウレタン関連製品及び配送費 価格改定のお願い」2026年4月30日（PDF）', url: 'https://www.agc-polymer.com/pdf/20260430.pdf' },
+        { label: '田島ルーフィング「イラン情勢の悪化に伴う製品価格改定及び供給に関するお願い（第2報）」', url: 'https://tajima.jp/corporate/news/20260401_02/' }
+      ]
     },
     {
       id: 'glasswool', cat: 'insulation', kind: 'buy',
       name: 'グラスウール断熱材', spec: '住宅用・ビル用', keywords: ['グラスウール', '断熱材'],
+      priceNote: '品種が多いので価格は非掲載。2026年6〜9月に主要メーカーが15〜25%の値上げ',
+      history: [
+        { label: '旭ファイバーグラス', text: '15%以上（2026年9月出荷分〜）' },
+        { label: 'パラマウント硝子', text: '15%（2026年6月〜）' },
+        { label: 'マグ・イゾベール', text: '25%以上（2026年7月〜、業界紙による）' },
+        { label: '2022年', text: '各社が20〜25%の値上げを2回' }
+      ],
       trend: { code: 'PRCG20_2200850005', label: 'ガラス繊維・同製品' },
-      memo: 'ガラスを溶かす燃料・電気の値上がりで、2022年以降メーカーの値上げが続きました。2020年比+4割の水準です。'
+      memo: 'ガラスを溶かす燃料・電気の値上がりで、2022年に各社が2回値上げ。2026年も中東情勢を理由に15〜25%の値上げが続いています。指数は2020年比+4割です。',
+      sources: [
+        { label: '旭ファイバーグラス「価格改定のお願い」2026年6月10日', url: 'https://www.afgc.co.jp/news/news20260610.html' },
+        { label: 'パラマウント硝子工業「中東情勢の緊迫化と長期化に伴うグラスウール製品価格改定のお願い」2026年4月27日', url: 'https://www.pgm.co.jp/news/news_137.html' },
+        { label: 'ハウジング・トリビューン「住宅関連資材値上げ情報」（11月5日時点）', url: 'https://htonline.sohjusha.co.jp/20260409-3/' }
+      ]
     },
     {
       id: 'd_foam', cat: 'insulation', kind: 'dispose',
@@ -605,45 +659,114 @@ window.KONYLOG_SOUBA = {
     /* ===== プラスチック ===== */
     {
       id: 'enbi_kan', cat: 'plastic', kind: 'buy',
-      name: '塩ビ管', spec: 'VP・VU', keywords: ['塩ビ', 'VP', 'VU', '排水管'],
+      name: '塩ビ管', spec: 'VP50 4m', keywords: ['塩ビ', 'VP', 'VU', '排水管', 'エスロン'],
+      price: { low: 4810, high: 7230, unit: '円/本', basis: 'メーカー設計価格＝定価（アロン化成4,810・積水化学4,840・クボタケミックス7,230円）。実際の仕入れはこれより安いことが多い', asOf: '2026-11', tax: '税抜' },
+      history: [
+        { label: '通販', text: 'モノタロウ 5,198円/本（日本プラスチック工業、税抜）' },
+        { label: '2026年', text: 'クボタ 30%以上（5月）、積水 12%以上×2回（5月・6月）、アロン 15%以上（5月）＋10%以上（7月）' },
+        { label: '2022年', text: '積水 30%以上（1月）＋20%以上（5月）など' }
+      ],
       trend: { code: 'PRCG20_2200750002', label: 'プラスチック管' },
-      memo: '塩ビ管は原料の塩ビ樹脂の値段で動きます。2022年に約3割上がり、2026年に入ってさらに上昇して過去最高（2020年比+8割）です。'
+      memo: '塩ビ管は原料の塩ビ樹脂の値段で動きます。2026年春に中東情勢の悪化で原料のナフサが急騰し、メーカー各社が5〜7月に値上げ。指数は2026年9月に過去最高（2020年比+8割）です。',
+      sources: [
+        { label: '積水化学「塩化ビニル管・ポリエチレン管および関連製品の価格改定について」2026年4月22日', url: 'https://www.sekisui.co.jp/news/2026/1452150_42699.html' },
+        { label: '積水化学 建築設備用エスロンパイプ設計積算価格表 2026年度版', url: 'https://www.eslontimes.com/document/detail/8/12661' },
+        { label: 'アロン化成「アロンパイプ・継手など一部製品の積算価格改定について」2026年6月1日（PDF）', url: 'https://kankyo-is.aronkasei.co.jp/imgdb/webman_topics/227-1.pdf' },
+        { label: 'クボタケミックス 2026年5月設計積算価格表（PDF）', url: 'https://www.kubota-chemix.co.jp/dcms_media/other/ebook_G02.pdf' }
+      ]
     },
     {
       id: 'enbi_tsugite', cat: 'plastic', kind: 'buy',
-      name: '塩ビ継手', spec: 'DV・TS継手など', keywords: ['継手', 'エルボ', 'チーズ', '塩ビ'],
+      name: '塩ビ継手', spec: 'VU 90°エルボ 50', keywords: ['継手', 'エルボ', 'チーズ', '塩ビ', 'DV'],
+      price: { low: 257, high: 324, unit: '円/個', basis: 'メーカー設計価格＝定価（積水化学257・クボタケミックス324円）', asOf: '2026-11', tax: '税抜' },
+      history: [
+        { label: '2026年', text: 'クボタ 15%以上（5月）、積水 6%以上（6月）、アロン 10%以上（7月）' },
+        { label: '大きいサイズ', text: 'VU 90°エルボ 100 は 1,211〜1,550円/個（同じく設計価格）' }
+      ],
       trend: { code: 'PRCG20_2200750003', label: 'プラスチック継手' },
-      memo: '継手も管と同じく塩ビ樹脂の値上がりで上昇。2026年5月に過去最高をつけています。'
+      memo: '継手も管と同じく塩ビ樹脂の値上がりで上昇。指数は2026年5月に過去最高をつけています。',
+      sources: [
+        { label: '積水化学 建築設備用エスロンパイプ設計積算価格表 2026年度版', url: 'https://www.eslontimes.com/document/detail/8/12661' },
+        { label: 'クボタケミックス 2026年5月設計積算価格表（PDF）', url: 'https://www.kubota-chemix.co.jp/dcms_media/other/ebook_G02.pdf' },
+        { label: 'アロン化成「アロンパイプ・継手など一部製品の積算価格改定について」2026年6月1日（PDF）', url: 'https://kankyo-is.aronkasei.co.jp/imgdb/webman_topics/227-1.pdf' }
+      ]
     },
     {
       id: 'amadoi', cat: 'plastic', kind: 'buy',
-      name: '雨どい', spec: '塩ビ製', keywords: ['雨樋', '雨どい', '軒どい'],
+      name: '雨どい', spec: '塩ビ製', keywords: ['雨樋', '雨どい', '軒どい', 'たてどい'],
+      priceNote: '品番が多いので価格は非掲載。2026年5〜7月に主要3社が20%以上の値上げ',
+      history: [
+        { label: 'パナソニック', text: '雨とい全般20%以上・JIS管30%以上（2026年7月納入分〜、ケイミュー）' },
+        { label: '積水化学', text: '20%以上（2026年5月20日〜）' },
+        { label: 'タキロンシーアイ', text: '20%以上（2026年5月〜）' }
+      ],
       trend: { code: 'PRCG20_2200750004', label: 'プラスチック雨どい' },
-      memo: '2026年に入って急に上がり（前年比+17%）、過去最高です。'
+      memo: '塩ビ製の雨どいは2026年に入って急に上がり、指数は前年比+17%で過去最高。主要3社がそろって20%以上の値上げをしています。',
+      sources: [
+        { label: 'パナソニック「雨とい及び関連製品 価格改定のご案内」2026年5月18日（PDF）', url: 'https://sumai.panasonic.jp/amatoi/pdf/20260518_amatoi_kaitei.pdf' },
+        { label: '積水化学「建材製品群の価格改定について」2026年4月14日', url: 'https://www.sekisui.co.jp/news/2026/1451409_42699.html' },
+        { label: 'タキロンシーアイ「供給制限および価格改定について」2026年4月（PDF）', url: 'https://www.takiron-ci.co.jp/news/assets/pdf/20260403.pdf' }
+      ]
     },
     {
       id: 'sheet', cat: 'plastic', kind: 'buy',
-      name: 'ブルーシート・養生シート', spec: 'PEシート・養生フィルムなど', keywords: ['ブルーシート', '養生', 'シート', 'ビニール'],
+      name: 'ブルーシート', spec: '#3000 3.6×5.4m', keywords: ['ブルーシート', '養生', 'シート', 'ビニール'],
+      price: { low: 1898, high: 2298, unit: '円/枚', basis: '通販価格（モノタロウ）', asOf: '2026-11-06', tax: '税抜' },
+      history: [
+        { label: '2026年', text: '販売店が約15%以上の値上げを告知（5月）。メーカーの公式な値上げ率は未公表' }
+      ],
       trend: { code: 'PRCG20_2200750005', label: 'プラスチックフィルム・シート' },
-      memo: 'プラスチックフィルム・シートの指数です。2026年に入って急上昇（前年比+18%）しました。'
+      memo: 'ブルーシートや養生シートなどのプラスチックフィルム・シートの指数は、2026年に入って急上昇（前年比+18%）しました。原料のポリエチレンがナフサ高で値上がりしたためです。',
+      sources: [
+        { label: 'モノタロウ ブルーシート #3000', url: 'https://www.monotaro.com/g/03147710/' },
+        { label: 'モノタロウ ブルーシート #3000（パレックス）', url: 'https://www.monotaro.com/g/08651790/' }
+      ]
     },
     {
       id: 'yuka', cat: 'plastic', kind: 'buy',
-      name: '塩ビ床材', spec: '長尺シート・塩ビタイル', keywords: ['長尺シート', 'Pタイル', 'フロアタイル', 'CF'],
+      name: '塩ビ床材', spec: 'CFシート・長尺シート・塩ビタイル', keywords: ['長尺シート', 'Pタイル', 'フロアタイル', 'CF'],
+      price: { low: 3000, high: 4800, unit: '円/m²', basis: 'メーカー定価（東リ：CFシート-H 3,000・ホスピリュームNW 4,200・ロイヤルウッド 4,800円）', asOf: '2026-11', tax: '税抜' },
+      history: [
+        { label: '東リ', text: '取引価格 20〜30%（2026年7月27日受注分〜）' },
+        { label: '田島ルーフィング', text: '20〜30%程度（2026年7月21日納品分〜）' },
+        { label: 'サンゲツ', text: '18〜30%程度（2026年7月1日受注分〜）' }
+      ],
       trend: { code: 'PRCG20_2200750006', label: 'プラスチック床材' },
-      memo: '2026年夏以降に大きく上がり、3か月で+17%。過去最高です。'
+      memo: '長尺シートや塩ビタイルは2026年夏に各社が20〜30%の値上げ。指数も夏以降に大きく上がり、3か月で+17%と過去最高です。',
+      sources: [
+        { label: '東リ「お取引価格改定のお知らせ」2026年4月6日', url: 'https://www.toli.co.jp/newsrelease/news20260406.html' },
+        { label: 'サンゲツ「取引価格改定に関するお知らせ」2026年4月13日', url: 'https://www.sangetsu.co.jp/information/detail/20260413130548.html' },
+        { label: '田島ルーフィング「価格改定に関するお知らせ（床材）」2026年4月15日', url: 'https://tajima.jp/corporate/news/20260415_02/' }
+      ]
     },
     {
       id: 'pvc_resin', cat: 'plastic', kind: 'buy',
       name: '塩ビ樹脂（原料）', spec: 'PVC', keywords: ['塩ビ', 'PVC', '樹脂'],
+      price: { low: 288, high: 300, unit: '円/kg', basis: '東京地区の需要家渡し（日本経済新聞の指標）。その後も追加値上げあり', asOf: '2026-05', },
+      history: [
+        { label: 'メーカー', text: '信越化学 +30円/kg以上（4月・5月）、大洋塩ビ +45円（4月）＋15円（6月）、カネカ +35円（4月）' }
+      ],
       trend: { code: 'PRCG20_2200550025', label: '塩化ビニル樹脂' },
-      memo: '塩ビ管・雨どい・床材などの原料。2022年に大きく上がり、2026年7月に過去最高を更新しました。'
+      memo: '塩ビ管・雨どい・床材などの原料。2022年に大きく上がり、2026年は中東情勢による原料高で春に急騰、指数は7月に過去最高を更新しました。',
+      sources: [
+        { label: '日本経済新聞「塩ビ樹脂、1年8カ月ぶり値上がり 中東危機で原料急騰を価格転嫁」2026年5月15日', url: 'https://www.nikkei.com/article/DGXZQOUB138K40T10C26A5000000/' },
+        { label: '信越化学「塩化ビニル樹脂の値上げについて」2026年4月20日（PDF）', url: 'https://www.shinetsu.co.jp/wp-content/uploads/2026/04/Shin-Etsu-Release_20260420-1.pdf' },
+        { label: '大洋塩ビ「価格改定のお知らせ」（PDF）', url: 'https://www.taiyo-vinyl.co.jp/images/news_260326.pdf' }
+      ]
     },
     {
       id: 'naphtha', cat: 'plastic', kind: 'buy',
-      name: 'ナフサ（プラの原料）', spec: '国産ナフサ', keywords: ['ナフサ', '原油', '石油化学'],
+      name: 'ナフサ（プラの原料）', spec: '国産ナフサ（四半期）', keywords: ['ナフサ', '原油', '石油化学'],
+      price: { low: 118900, high: 118900, unit: '円/kL', basis: '国産ナフサ価格 2026年4〜6月期（過去最高。化学品商社の集計）', asOf: '2026-06' },
+      history: [
+        { label: '7〜9月期', text: '約2割安と報道（確定額は未確認）' },
+        { label: '2025年', text: '63,200〜73,400円/kL' }
+      ],
       trend: { code: 'PRCG20_2200650002', label: 'ナフサ' },
-      memo: 'プラスチック・塩ビ・ウレタンなどの大もとの原料で、原油相場と円相場で動きます。2026年6月に過去最高をつけたあと急に下がりました（3か月で−21%）。\n原料の値動きは、数か月遅れて製品の価格に表れることが多いです。'
+      memo: 'プラスチック・塩ビ・ウレタン・塗料などの大もとの原料で、原油相場と円相場で動きます。2026年2月からの中東情勢（イラン情勢）の悪化で急騰し、指数は6月に過去最高をつけたあと急に下がりました（3か月で−21%）。\n原料の値動きは数か月遅れて製品の価格に表れるので、2026年の建材の値上げラッシュはこの影響です。',
+      sources: [
+        { label: '三協化学「国産ナフサ価格」', url: 'https://www.sankyo-chem.com/news/post-5971/' }
+      ]
     },
     {
       id: 'd_plastic', cat: 'plastic', kind: 'dispose',
@@ -661,39 +784,96 @@ window.KONYLOG_SOUBA = {
     /* ===== ガラス・内外装 ===== */
     {
       id: 'sekkou', cat: 'finish', kind: 'buy',
-      name: '石膏ボード', spec: '12.5mm 3×6', keywords: ['PB', 'プラスターボード', 'ボード'],
+      name: '石膏ボード', spec: '不燃ベベル 12.5mm 3×6', keywords: ['PB', 'プラスターボード', 'ボード', 'タイガーボード'],
+      price: { low: 915, high: 915, unit: '円/枚', basis: '通販価格（モノタロウ、120枚セット・メーカー直送、運賃別）', asOf: '2026-11-06', tax: '税抜' },
+      history: [
+        { label: '吉野石膏', text: '2026年6月出荷分から20%値上げ（特別運賃+20%、加工費+40%）' }
+      ],
       trend: { code: 'PRCG20_2200850021', link: 'PRCG15_2200850036', label: '石こうボード・粘土かわら' },
-      memo: '原料・燃料の値上がりで2022年以降ほぼ毎年値上げ。指数は2026年9月に過去最高（2020年比+7割）です。※指数は粘土瓦と合わせたものです。'
+      memo: '原料・燃料・海上運賃の値上がりで2022年以降ほぼ毎年値上げ。2026年6月には最大手の吉野石膏が20%値上げし、指数は2026年9月に過去最高（2020年比+7割）です。※指数は粘土瓦と合わせたものです。',
+      sources: [
+        { label: '吉野石膏「価格改定に関するお知らせ」2026年3月（PDF）', url: 'https://www.yoshino-gypsum.com/pdf/etc/kakakukaitei202603.pdf' },
+        { label: 'モノタロウ 3×6 不燃ベベルタイガーボード（120枚）', url: 'https://www.monotaro.com/p/7514/0852/' }
+      ]
     },
     {
       id: 'glass', cat: 'finish', kind: 'buy',
       name: '板ガラス', spec: 'フロート板ガラス', keywords: ['ガラス', 'FL'],
+      priceNote: '厚さ・サイズで違うので価格は非掲載。2026年7〜12月に大手3社が10〜20%の値上げ',
+      history: [
+        { label: 'AGC', text: 'フロート約20%（2026年7月21日納品分〜）' },
+        { label: '日本板硝子', text: '10〜20%（2026年10月1日〜）' },
+        { label: 'セントラル硝子', text: '10〜20%（2026年12月1日〜、予定）' },
+        { label: '2022年', text: 'AGC フロート約40%（10月）など大幅値上げ' }
+      ],
       trend: { code: 'PRCG20_2200850001', link: 'PRCG15_2200850001' },
-      memo: '燃料費の高騰を受けて2022年以降ガラス各社が値上げ。2020年比+3割の水準です。'
+      memo: '燃料費の高騰を受けて2021〜22年に大幅値上げ。2026年も中東情勢を理由に大手3社が再び値上げしています。指数は2020年比+3割です。',
+      sources: [
+        { label: 'AGC「国内建築用ガラス関連製品の価格を改定」2026年6月1日（PDF）', url: 'https://www.agc.com/news/pdf/20260601_2.pdf' },
+        { label: '日本板硝子「国内建築用板ガラス製品の価格改定について」2026年7月10日（PDF）', url: 'https://digitalpr.jp/pdf.php?r=138693' },
+        { label: 'セントラル硝子プロダクツ「国内建築用板ガラス関連製品の価格改定について」2026年9月14日（PDF）', url: 'https://www.cgprd.co.jp/news/assets/pdf/075ce43fb8f84a734d0fe133970cbd27617a5fed.pdf' }
+      ]
     },
     {
       id: 'pair_glass', cat: 'finish', kind: 'buy',
-      name: '複層ガラス', spec: 'ペアガラス', keywords: ['ペアガラス', 'Low-E', '断熱'],
+      name: '複層ガラス', spec: 'FL3+A12+FL3〜Low-E複層（2.0m²以下）', keywords: ['ペアガラス', 'Low-E', '断熱'],
+      price: { low: 7630, high: 17200, unit: '円/m²', basis: '東京都の設計単価（材料＋施工）：一般複層7,630円〜Low-E複層17,200円', asOf: '2026-11' },
+      history: [
+        { label: '2026年', text: '加工ガラスとして各社10〜15%の値上げ（AGC 7月、日本板硝子 10月、セントラル 12月）' }
+      ],
       trend: { code: 'PRCG20_2200850004' },
-      memo: '2023年に大きく上がり（前年比+23%）、その後も高い水準が続いています。'
+      memo: '指数は2023年に大きく上がり（前年比+23%）、その後も高い水準。2026年は板ガラスと同じく各社が再び値上げしています。',
+      sources: [
+        { label: '東京都「工事設計単価表 建築資材」2026年11月1日発行', url: 'https://www.zaimu.metro.tokyo.lg.jp/documents/d/zaimu/kenchiku_zaimur0811' },
+        { label: 'AGC「国内建築用ガラス関連製品の価格を改定」2026年6月1日（PDF）', url: 'https://www.agc.com/news/pdf/20260601_2.pdf' }
+      ]
     },
     {
       id: 'siding', cat: 'finish', kind: 'buy',
-      name: '窯業系サイディング', spec: '外壁材', keywords: ['サイディング', '外壁'],
+      name: '窯業系サイディング', spec: '外壁材', keywords: ['サイディング', '外壁', 'ニチハ', 'ケイミュー'],
+      priceNote: '品番が多いので価格は非掲載。本体の直近の値上げはニチハの2025年4月（10〜15%程度）',
+      history: [
+        { label: 'ニチハ', text: '本体 10〜16%程度（2022年8月）、10〜15%程度（2025年4月）。2026年は防水部材など20〜30%程度' },
+        { label: 'LIXIL', text: '外壁・屋根 平均13%程度（2026年9月受注分〜）' }
+      ],
       trend: { code: 'PRCG20_2200850015', label: '窯業外装材' },
-      memo: '外壁材のサイディングは上げ幅が小さめ（2020年比+2割）です。'
+      memo: '外壁材のサイディングは上げ幅が小さめ（指数は2020年比+2割）。2026年は本体ではなく、防水部材などの値上げが中心です。',
+      sources: [
+        { label: 'ニチハ「価格改定のご案内」2025年1月（PDF）', url: 'https://www.nichiha.co.jp/news/20250115.pdf' },
+        { label: 'ニチハ「価格改定のご案内（防水部材ほか）」2026年6月（PDF）', url: 'https://www.nichiha.co.jp/news/20260601_01.pdf' }
+      ]
     },
     {
       id: 'toki', cat: 'finish', kind: 'buy',
-      name: '衛生陶器', spec: '便器・洗面器など', keywords: ['トイレ', '便器', '洗面器'],
+      name: '衛生陶器', spec: '便器・洗面器など', keywords: ['トイレ', '便器', '洗面器', 'TOTO', 'LIXIL'],
+      priceNote: '品番ごとに違うので価格は非掲載。TOTOが2026年12月受注分から平均13%、LIXILが8月からトイレを平均13%程度値上げ',
+      history: [
+        { label: 'TOTO', text: '衛生陶器 平均13%（2026年12月1日受注分〜）' },
+        { label: 'LIXIL', text: 'トイレ 平均6%（2026年4月）＋平均13%程度（8月3日受注分〜）' }
+      ],
       trend: { code: 'PRCG20_2200850017' },
-      memo: '2023年以降、年5〜7%ずつ値上がりしています。'
+      memo: '指数は2023年以降、年5〜7%ずつ上がってきました。2026年はTOTO・LIXILとも平均13%前後の値上げです。',
+      sources: [
+        { label: 'TOTO「住宅設備機器商品の希望小売価格改定」2026年7月31日（PDF）', url: 'https://jp.toto.com/assets/files/NR2026073102.pdf' },
+        { label: 'LIXIL「建材・設備機器のメーカー希望小売価格の一部改定について」2026年5月18日（PDF）', url: 'https://newsroom.lixil.com/hubfs/newsroom/PDF/JapanComms/20260518_LIXIL_Price_Revision.pdf' }
+      ]
     },
     {
       id: 'paint', cat: 'finish', kind: 'buy',
-      name: '塗料', spec: '合成樹脂塗料', keywords: ['ペンキ', '塗装', '塗料'],
+      name: '塗料（外壁塗装）', spec: '水性シリコン系上塗り（材料＋施工）', keywords: ['ペンキ', '塗装', '塗料', '外壁'],
+      price: { low: 2710, high: 2920, unit: '円/m²', basis: 'メーカー設計価格（エスケー化研 2026年度版、新築・300m²以上、材工共）', asOf: '2026-05', tax: '税抜' },
+      history: [
+        { label: '2025年度版', text: '2,360〜2,540円/m²（1年で約15%上昇）' },
+        { label: '日本ペイント', text: '溶剤系25〜35%・水性20〜30%（2026年6月1日出荷分〜、業界紙による）' },
+        { label: '関西ペイント', text: '溶剤系20〜35%・水性15〜30%（2026年6月15日〜、業界紙による）' }
+      ],
       trend: { code: 'PRCG20_2200550042', label: '合成樹脂塗料' },
-      memo: '樹脂や溶剤の値上がりで2022〜23年に上がり、2026年に入って再び上昇（前年比+10%）しています。'
+      memo: '樹脂や溶剤の値上がりで2022〜23年に上がり、2026年は中東情勢による原料高で大手が2〜3割の値上げ。指数も前年比+10%と再び上昇しています。',
+      sources: [
+        { label: 'エスケー化研 設計価格表 2026年度版（PDF）', url: 'https://www.sk-kaken.co.jp/wp/wp-content/uploads/price2026.pdf' },
+        { label: 'Bsr「日本ペイント、塗料類全般を最大35％値上げ 6月1日出荷分から」', url: 'https://bsrweb.jp/article/076066' },
+        { label: 'Bsr「関西ペイント、中東情勢背景に塗料製品を価格改定」', url: 'https://bsrweb.jp/article/979933' }
+      ]
     },
     {
       id: 'd_gypsum', cat: 'finish', kind: 'dispose',

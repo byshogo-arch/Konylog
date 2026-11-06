@@ -350,7 +350,7 @@
       function priceText(p) {
         if (!p || (p.low == null && p.high == null)) return '';
         const lo = p.low != null ? p.low : p.high, hi = p.high != null ? p.high : p.low;
-        const useMan = lo >= 10000 && hi >= 10000;
+        const useMan = lo >= 100000 && hi >= 100000;
         const f = (n) => (useMan ? man(n) : n.toLocaleString('ja-JP', { maximumFractionDigits: 1 }));
         const unit = useMan ? String(p.unit).replace(/^円/, '万円') : p.unit;
         return (lo === hi ? f(lo) : f(lo) + '〜' + f(hi)) + unit;
@@ -367,8 +367,8 @@
         const y = yoy(it.trend && it.trend.code);
         const ytxt = y == null ? '—' : (y >= 0 ? '▲ +' : '▼ −') + Math.abs(y * 100).toFixed(1) + '%';
         return `<div class="border-2 border-base-charcoal p-3 bg-base-sand">
-          <div class="flex items-center gap-1.5"><span class="px-1.5 py-0.5 text-[10px] font-mono font-bold border border-base-charcoal ${k.cls}">${esc(k.label)}</span><span class="text-xs font-bold truncate">${esc(it.name)}</span></div>
-          <div class="mt-2 font-black text-lg leading-tight">${esc(priceText(it.price) || '—')}</div>
+          <div class="flex items-start gap-1.5"><span class="shrink-0 whitespace-nowrap px-1.5 py-0.5 text-[10px] font-mono font-bold border border-base-charcoal ${k.cls}">${esc(k.label)}</span><span class="min-w-0 text-xs font-bold leading-snug">${esc(it.name)}</span></div>
+          <div class="mt-2 font-black text-base sm:text-lg leading-tight">${esc(priceText(it.price) || '—')}</div>
           <div class="mt-1 font-mono text-[11px] text-gray-600">前年比 ${esc(ytxt)}</div>
         </div>`;
       }).join('');
