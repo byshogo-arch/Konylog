@@ -42,8 +42,8 @@ window.KONYLOG_SOUBA_ADS = {
 
   // AdSense のユニットIDが空のときに出すバナー（banners の名前）
   house: {
-    afterSummary: 'mitsumoreal_banner',
-    afterBoard: 'a8_gaiheki_banner',
+    afterSummary: 'a8_gaiheki_banner',
+    afterBoard: 'mitsumoreal_banner',
     afterRanking: 'a8_sekokan_banner'
   },
 
