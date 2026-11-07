@@ -69,6 +69,25 @@ sources: [{ label: '出典の名前', url: 'https://...' }],
 - `trend.proxy: true` … 品目そのものの指数がなく、値動きが近い指数で代用しているとき（画面に「参考指標」と出ます）
 - `trend.link` … 2020年基準の系列が2020年からしかないとき、2015年基準の系列コードを書くと2019年以前をつないで表示します
 
+## konylog.com などに建材相場の枠を置く
+
+`embed/souba-widget.js` を読み込むと、品目のカード（区分・名前・相場の目安・前年比）と「建材相場ボードを開く」ボタンの枠が出ます。
+相場と指数のデータは base.konylog.com から読み込むので、ボードを更新すると枠の中身も自動で変わります。
+WordPress の「カスタムHTML」ブロックに、次をそのまま貼ります（konylog.com のトップページに置いているものと同じです）。
+
+```html
+<section class="klt-sec kl-souba-widget" data-items="namacon,tekkin,kouzou_gouhan,cu_pika" data-after-heading="無料ツール">
+  <h2 class="klt-h2"><span>建材相場</span><a class="klt-more" href="https://base.konylog.com/souba.html">全品目を見る →</a></h2>
+  <p class="ksw-lead">生コン・鉄筋・合板・スクラップなど<span class="ksw-count">約60</span>品目の、いまの相場の目安と値動き。…</p>
+  <div class="ksw-grid"><a class="ksw-fallback" href="https://base.konylog.com/souba.html">建材相場ボードを見る →</a></div>
+</section>
+<script src="https://base.konylog.com/embed/souba-widget.js" defer></script>
+```
+
+- `data-items` … 出す品目のID（`souba-items.js` の `id`）。カンマ区切りで並べた順に出ます
+- `data-after-heading` … この文字を見出しに含む節のすぐ下へ、枠を移して出します。konylog.com のトップは全体が1つのHTMLブロックなので、ブロックはページの最後に置き、表示のときに「無料ツール」の下へ移しています。消すと、置いた場所にそのまま出ます
+- データは枠が画面に近づいてから読み込みます。読み込めないときは「建材相場ボードを見る →」のリンクだけが残ります
+
 ## 公開先
 
 - `https://base.konylog.com/souba.html`（`base.konylog.com` は KONYLOG BASE 全体の入口。トップは `index.html`）
