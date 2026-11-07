@@ -10,7 +10,9 @@
  *   <script src="https://base.konylog.com/embed/souba-widget.js" defer></script>
  *
  * - data-items          … 出す品目のID（data/souba-items.js の id）。カンマ区切り
- * - data-after-heading  … この文字を見出し（.klt-h2）に含む節のすぐ下へ、枠を移す（なければその場に出す）
+ * - data-after-heading  … この文字を見出し（.klt-h2）に含む節のすぐ下へ、枠を移す（なければその場に出す）。
+ *                         建材相場の枠に限らず、この属性を持つ要素はすべて、ページに書かれた順に移す
+ *                         （konylog.com のトップでは、ラフター吊り荷計算の枠を「建材相場」の下に置いている）
  * - data-base           … データとリンクの元（省略時はこのスクリプトと同じ https://base.konylog.com）
  *
  * 相場と指数のデータ（data/souba-items.js・data/souba-trends.js）は、枠が画面に近づいてから読み込む。
@@ -152,6 +154,13 @@
   }
 
   function init() {
+    // data-after-heading を持つ要素（建材相場の枠・ラフターの枠など）を、ページに書かれた順に移す。
+    // 先に移した枠の見出しを、あとの枠の目印にできる（例：ラフターの枠は「建材相場」の下）
+    Array.prototype.forEach.call(document.querySelectorAll('[data-after-heading]'), function (el) {
+      if (el.getAttribute('data-kl-placed')) return;
+      el.setAttribute('data-kl-placed', '1');
+      place(el);
+    });
     var boxes = document.querySelectorAll('.kl-souba-widget');
     if (!boxes.length) return;
     addStyle();
@@ -159,7 +168,6 @@
       if (box.getAttribute('data-ksw-ready')) return;
       box.setAttribute('data-ksw-ready', '1');
       var base = (box.getAttribute('data-base') || SCRIPT_BASE).replace(/\/+$/, '');
-      place(box);
       var go = function () { loadData(base).then(function () { render(box, base); }).catch(function () { /* リンクのまま */ }); };
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {
