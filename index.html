@@ -104,6 +104,20 @@
           title: "「現場のここが不便」を自分で解決する。小さな自作ツールの開発記録",
           summary: "大掛かりなシステムはいらない。自分や周りの仲間が現場でちょっと便利になるような、軽量で使い勝手のいいWebツールを作ってみる。",
           content: "市販の施工管理アプリは多機能すぎて使いづらいことがある。『この作業だけワンクリックで終わらせたい』という現場の小さなワガママを形にする個人開発の記録。小さく作って現場で試すのが一番面白い。"
+        },
+        {
+          id: "card-crane",
+          category: "dev",
+          badge: "自作ツール #04",
+          badgeColor: "bg-base-mustard text-base-charcoal",
+          logNo: "LOG-04",
+          tag: "RT-CRANE LOAD",
+          date: "2026.11.06",
+          title: "ラフター吊り荷計算：何mで何t吊れるか、図で確認できるツール",
+          summary: "タダノ・加藤のラフテレーンクレーンの定格総荷重表から、作業半径・アウトリガ張出・旋回方向ごとの吊り能力とブーム角度を一画面で。ジブ、全機種比較、特車許可の要否まで。",
+          content: "揚重計画のたびに性能表をめくって「中間張出の側方だと何トン？」「フック込み？」と確認するのが面倒で作ったツール。機種とアウトリガ張出を選んで、側面図・平面図をクリックするだけで、定格総荷重・定格荷重（フックを引いた値）・吊れる荷の質量・ブーム角度の目安・向き（前方/側方/後方）ごとの違いが出る。数値はメーカー公表の定格総荷重表から取り込んだ計画用の目安なので、実作業は必ず実機の表とAML/ACSで確認を。",
+          link: "tools/crane/",
+          linkLabel: "ツールを開く"
         }
       ]
     };
@@ -316,7 +330,8 @@
         <div class="text-gray-700 leading-relaxed text-sm sm:text-base border-t-2 border-base-sandDark pt-6">
           <p>${item.content}</p>
         </div>
-        <div class="mt-8 pt-4 border-t-2 border-base-sandDark flex justify-end">
+        <div class="mt-8 pt-4 border-t-2 border-base-sandDark flex justify-end gap-3">
+          ${item.link ? `<a href="${item.link}" class="px-6 py-2 bg-base-turquoise text-white font-mono text-xs font-bold border-2 border-base-charcoal shadow-solid-sm hover:bg-base-charcoal">${item.linkLabel || '開く'} →</a>` : ''}
           <button onclick="closeModal()" class="px-6 py-2 bg-base-charcoal text-white font-mono text-xs font-bold hover:bg-base-turquoise">閉じる</button>
         </div>
       `;

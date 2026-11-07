@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ラフター吊り荷計算 | KONYLOG TOOLS</title>
+  <meta name="description" content="ラフテレーンクレーン（ラフター）の定格総荷重表から、作業半径・ブーム長さ・アウトリガ張出・旋回方向ごとに何トン吊れるか、ブーム角度、ジブ作業、特殊車両通行許可の要否を図で確認できる計算ツール。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-l"><span class="ping"></span><span>KONYLOG BASE // TOOLS / RT-CRANE LOAD</span></div>
+    <a class="topbar-r" href="../../index.html">← KONYLOG TOP</a>
+  </div>
+
+  <main class="wrap">
+    <header class="card hero">
+      <div class="hero-stamp">CHECK THE CHART.</div>
+      <div class="tag">● 自作ツール #04 / ラフテレーンクレーン</div>
+      <h1>ラフター<span class="accent">吊り荷計算</span></h1>
+      <p class="lead">メーカー公表の<b>定格総荷重表</b>から「何mで何t吊れるか」「この向きなら何tか」「ブームは何度か」を図で確認。アウトリガの張出幅・前方/側方/後方・ジブ・公道走行の許可要否までまとめて見られます。</p>
+      <p class="warn-strip">計画・打合せ用の目安です。実作業は必ず実機の定格総荷重表と過負荷防止装置（AML/ACS）の表示に従ってください。</p>
+    </header>
+
+    <!-- 1. 機種 -->
+    <section class="card" id="pick" aria-labelledby="h-pick">
+      <div class="sec-head"><span class="sec-no">01</span><h2 id="h-pick">機種を選ぶ</h2></div>
+      <div class="row-label">メーカー</div>
+      <div class="seg" id="makerSeg" role="radiogroup" aria-label="メーカー"></div>
+      <div class="row-label">吊り能力クラス</div>
+      <div class="chips" id="classChips" role="radiogroup" aria-label="クラス"></div>
+      <div class="models" id="modelList"></div>
+    </section>
+
+    <!-- 2. 条件 -->
+    <section class="card" id="cond" aria-labelledby="h-cond">
+      <div class="sec-head"><span class="sec-no">02</span><h2 id="h-cond">作業条件</h2><span class="sec-note" id="modelBadge"></span></div>
+      <div class="cond-grid">
+        <div class="cond-block">
+          <div class="row-label">アウトリガ</div>
+          <div class="chips" id="ostChips"></div>
+          <p class="hint" id="ostHint"></p>
+        </div>
+        <div class="cond-block">
+          <div class="row-label">作業</div>
+          <div class="seg" id="workSeg"></div>
+          <div id="jibOpts" class="sub-opts" hidden>
+            <div class="row-label">ジブ長さ</div><div class="chips" id="jibChips"></div>
+            <div class="row-label">オフセット角</div><div class="chips" id="offChips"></div>
+          </div>
+          <label class="check" id="jibMountedWrap" hidden><input type="checkbox" id="jibMounted"> ジブを装着したままブーム作業</label>
+        </div>
+        <div class="cond-block wide">
+          <div class="row-label">ブーム長さ <span class="muted">（表の間の長さは前後の小さい方の値で計算）</span></div>
+          <div class="chips" id="lenChips"></div>
+          <div class="seg small" id="partsSeg" hidden></div>
+          <div class="seg small" id="modeSeg" hidden></div>
+          <label class="check"><input type="checkbox" id="autoL"> 作業半径・揚程から一番吊れるブーム長さを自動で選ぶ</label>
+        </div>
+      </div>
+      <div class="inputs">
+        <label class="field"><span>作業半径</span><input type="number" id="inR" step="0.5" min="0" inputmode="decimal"><em>m</em></label>
+        <label class="field"><span>旋回方向</span><input type="number" id="inSlew" step="5" min="0" max="359" inputmode="numeric"><em>°</em></label>
+        <label class="field"><span>必要揚程</span><input type="number" id="inH" step="0.5" min="0" placeholder="任意" inputmode="decimal"><em>m</em></label>
+        <label class="field"><span>吊り荷質量</span><input type="number" id="inLoad" step="0.05" min="0" placeholder="例 2.5" inputmode="decimal"><em>t</em></label>
+        <label class="field"><span>玉掛け用具</span><input type="number" id="inSling" step="0.01" min="0" inputmode="decimal"><em>t</em></label>
+      </div>
+      <div class="sf-row">
+        <div class="row-label">安全率 <span class="muted">（定格総荷重に掛ける係数。社内基準などに合わせて）</span></div>
+        <div class="sf-flex">
+          <div class="chips" id="sfChips"></div>
+          <label class="field sf-field"><span>任意</span><input type="number" id="inSf" step="0.01" min="0.5" max="1" placeholder="0.75" inputmode="decimal"></label>
+        </div>
+      </div>
+      <div class="quick-dir" id="quickDir"></div>
+    </section>
+
+    <!-- 3. 図 -->
+    <section class="views">
+      <div class="card view">
+        <div class="view-head"><h3>側面図</h3><span class="muted">クリック／ドラッグで作業半径・揚程を指定</span></div>
+        <svg id="sideSvg" class="svg" role="img" aria-label="クレーン側面図"></svg>
+      </div>
+      <div class="card view">
+        <div class="view-head"><h3>平面図</h3><span class="muted">クリック／ドラッグで旋回方向を指定</span></div>
+        <svg id="topSvg" class="svg" role="img" aria-label="クレーン平面図と性能領域"></svg>
+      </div>
+    </section>
+
+    <!-- 4. 結果 -->
+    <section class="card result" id="result" aria-live="polite"></section>
+
+    <!-- 5. 方向別 -->
+    <section class="card" id="dirCard">
+      <div class="sec-head"><span class="sec-no">03</span><h2>向きで変わる吊り能力</h2><span class="sec-note">同じ半径・ブーム長さで旋回方向だけ変えた場合</span></div>
+      <div id="dirBox"></div>
+    </section>
+
+    <!-- 5b. 全機種比較 -->
+    <section class="card" id="cmpCard">
+      <div class="sec-head"><span class="sec-no">04</span><h2>この条件で吊れる機種（全機種比較）</h2><span class="sec-note">機種選びの目安に</span></div>
+      <div id="cmpBox"></div>
+    </section>
+
+    <aside class="ad-slot" id="ad-middle" hidden aria-label="広告"><div class="ad-label">広告</div><div class="ad-body"></div></aside>
+
+    <!-- 6. 性能曲線 -->
+    <section class="card" id="curveCard">
+      <div class="sec-head"><span class="sec-no">05</span><h2>性能曲線</h2><span class="sec-note" id="curveNote"></span></div>
+      <svg id="curveSvg" class="svg curve" role="img" aria-label="作業半径と定格総荷重のグラフ"></svg>
+      <div class="legend" id="curveLegend"></div>
+    </section>
+
+    <!-- 7. 定格総荷重表 -->
+    <section class="card" id="tableCard">
+      <div class="sec-head"><span class="sec-no">06</span><h2>定格総荷重表</h2><span class="sec-note" id="tableNote"></span></div>
+      <div class="table-wrap" id="tableBox"></div>
+      <div id="tableNotes"></div>
+    </section>
+
+    <!-- 8. 公道 -->
+    <section class="card" id="roadCard">
+      <div class="sec-head"><span class="sec-no">07</span><h2>車両サイズと公道走行</h2></div>
+      <div id="roadBox"></div>
+    </section>
+
+    <!-- 9. 解説 -->
+    <section class="card learn" id="learnCard">
+      <div class="sec-head"><span class="sec-no">08</span><h2>「定格荷重」と「定格総荷重」の違い</h2></div>
+      <div id="learnBox"></div>
+    </section>
+
+    <!-- 10. 出典 -->
+    <section class="card" id="srcCard">
+      <div class="sec-head"><span class="sec-no">09</span><h2>出典・この機種の注意事項</h2></div>
+      <div id="srcBox"></div>
+    </section>
+
+    <aside class="ad-slot" id="ad-bottom" hidden aria-label="広告"><div class="ad-label">広告</div><div class="ad-body"></div></aside>
+
+    <footer class="card foot">
+      <div><span class="sq"></span> KONYLOG.COM // 現場とツールの備忘録</div>
+      <div class="muted">データ: タダノ・加藤製作所の公表資料（各機種の出典欄参照）。ご安全に！</div>
+    </footer>
+  </main>
+
+  <div id="reportRoot" aria-hidden="true"></div>
+
+  <script src="ads.js"></script>
+  <script src="data/index.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
